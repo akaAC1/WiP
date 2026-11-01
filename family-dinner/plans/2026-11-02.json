@@ -1,0 +1,849 @@
+{
+ "equipment": "Every recipe fits one pot, two pans and one sheet pan.",
+ "generatedAt": "2026-11-01T15:45:00-06:00",
+ "grocery": {
+  "estimate": "About $93 for the full list when each item comes from the cheapest of Aldi, Jewel-Osco and Mariano's. Pantry staples are only counted if you slide them below \"Have it\".",
+  "groups": [
+   {
+    "items": [
+     {
+      "amount": "1.5 lb",
+      "for": "Mon",
+      "key": "salmon",
+      "name": "Fresh Atlantic salmon",
+      "note": "Weekly-ad price, roughly half of usual",
+      "price": 7.49,
+      "prices": {
+       "aldi": {
+        "cost": 13.49,
+        "unit": "$8.99/lb"
+       },
+       "costco": {
+        "approx": true,
+        "bulk": true,
+        "cost": 41.01,
+        "note": "Delivery price; usually lower in the warehouse",
+        "unit": "$13.67/lb · ~3 lb"
+       },
+       "jewel": {
+        "cost": 7.49,
+        "note": "Ad ends Tue Nov 3",
+        "sale": true,
+        "unit": "$4.99/lb"
+       },
+       "marianos": {
+        "cost": 13.49,
+        "sale": true,
+        "unit": "$8.99/lb"
+       }
+      }
+     },
+     {
+      "amount": "about 1.25 lb",
+      "for": "Tue",
+      "key": "pork-tenderloin",
+      "name": "Pork tenderloin, plain",
+      "note": "Plain, not marinated, for less sodium. Jewel's ad has marinated tenderloins buy-one-get-one, but they carry much more salt.",
+      "price": 9.48,
+      "prices": {
+       "aldi": {
+        "cost": 9.48,
+        "note": "2 tenderloins; freeze one",
+        "unit": "$3.59/lb · 2-pack"
+       },
+       "costco": {
+        "approx": true,
+        "bulk": true,
+        "cost": 11.96,
+        "unit": "~$2.99/lb · ~4 lb"
+       },
+       "marianos": {
+        "cost": 6.24,
+        "unit": "$4.99/lb"
+       }
+      }
+     },
+     {
+      "amount": "about 1.25 lb",
+      "for": "Fri",
+      "key": "cod",
+      "name": "Wild cod",
+      "price": 20.89,
+      "prices": {
+       "aldi": {
+        "cost": 20.89,
+        "note": "Extra stays frozen",
+        "unit": "32 oz bag"
+       },
+       "jewel": {
+        "cost": 17.97,
+        "note": "Buy 3 portions; ad ends Tue Nov 3",
+        "sale": true,
+        "unit": "$5.99 per 6 oz"
+       },
+       "marianos": {
+        "cost": 18.99,
+        "note": "Extra stays frozen",
+        "sale": true,
+        "unit": "32 oz bag"
+       }
+      },
+      "staple": true
+     },
+     {
+      "amount": "12 oz–1 lb",
+      "for": "Thu",
+      "key": "shrimp",
+      "name": "Raw peeled shrimp",
+      "price": 6.59,
+      "prices": {
+       "aldi": {
+        "cost": 6.59,
+        "unit": "12 oz bag"
+       },
+       "costco": {
+        "bulk": true,
+        "cost": 16.49,
+        "unit": "1.5 lb bag"
+       },
+       "jewel": {
+        "cost": 5.99,
+        "note": "Small, previously frozen: buy by Tue, cook by Thu, don't refreeze",
+        "sale": true,
+        "unit": "$5.99/lb"
+       },
+       "marianos": {
+        "cost": 10.99,
+        "sale": true,
+        "unit": "16 oz bag"
+       }
+      },
+      "staple": true
+     }
+    ],
+    "name": "Meat & seafood"
+   },
+   {
+    "items": [
+     {
+      "amount": "4",
+      "for": "Mon, Wed, Fri",
+      "key": "avocados",
+      "name": "Avocados",
+      "note": "Buy firm ones for Friday",
+      "price": 1.96,
+      "prices": {
+       "aldi": {
+        "cost": 1.96,
+        "sale": true,
+        "unit": "49¢ each"
+       },
+       "costco": {
+        "bulk": true,
+        "cost": 5.89,
+        "unit": "6-count bag"
+       },
+       "jewel": {
+        "cost": 3.96,
+        "sale": true,
+        "unit": "99¢ each"
+       },
+       "marianos": {
+        "cost": 4.99,
+        "unit": "4-count bag"
+       }
+      }
+     },
+     {
+      "amount": "2",
+      "for": "Mon, Fri",
+      "key": "arugula",
+      "name": "Arugula, 5 oz container",
+      "price": 6.98,
+      "prices": {
+       "marianos": {
+        "cost": 5.98,
+        "unit": "$2.99 per 5 oz"
+       }
+      }
+     },
+     {
+      "amount": "about 1.5 lb",
+      "for": "Mon",
+      "key": "broccoli",
+      "name": "Broccoli crowns",
+      "price": 1.49,
+      "prices": {
+       "jewel": {
+        "cost": 1.49,
+        "sale": true,
+        "unit": "99¢/lb"
+       }
+      }
+     },
+     {
+      "amount": "1 lb",
+      "for": "Tue",
+      "key": "baby-carrots",
+      "name": "Baby-cut carrots",
+      "price": 0.99,
+      "prices": {
+       "jewel": {
+        "cost": 0.99,
+        "sale": true,
+        "unit": "99¢ per 1 lb"
+       }
+      }
+     },
+     {
+      "amount": "1 bag",
+      "for": "Thu + toddler",
+      "key": "spinach",
+      "name": "Fresh Express spinach, 8 oz",
+      "price": 1.99,
+      "prices": {
+       "jewel": {
+        "cost": 1.99,
+        "sale": true,
+        "unit": "$1.99 per 8 oz"
+       }
+      }
+     },
+     {
+      "amount": "1 bunch",
+      "for": "Tue",
+      "key": "kale",
+      "name": "Kale",
+      "price": 1.99
+     },
+     {
+      "amount": "1 head",
+      "for": "Wed",
+      "key": "romaine",
+      "name": "Romaine",
+      "price": 1.99
+     },
+     {
+      "amount": "4",
+      "for": "Mon, Tue, Thu, Fri",
+      "key": "lemons",
+      "name": "Lemons",
+      "price": 2.76
+     },
+     {
+      "amount": "1",
+      "for": "Wed",
+      "key": "lime",
+      "name": "Lime",
+      "price": 0.4
+     },
+     {
+      "amount": "1 pint",
+      "for": "Thu",
+      "key": "cherry-tomatoes",
+      "name": "Cherry or grape tomatoes",
+      "price": 2.49
+     },
+     {
+      "amount": "1 head",
+      "for": "Tue, Thu",
+      "key": "garlic",
+      "name": "Garlic",
+      "price": 0.75,
+      "staple": true
+     }
+    ],
+    "name": "Produce"
+   },
+   {
+    "items": [
+     {
+      "amount": "1",
+      "for": "Thu, Fri",
+      "key": "parmesan",
+      "name": "Parmesan wedge",
+      "price": 3.99,
+      "prices": {
+       "aldi": {
+        "cost": 3.99,
+        "sale": true,
+        "unit": "wedge"
+       }
+      },
+      "staple": true
+     },
+     {
+      "amount": "1",
+      "for": "Wed",
+      "key": "shredded-cheese",
+      "name": "Lucerne shredded cheese, 6–8 oz",
+      "price": 1.99,
+      "prices": {
+       "jewel": {
+        "cost": 1.99,
+        "sale": true,
+        "unit": "6–8 oz"
+       }
+      }
+     },
+     {
+      "amount": "1",
+      "for": "Tue",
+      "key": "broth",
+      "name": "Swanson broth, low-sodium",
+      "price": 1.99,
+      "prices": {
+       "jewel": {
+        "cost": 1.99,
+        "sale": true,
+        "unit": "32 oz"
+       }
+      }
+     },
+     {
+      "amount": "16 oz bag",
+      "for": "Mon, Fri",
+      "key": "quinoa",
+      "name": "Quinoa",
+      "price": 3.49,
+      "prices": {
+       "costco": {
+        "bulk": true,
+        "cost": 9.99,
+        "unit": "4.5 lb bag"
+       }
+      },
+      "staple": true
+     },
+     {
+      "amount": "32 oz",
+      "for": "Wed, Fri",
+      "key": "greek-yogurt",
+      "name": "Plain Greek yogurt",
+      "price": 4.29
+     },
+     {
+      "amount": "1 dozen",
+      "for": "Fri",
+      "key": "eggs",
+      "name": "Eggs",
+      "price": 3,
+      "staple": true
+     },
+     {
+      "amount": "2 lb bag",
+      "for": "Wed",
+      "key": "brown-rice",
+      "name": "Brown rice (or 2 microwave pouches)",
+      "price": 1.99,
+      "staple": true
+     },
+     {
+      "amount": "16 oz box",
+      "for": "Thu",
+      "key": "pasta",
+      "name": "Spaghetti or penne",
+      "price": 1.29,
+      "staple": true
+     },
+     {
+      "amount": "1 box",
+      "for": "Fri",
+      "key": "panko",
+      "name": "Panko breadcrumbs",
+      "price": 2.49,
+      "staple": true
+     },
+     {
+      "amount": "2 cans",
+      "for": "Tue",
+      "key": "cannellini",
+      "name": "Cannellini beans, 15 oz",
+      "price": 1.78,
+      "staple": true
+     },
+     {
+      "amount": "2 cans",
+      "for": "Wed",
+      "key": "black-beans",
+      "name": "Black beans, 15 oz",
+      "price": 1.7,
+      "staple": true
+     },
+     {
+      "amount": "1 bag",
+      "for": "Wed",
+      "key": "frozen-corn",
+      "name": "Frozen corn",
+      "price": 1.29,
+      "staple": true
+     },
+     {
+      "amount": "1 bag",
+      "for": "Fri",
+      "key": "frozen-peas",
+      "name": "Frozen peas",
+      "price": 1.29,
+      "staple": true
+     },
+     {
+      "amount": "1 jar",
+      "for": "Wed",
+      "key": "salsa",
+      "name": "Mild salsa",
+      "price": 2.29,
+      "staple": true
+     }
+    ],
+    "name": "Dairy, grains & cans"
+   },
+   {
+    "items": [
+     {
+      "amount": "about 1 cup this week",
+      "key": "olive-oil",
+      "name": "Olive oil",
+      "price": 8.99,
+      "staple": true
+     },
+     {
+      "amount": "1 can",
+      "key": "olive-oil-spray",
+      "name": "Olive oil spray",
+      "price": 3.99,
+      "staple": true
+     },
+     {
+      "amount": "¼ cup",
+      "key": "flour",
+      "name": "All-purpose flour",
+      "price": 2.99,
+      "staple": true
+     },
+     {
+      "amount": "1 tsp",
+      "key": "dijon",
+      "name": "Dijon mustard",
+      "price": 1.99,
+      "staple": true
+     },
+     {
+      "amount": "about 2 tsp",
+      "key": "garlic-powder",
+      "name": "Garlic powder",
+      "price": 1.49,
+      "staple": true
+     },
+     {
+      "amount": "1 tsp",
+      "key": "italian-seasoning",
+      "name": "Dried Italian seasoning",
+      "price": 1.49,
+      "staple": true
+     },
+     {
+      "amount": "½ tsp",
+      "key": "dill",
+      "name": "Dried dill",
+      "price": 1.49,
+      "staple": true
+     },
+     {
+      "amount": "1 tsp",
+      "key": "cumin",
+      "name": "Ground cumin",
+      "price": 1.49,
+      "staple": true
+     },
+     {
+      "amount": "1 tsp",
+      "key": "chili-powder",
+      "name": "Chili powder",
+      "price": 1.49,
+      "staple": true
+     },
+     {
+      "amount": "1 tsp",
+      "key": "paprika",
+      "name": "Paprika",
+      "price": 1.49,
+      "staple": true
+     },
+     {
+      "amount": "a pinch",
+      "key": "red-pepper-flakes",
+      "name": "Red pepper flakes",
+      "price": 1.49,
+      "staple": true
+     }
+    ],
+    "name": "Pantry staples",
+    "pantry": true
+   }
+  ],
+  "skipped": "Trader Joe's isn't included because it doesn't publish prices online. A blank store cell means no current price was found there; the item's typical price is used instead. Costco prices are for the whole bulk pack.",
+  "sources": [
+   {
+    "label": "Jewel-Osco ad Oct 28–Nov 3",
+    "url": "https://weeklyadhunters.com/jewel-osco-weekly-ad/"
+   },
+   {
+    "label": "Aldi ad Oct 28–Nov 3",
+    "url": "https://aldiweekly.com/"
+   },
+   {
+    "label": "Aldi pork tenderloin",
+    "url": "https://shop.aldi.us/store/aldi/products/19133892-boneless-pork-tenderloin-2-ct"
+   },
+   {
+    "label": "Aldi seafood",
+    "url": "https://www.instacart.com/store/aldi/collections/meat-seafood"
+   },
+   {
+    "label": "Mariano's salmon",
+    "url": "https://www.marianos.com/p/atlantic-salmon-fillet/0022859000000"
+   },
+   {
+    "label": "Mariano's pork tenderloin",
+    "url": "https://www.marianos.com/p/pork-tenderloin/0022335800000"
+   },
+   {
+    "label": "Mariano's cod",
+    "url": "https://www.marianos.com/p/kroger-wild-caught-pacific-cod-fillets-frozen-big-deal-/0001111077998"
+   },
+   {
+    "label": "Mariano's shrimp",
+    "url": "https://www.marianos.com/p/simple-truth-peeled-deveined-jumbo-raw-frozen-shrimp/0001111008068"
+   },
+   {
+    "label": "Mariano's arugula",
+    "url": "https://www.marianos.com/p/kroger-baby-arugula/0001111060639"
+   },
+   {
+    "label": "Mariano's avocados",
+    "url": "https://www.marianos.com/p/kroger-fresh-avocados-in-4-count-bag/0001111018180"
+   },
+   {
+    "label": "Costco salmon",
+    "url": "https://www.instacart.com/store/costco/s?k=salmon"
+   },
+   {
+    "label": "Costco meat prices",
+    "url": "https://costcoguides.com/costco-meat-prices/"
+   },
+   {
+    "label": "Costco shrimp",
+    "url": "https://app.warehouserunner.com/costco/25553-kirkland-signature-11-15-ct-raw-shrimp-1-5-lbs"
+   },
+   {
+    "label": "Costco quinoa",
+    "url": "https://app.warehouserunner.com/costco/1001368-kirkland-signature-organic-quinoa-4-5lbs"
+   },
+   {
+    "label": "Costco avocados",
+    "url": "https://app.warehouserunner.com/costco/1188-avocados-gem-variety-6-count"
+   }
+  ],
+  "stores": [
+   {
+    "id": "aldi",
+    "name": "Aldi",
+    "note": "Ad runs Wed–Tue"
+   },
+   {
+    "id": "jewel",
+    "name": "Jewel-Osco",
+    "note": "Ad ends Tue Nov 3"
+   },
+   {
+    "id": "marianos",
+    "name": "Mariano's",
+    "note": "Website prices; sales marked"
+   },
+   {
+    "id": "costco",
+    "name": "Costco",
+    "note": "Membership; bulk packs"
+   }
+  ]
+ },
+ "headline": "Salmon, pork tenderloin, black bean bowls, garlic shrimp pasta and crispy cod bites.",
+ "household": "2 adults + 1 toddler",
+ "nights": [
+  {
+   "activeMin": 15,
+   "cuisine": "American",
+   "day": "Monday",
+   "gear": [
+    "Sheet pan"
+   ],
+   "id": "mon",
+   "ingredients": [
+    "1.5 lb salmon fillets (4 pieces; one is lunch leftovers)",
+    "1 large head broccoli, cut into florets (about 4 cups)",
+    "3 tbsp olive oil, divided",
+    "1 lemon",
+    "1 tsp garlic powder, ½ tsp dried dill, salt and pepper",
+    "2 cups cooked quinoa (from Sunday)",
+    "5 oz arugula, 1 avocado, 2 tbsp lemon vinaigrette (from Sunday)"
+   ],
+   "mealId": "sheet-pan-lemon-salmon-broccoli",
+   "newTechnique": false,
+   "plate": {
+    "carb": "Quinoa",
+    "fat": "Avocado, olive oil",
+    "green": "Arugula",
+    "protein": "Salmon"
+   },
+   "prep": "Broccoli is chopped and quinoa cooked on Sunday. Save the 4th fillet for Tuesday's lunch.",
+   "steps": [
+    "Heat the oven to 425°F and line a sheet pan with foil or parchment paper.",
+    "Toss the broccoli with 2 tbsp oil and a pinch of salt on the pan. Roast for 10 minutes.",
+    "Meanwhile, pat the salmon dry with paper towels. Rub with 1 tbsp oil, garlic powder, dill and pepper. Lay thin lemon slices on top.",
+    "Push the broccoli to the edges and set the salmon in the middle, skin side down. Roast 10–12 minutes, until the fish flakes easily with a fork (145°F).",
+    "Warm the quinoa in the microwave for 1–2 minutes with a splash of water.",
+    "Toss the arugula with the vinaigrette and top it with sliced avocado."
+   ],
+   "technique": "Sheet-pan roasting",
+   "title": "Sheet-pan lemon salmon & broccoli",
+   "toddler": "About 2 oz flaked salmon (check for bones), 2 tbsp quinoa, soft broccoli \"trees\" and avocado slices. Skip the peppery arugula and stir a few soft spinach leaves into the quinoa instead.",
+   "totalMin": 30,
+   "why": "Salmon is the richest common source of heart-protective omega-3s. One pan, 30 minutes."
+  },
+  {
+   "activeMin": 20,
+   "cuisine": "Italian",
+   "day": "Tuesday",
+   "gear": [
+    "Sheet pan",
+    "Large skillet"
+   ],
+   "id": "tue",
+   "ingredients": [
+    "1 pork tenderloin, about 1.25 lb",
+    "1 lb baby-cut carrots",
+    "4 tbsp olive oil, divided",
+    "1 tsp each dried Italian seasoning and garlic powder, salt and pepper",
+    "2 cans (15 oz) cannellini beans, rinsed",
+    "1 bunch kale (or a 5 oz bag), stems removed, chopped",
+    "3 garlic cloves, sliced",
+    "½ cup low-sodium chicken broth",
+    "½ lemon"
+   ],
+   "mealId": "pork-tenderloin-white-beans-kale",
+   "newTechnique": true,
+   "plate": {
+    "carb": "Cannellini beans",
+    "fat": "Olive oil",
+    "green": "Kale",
+    "protein": "Pork tenderloin"
+   },
+   "prep": "Baby carrots need no prep. Save about ⅓ of the pork for Wednesday or Thursday lunch, and pack extra beans and kale as a side.",
+   "steps": [
+    "Heat the oven to 425°F. Toss the carrots with 1 tbsp oil and a pinch of salt on a sheet pan.",
+    "Pat the pork dry. Rub it with 1 tbsp oil, the Italian seasoning, garlic powder, ½ tsp salt and pepper. Set it on the pan next to the carrots.",
+    "Roast 20–25 minutes, until a meat thermometer in the thickest part reads 145°F. Rest it on a cutting board for 5 minutes, then slice.",
+    "While the pork roasts, warm 2 tbsp oil in a large skillet over medium heat. Add the garlic and cook 1 minute, until fragrant but not brown.",
+    "Add the kale and broth. Cover and cook 4–5 minutes until the kale softens.",
+    "Stir in the beans and heat 3 minutes. Squeeze in the lemon and season to taste."
+   ],
+   "technique": "Roasting a whole tenderloin to temperature",
+   "title": "Herb pork tenderloin with garlicky white beans & kale",
+   "toddler": "Thin pork slices cut into small strips, beans lightly mashed with a fork, soft carrots cut lengthwise, and finely chopped kale mixed into the beans.",
+   "totalMin": 45,
+   "why": "Pork tenderloin is about as lean as chicken breast, and the beans bring fiber that blunts the glucose rise."
+  },
+  {
+   "activeMin": 15,
+   "cuisine": "Mexican",
+   "day": "Wednesday",
+   "gear": [
+    "Saucepan"
+   ],
+   "id": "wed",
+   "ingredients": [
+    "2 cans (15 oz) black beans, rinsed",
+    "1 cup frozen corn",
+    "1 tbsp olive oil",
+    "1 tsp cumin, 1 tsp chili powder, ½ tsp garlic powder",
+    "2 cups cooked brown rice (from Sunday, or 2 microwave pouches)",
+    "1 head romaine, shredded (about 4 cups)",
+    "2 avocados",
+    "1 cup jarred salsa (mild)",
+    "½ cup plain Greek yogurt (in place of sour cream)",
+    "½ cup shredded cheddar or Mexican-blend cheese",
+    "1 lime"
+   ],
+   "mealId": "black-bean-corn-burrito-bowls",
+   "meatless": true,
+   "newTechnique": false,
+   "plate": {
+    "carb": "Brown rice",
+    "fat": "Avocado, cheese",
+    "green": "Romaine",
+    "protein": "Black beans"
+   },
+   "prep": "Rice is cooked and romaine washed on Sunday. Extra beans make a great breakfast with scrambled eggs.",
+   "steps": [
+    "Warm the oil in a saucepan over medium heat. Add the beans, corn, spices and ¼ cup water.",
+    "Simmer 5–6 minutes, stirring now and then, until the corn is hot. Mash about a quarter of the beans against the pan to thicken.",
+    "Reheat the rice in the microwave with a splash of water, covered, 2 minutes.",
+    "Mash 1 avocado with half the lime juice and a pinch of salt. Dice the other avocado.",
+    "Build bowls: romaine, rice, beans and corn, then avocado, salsa, a spoon of yogurt and a sprinkle of cheese."
+   ],
+   "technique": "One-pan simmer and build-your-own bowls",
+   "title": "Black bean & corn burrito bowls",
+   "toddler": "A scoop of rice with the beans mostly mashed, cheese melted on top, and mashed avocado on the side. Hold the salsa or offer a tiny taste. Mash the corn a little if your toddler is still learning to chew it.",
+   "totalMin": 20,
+   "why": "Beans plus brown rice make a complete protein with lots of soluble fiber, which helps lower LDL cholesterol. No oven."
+  },
+  {
+   "activeMin": 20,
+   "cuisine": "Italian",
+   "day": "Thursday",
+   "gear": [
+    "Pot",
+    "Large skillet"
+   ],
+   "id": "thu",
+   "ingredients": [
+    "12 oz–1 lb frozen raw shrimp, peeled and deveined (thawed)",
+    "8 oz spaghetti or penne",
+    "3 tbsp olive oil, divided",
+    "4 garlic cloves, minced",
+    "5 oz baby spinach",
+    "1 cup cherry tomatoes, halved",
+    "1 lemon",
+    "¼ cup grated Parmesan",
+    "Optional for adults: pinch of red pepper flakes"
+   ],
+   "mealId": "garlic-shrimp-spinach-pasta",
+   "newTechnique": true,
+   "plate": {
+    "carb": "Pasta, al dente",
+    "fat": "Olive oil, Parmesan",
+    "green": "Spinach",
+    "protein": "Shrimp"
+   },
+   "prep": "Move the shrimp to the fridge Wednesday night. One serving keeps for the next day's lunch.",
+   "steps": [
+    "Thaw the shrimp if needed: put them in a colander under cold running water for about 5 minutes. Pat dry.",
+    "Boil a large pot of salted water. Cook the pasta 1 minute less than the package says. Scoop out 1 cup of pasta water, then drain.",
+    "While the pasta cooks, heat 2 tbsp oil in a large skillet over medium-high. Add the shrimp in one layer and cook 2 minutes per side, until pink and curled into a \"C\" shape. Move them to a plate.",
+    "Lower the heat to medium. Add 1 tbsp oil, the garlic and tomatoes, and cook 2 minutes.",
+    "Add the spinach and a splash of pasta water. Stir until wilted, about 1 minute.",
+    "Add the pasta, shrimp, lemon juice and Parmesan. Toss, adding more pasta water until glossy. Sprinkle red pepper flakes on the adult plates only."
+   ],
+   "technique": "Searing shrimp and finishing pasta in the pan",
+   "title": "Garlic shrimp & spinach pasta",
+   "toddler": "Shrimp chopped into pea-sized pieces, short pasta pieces, quartered tomatoes, wilted spinach and a little extra Parmesan.",
+   "totalMin": 25,
+   "why": "Pasta cooked al dente digests more slowly than soft-cooked pasta. Keep adult portions to about 1 cup cooked and let the shrimp and spinach fill the rest of the plate."
+  },
+  {
+   "activeMin": 20,
+   "cuisine": "American comfort",
+   "day": "Friday",
+   "gear": [
+    "Sheet pan"
+   ],
+   "id": "fri",
+   "ingredients": [
+    "1.25 lb cod fillets (frozen is fine, thawed), cut into 1½-inch chunks",
+    "1 cup panko breadcrumbs",
+    "2 tbsp grated Parmesan",
+    "1 tsp paprika, ½ tsp garlic powder, ¼ tsp salt",
+    "2 eggs",
+    "¼ cup all-purpose flour",
+    "Olive oil spray (or 2 tbsp olive oil)",
+    "2 cups cooked quinoa (from Sunday)",
+    "2 cups frozen peas",
+    "5 oz arugula, 1 avocado, 2 tbsp lemon vinaigrette",
+    "Lemon wedges; optional dip of Greek yogurt mixed with lemon and dill"
+   ],
+   "mealId": "baked-cod-bites",
+   "newTechnique": true,
+   "plate": {
+    "carb": "Quinoa, peas",
+    "fat": "Avocado, olive oil",
+    "green": "Arugula",
+    "protein": "Cod"
+   },
+   "prep": "Move the cod to the fridge Wednesday night. Quinoa is from Sunday. Cod bites are best fresh; leftovers re-crisp in a 400°F oven in 5 minutes.",
+   "steps": [
+    "Heat the oven to 425°F. Set a wire rack on the sheet pan if you have one; otherwise line it with parchment.",
+    "Set up 3 shallow bowls: flour in the first; beaten eggs in the second; panko, Parmesan, paprika, garlic powder and salt in the third.",
+    "Pat the cod dry. Dip each piece in flour, then egg, then press into the crumbs. Place on the pan.",
+    "Spray or drizzle the tops with olive oil. Bake 12–15 minutes, until golden and the fish flakes easily (145°F).",
+    "While it bakes, microwave the peas with 2 tbsp water, covered, for 3–4 minutes. Warm the quinoa.",
+    "Toss the arugula with vinaigrette and sliced avocado."
+   ],
+   "technique": "Three-bowl breading station",
+   "title": "Crispy baked cod bites with peas & quinoa",
+   "toddler": "2–3 cod bites broken into smaller pieces (check for bones), peas lightly mashed, quinoa and avocado. The yogurt dip makes it fun.",
+   "totalMin": 30,
+   "why": "Homemade fish sticks, baked instead of fried, are a toddler favorite, and cod is very lean."
+  }
+ ],
+ "prep": {
+  "leftovers": [
+   {
+    "cook": "Sun: quinoa",
+    "extra": "About 2 cups",
+    "use": "Mon dinner, Fri dinner, adult lunch bowls"
+   },
+   {
+    "cook": "Mon: salmon",
+    "extra": "1 extra fillet",
+    "use": "Tue lunch, flaked over a salad or into the toddler's quinoa"
+   },
+   {
+    "cook": "Tue: pork tenderloin",
+    "extra": "About ⅓",
+    "use": "Wed or Thu lunch, sliced into wraps or grain bowls"
+   },
+   {
+    "cook": "Tue: white beans & kale",
+    "extra": "1–2 servings",
+    "use": "Lunch, or a side with Wednesday's bowls"
+   },
+   {
+    "cook": "Wed: seasoned black beans",
+    "extra": "Any extra",
+    "use": "Thu breakfast with eggs, or mashed on toast for the toddler"
+   },
+   {
+    "cook": "Thu: shrimp pasta",
+    "extra": "1 serving",
+    "use": "Next-day lunch. Eat within 1 day and reheat until steaming."
+   }
+  ],
+  "minutes": 45,
+  "steps": [
+   {
+    "text": "Rinse 1½ cups quinoa and simmer it in 3 cups water for 15 min, covered, then rest 5 min. Once the pot is free, cook 1 cup brown rice in it (about 40 min), or skip this and use 2 microwave pouches on Wednesday. Cool both and refrigerate separately.",
+    "title": "Cook the grains"
+   },
+   {
+    "text": "Do the spinach, kale and romaine. Store each wrapped in a paper towel inside a bag. Arugula is usually pre-washed; leave it in its container.",
+    "title": "Wash and dry the greens"
+   },
+   {
+    "text": "Cut the broccoli into florets for Monday and store in a container.",
+    "title": "Chop the vegetables"
+   },
+   {
+    "text": "6 tbsp olive oil, 3 tbsp lemon juice, 1 tsp Dijon mustard, a pinch of salt and pepper. Shake in a jar and refrigerate.",
+    "title": "Mix the lemon vinaigrette"
+   },
+   {
+    "text": "Fresh salmon needs no thawing. Move the cod and shrimp from the freezer to the fridge on Wednesday night.",
+    "title": "Plan the thaws"
+   }
+  ],
+  "storage": "Cooked grains keep 4–5 days in the fridge. Cooked meat keeps 3–4 days; shrimp and fish are best within 1–2 days."
+ },
+ "shopNote": "Best split this week: Jewel-Osco by Tuesday, Nov 3 (salmon $4.99/lb, cod portions, produce) and Aldi (avocados, Parmesan, staples). Mariano's has the cheapest plain pork tenderloin.",
+ "toddlerRules": "Set aside the toddler's portion before adding salt or red pepper flakes. Cut food into pea-sized pieces, flatten or mash beans and peas, quarter small round foods, and flake fish by hand to check for bones.",
+ "weekOf": "2026-11-02"
+}

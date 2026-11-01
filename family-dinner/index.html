@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Family Dinner Plan</title>
+<meta name="description" content="Five heart-healthy weeknight dinners, Sunday prep, and a priced grocery list with on-hand sliders.">
+<meta name="theme-color" content="#F3F5F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111613" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Dinners">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow" id="weekLabel">Heart-healthy dinners</div>
+    <h1 id="title">Family Dinner Plan</h1>
+    <p class="sub" id="sub">Five weeknight dinners for 2 adults and a toddler.</p>
+  </header>
+</div>
+<nav class="tabs" aria-label="Plan sections">
+  <div class="wrap"><div class="tabrow" id="tabs" role="tablist"></div></div>
+</nav>
+<div class="wrap"><main id="main"></main></div>
+<div class="toast" id="toast" role="status" hidden><span id="toastmsg"></span><button id="toastbtn" hidden></button></div>
+<input type="file" id="importfile" accept="application/json,.json" hidden>
+<script src="app.js"></script>
+</body>
+</html>
