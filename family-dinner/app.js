@@ -1,0 +1,490 @@
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const $main = $('main'), $tabs = $('tabs');
+  const EASE = [['easy','Easy'],['right','Just right'],['hard','Too much work']];
+  const LEVELS = ['Need all','¾ needed','½ needed','¼ needed','Have it'];
+  const DEFAULT_STORES = ['aldi','jewel','marianos','costco'];
+  const STATE_KEY = 'fdp:state', PLAN_KEY = 'fdp:plan';
+
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const money = n => '$' + (Math.round(n*100)/100).toFixed(2);
+  const store = {
+    get(k){ try{ return JSON.parse(localStorage.getItem(k) || 'null'); }catch(e){ return null; } },
+    set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } }
+  };
+
+  // ---------- state (all on this device) ----------
+  let plan = null, planSource = '', loadNote = '';
+  const saved = store.get(STATE_KEY) || {};
+  let ratings = obj(saved.ratings), inv = obj(saved.inv);
+  let enabled = Array.isArray(saved.enabled) ? saved.enabled : null;
+  let names = Array.isArray(saved.names) ? saved.names : ['Adult 1','Adult 2'];
+  function obj(x){ return x && typeof x === 'object' && !Array.isArray(x) ? x : {}; }
+  function persist(){
+    if(!store.set(STATE_KEY, {v:1, ratings, inv, enabled, names})) toast("Couldn't save on this device. Storage may be full or blocked.");
+  }
+
+  // ---------- plan loading ----------
+  function validPlan(p){ return p && typeof p === 'object' && /^\d{4}-\d{2}-\d{2}$/.test(p.weekOf||'') && Array.isArray(p.nights) && p.nights.length && p.grocery && p.prep; }
+  function newer(a, b){ // is plan a newer than plan b?
+    if(!b) return true; if(!a) return false;
+    if(a.weekOf !== b.weekOf) return a.weekOf > b.weekOf;
+    return String(a.generatedAt||'') > String(b.generatedAt||'');
+  }
+  function usePlan(p, source){
+    const prevWeek = plan && plan.weekOf;
+    plan = p; planSource = source;
+    store.set(PLAN_KEY, {plan:p, source});
+    if(prevWeek && prevWeek !== p.weekOf && location.hash) history.replaceState(null,'',location.pathname+location.search);
+  }
+  async function loadPlan(){
+    const cached = store.get(PLAN_KEY);
+    if(cached && validPlan(cached.plan)){ plan = cached.plan; planSource = cached.source || 'saved'; render(); }
+    try{
+      const res = await fetch('plans/current.json', {cache:'no-cache'});
+      if(!res.ok) throw new Error(res.status);
+      const p = await res.json();
+      if(!validPlan(p)) throw new Error('bad plan');
+      if(!plan || newer(p, plan) || (p.weekOf === plan.weekOf && planSource !== 'imported')) usePlan(p, 'published');
+      loadNote = '';
+    }catch(e){
+      loadNote = plan ? '' : "The plan couldn't load. Check your connection and reopen the app.";
+    }
+    render();
+  }
+
+  // ---------- dates & navigation ----------
+  function weekDate(i){
+    const d = new Date(plan.weekOf + 'T12:00:00');
+    d.setDate(d.getDate() + i);
+    return d;
+  }
+  const fmtDate = (d, opts) => d.toLocaleDateString('en-US', opts);
+  function todayId(){
+    if(!plan) return 'week';
+    const now = new Date().toDateString();
+    for(let i=0;i<plan.nights.length;i++) if(weekDate(i).toDateString() === now) return plan.nights[i].id;
+    return 'week';
+  }
+  function tabIds(){ return ['week', ...(plan ? plan.nights.map(n=>n.id) : []), 'groceries']; }
+  function current(){
+    const h = location.hash.replace('#','');
+    return tabIds().includes(h) ? h : todayId();
+  }
+  function go(id){
+    if(location.hash !== '#'+id) location.hash = id; else render();
+    window.scrollTo({top:0});
+  }
+
+  function renderTabs(active){
+    const today = todayId();
+    const items = [{id:'week', d:'Plan', n:'Week', wide:true}];
+    if(plan) plan.nights.forEach((n,i)=>items.push({id:n.id, d:n.day.slice(0,3), n:weekDate(i).getDate()}));
+    items.push({id:'groceries', d:'List', n:'Groceries', wide:true});
+    $tabs.innerHTML = items.map(t =>
+      `<button class="tab${t.wide?' wide':''}${t.id===today?' today':''}" role="tab" id="tab-${t.id}" aria-selected="${t.id===active}" data-go="${t.id}"><span class="d">${esc(t.d)}</span><span class="n">${esc(t.n)}</span></button>`
+    ).join('');
+    const sel = $('tab-'+active);
+    if(sel) sel.scrollIntoView({inline:'nearest', block:'nearest'});
+  }
+
+  function header(){
+    const a = weekDate(0), b = weekDate(plan.nights.length-1);
+    $('weekLabel').textContent = 'Week of ' + fmtDate(a,{month:'short',day:'numeric'}) + ' – ' + fmtDate(b,{month:'short',day:'numeric'});
+    $('sub').textContent = plan.headline || 'Five weeknight dinners for ' + (plan.household||'the family') + '.';
+  }
+
+  function plateHTML(p){
+    p = p || {};
+    return `<div class="plate-row">
+      <div class="plate" aria-hidden="true"><span class="q-protein">Protein</span><span class="q-green">Greens</span><span class="q-carb">Slow carb</span><span class="q-fat">Good fat</span></div>
+      <div class="plate-key">
+        <div><b>Protein</b><span>${esc(p.protein)}</span></div>
+        <div><b>Greens</b><span>${esc(p.green)}</span></div>
+        <div><b>Slow carb</b><span>${esc(p.carb)}</span></div>
+        <div><b>Good fat</b><span>${esc(p.fat)}</span></div>
+      </div></div>`;
+  }
+
+  // ---------- week ----------
+  function renderWeek(){
+    const rows = plan.nights.map(n=>`<button class="weekrow" data-go="${esc(n.id)}"><span class="d">${esc(n.day.slice(0,3))}</span><span class="t">${esc(n.title)}<span class="sm">${esc([n.cuisine, n.meatless?'Meatless':''].filter(Boolean).join(' · '))}</span>${ratingSummary(ratingFor(n))}</span><span class="m">${esc(n.totalMin)} min</span></button>`).join('');
+    const prep = plan.prep;
+    return `
+      <section><h2>This week</h2><p class="lead">${esc(plan.equipment||'')}</p></section>
+      <div class="card weekgrid">${rows}</div>
+      <div class="note"><b>Shopping</b><p>${esc(plan.shopNote||'')}</p></div>
+      <section>
+        <h3>Sunday prep · about ${esc(prep.minutes)} minutes</h3>
+        <ol class="steps">${(prep.steps||[]).map(s=>`<li><p><b>${esc(s.title)}.</b> ${esc(s.text)}</p></li>`).join('')}</ol>
+      </section>
+      <section>
+        <h3>Leftover map</h3>
+        <div class="card tablewrap"><table><thead><tr><th>Cook</th><th>Extra</th><th>Use it for</th></tr></thead><tbody>
+          ${(prep.leftovers||[]).map(l=>`<tr><td>${esc(l.cook)}</td><td>${esc(l.extra)}</td><td>${esc(l.use)}</td></tr>`).join('')}
+        </tbody></table></div>
+        <p class="status">${esc(prep.storage||'')}</p>
+      </section>
+      <div class="note green"><b>Toddler rules, every night</b><p>${esc(plan.toddlerRules||'')}</p></div>
+      <section>
+        <h3>Who's rating</h3>
+        <p class="status" style="margin-top:-6px">Each dinner tab has a thumbs up or down for each of you, plus an ease rating.</p>
+        <div class="names"><label for="name-0">First adult<input id="name-0" data-name="0" value="${esc(names[0])}" maxlength="24"></label><label for="name-1">Second adult<input id="name-1" data-name="1" value="${esc(names[1])}" maxlength="24"></label></div>
+      </section>
+      <section>
+        <h3>Your data</h3>
+        <p class="status" style="margin-top:-6px">Ratings, sliders, store choices and checklists are saved on this device. Export a backup to move them to another phone, or import a new week's plan file.</p>
+        <div class="row">
+          <button class="btn" id="export">Export backup</button>
+          <button class="btn" id="import">Import backup or plan</button>
+          <button class="btn" id="refresh">Check for new plan</button>
+        </div>
+        <p class="status">Plan generated ${esc(plan.generatedAt ? fmtDate(new Date(plan.generatedAt),{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) : '—')}${planSource==='imported'?' · imported from a file':''}.</p>
+      </section>`;
+  }
+
+  // ---------- ratings ----------
+  function ratingFor(n){ return n && n.mealId ? ratings[n.mealId] : null; }
+  const thumbs = v => v==='up'?'👍':v==='down'?'👎':'·';
+  function ratingSummary(r){
+    if(!r || (!r.a && !r.b && !r.ease)) return '';
+    const both = r.a && r.b;
+    const tag = both ? (r.a==='up'&&r.b==='up' ? 'Favorite' : r.a==='down'&&r.b==='down' ? 'Retired' : 'Split vote') : 'Partly rated';
+    const ease = EASE.find(e=>e[0]===r.ease);
+    return `<span class="chip ${tag==='Favorite'?'green':tag==='Retired'?'warm':''}">${thumbs(r.a)}${thumbs(r.b)} ${tag}${ease?' · '+ease[1]:''}</span>`;
+  }
+  function ratingCard(n){
+    if(!n.mealId) return '';
+    const r = ratingFor(n);
+    if(r && r.ratedWeek && r.ratedWeek !== plan.weekOf){
+      return `<div class="card rate"><h3>Your ratings</h3><p class="status">You rated this dinner the week of ${esc(r.ratedWeek)}.</p><div class="meta">${ratingSummary(r)}</div></div>`;
+    }
+    const cur = r || {};
+    const who = (k,i)=>`<div class="raterow"><span class="who">${esc(names[i]||('Adult '+(i+1)))}</span>
+      <div class="seg" role="group" aria-label="${esc(names[i])}'s rating">
+        <button data-rate="${k}" data-val="up" aria-pressed="${cur[k]==='up'}" aria-label="Thumbs up">👍</button>
+        <button data-rate="${k}" data-val="down" aria-pressed="${cur[k]==='down'}" aria-label="Thumbs down">👎</button>
+      </div></div>`;
+    return `<div class="card rate">
+      <h3>How was it?</h3>
+      <p class="status">Two thumbs up brings it back within two weeks, a split vote within four, and two thumbs down retires it.</p>
+      ${who('a',0)}${who('b',1)}
+      <div class="raterow col"><span class="who">How easy was it to make?</span>
+        <div class="seg wide" role="group" aria-label="Ease of preparing">${EASE.map(([v,l])=>`<button data-ease="${v}" aria-pressed="${cur.ease===v}">${l}</button>`).join('')}</div>
+      </div>
+      <p class="status">${n.newTechnique?'New technique this week: '+esc(n.technique)+'. Your ease rating shapes how fast new techniques come.':'Your ease rating shapes how fast new techniques come.'}</p>
+    </div>`;
+  }
+  function saveRating(n, patch){
+    const prev = ratings[n.mealId] || {};
+    ratings[n.mealId] = Object.assign({}, prev, patch, {mealId:n.mealId, title:n.title, cuisine:n.cuisine||null, technique:n.technique||null, ratedWeek:plan.weekOf, updatedAt:new Date().toISOString()});
+    persist(); render();
+  }
+
+  // ---------- one night ----------
+  function nightKey(id){ return 'fdp:' + plan.weekOf + ':' + id; }
+  function renderNight(id){
+    const i = plan.nights.findIndex(n=>n.id===id);
+    const n = plan.nights[i];
+    const st = store.get(nightKey(id)) || {ing:[], steps:[]};
+    const date = fmtDate(weekDate(i), {weekday:'long', month:'long', day:'numeric'});
+    const r = ratingFor(n);
+    return `
+      <section>
+        <div class="eyebrow">${esc(date)}</div>
+        <h2>${esc(n.title)}</h2>
+        <div class="meta">
+          <span class="chip">${esc(n.activeMin)} min active</span>
+          <span class="chip">${esc(n.totalMin)} min total</span>
+          ${(n.gear||[]).map(g=>`<span class="chip">${esc(g)}</span>`).join('')}
+          ${n.meatless?'<span class="chip green">Meatless</span>':''}
+          ${n.cuisine?`<span class="chip">${esc(n.cuisine)}</span>`:''}
+          ${n.newTechnique?`<span class="chip warm">New technique</span>`:''}
+          ${r && r.ratedWeek!==plan.weekOf ? ratingSummary(r) : ''}
+        </div>
+        <p class="lead" style="margin-top:6px">${esc(n.why)}</p>
+      </section>
+      <div class="card">${plateHTML(n.plate)}</div>
+      <section>
+        <div class="row" style="justify-content:space-between"><h3 style="margin:0">Ingredients</h3><span class="status">Serves ${esc(plan.household||'2 adults + toddler')}</span></div>
+        <div class="card" style="padding-block:6px"><ul class="check">
+          ${(n.ingredients||[]).map((x,j)=>`<li><label><input type="checkbox" id="ing-${esc(id)}-${j}" data-ing="${j}" ${st.ing.includes(j)?'checked':''}><span>${esc(x)}</span></label></li>`).join('')}
+        </ul></div>
+      </section>
+      <section>
+        <div class="row" style="justify-content:space-between"><h3 style="margin:0">Steps</h3>${'wakeLock' in navigator?`<button class="btn" id="wake" aria-pressed="${!!wake}">${wake?'Screen stays on':'Keep screen on'}</button>`:''}</div>
+        <p class="status">Tap a step to mark it done.</p>
+        <ol class="steps">${(n.steps||[]).map((s,j)=>`<li class="${st.steps.includes(j)?'done':''}"><button data-step="${j}" aria-pressed="${st.steps.includes(j)}"><p>${esc(s)}</p></button></li>`).join('')}</ol>
+      </section>
+      <div class="note green"><b>Toddler plate</b><p>${esc(n.toddler)}</p></div>
+      <div class="note"><b>Prep-ahead &amp; leftovers</b><p>${esc(n.prep)}</p></div>
+      ${n.technique?`<div class="note green"><b>Technique${n.newTechnique?' · new':''}</b><p>${esc(n.technique)}</p></div>`:''}
+      ${ratingCard(n)}
+      <div class="row">
+        ${i>0?`<button class="btn" data-go="${esc(plan.nights[i-1].id)}">← ${esc(plan.nights[i-1].day)}</button>`:`<button class="btn" data-go="week">← Week</button>`}
+        <span style="flex:1"></span>
+        ${i<plan.nights.length-1?`<button class="btn" data-go="${esc(plan.nights[i+1].id)}">${esc(plan.nights[i+1].day)} →</button>`:`<button class="btn" data-go="groceries">Groceries →</button>`}
+      </div>`;
+  }
+
+  // ---------- groceries ----------
+  function enabledStores(){
+    const ids = (plan.grocery.stores||[]).map(s=>s.id);
+    const on = enabled || DEFAULT_STORES;
+    return ids.filter(id=>on.includes(id));
+  }
+  function storeName(id){ const s=(plan.grocery.stores||[]).find(s=>s.id===id); return s?s.name:id; }
+  function allItems(){ const out=[]; (plan.grocery.groups||[]).forEach(g=>g.items.forEach(it=>out.push([it,g]))); return out; }
+  function levelFor(item, grp){
+    const d = inv[item.key];
+    if(d && (item.staple || grp.pantry || d.weekOf === plan.weekOf)) return d.level;
+    return grp.pantry ? 4 : 0;
+  }
+  function pick(it, stores){
+    const pr = it.prices||{};
+    let best = null;
+    stores.forEach(id=>{ const p=pr[id]; if(p && (best===null || p.cost < best.cost)) best = {store:id, cost:p.cost, p}; });
+    return best || {store:null, cost:it.price||0, p:null};
+  }
+  function totals(){
+    const on = enabledStores();
+    let full=0, left=0; const route={};
+    allItems().forEach(([it,g])=>{
+      const lv = levelFor(it,g), pk = pick(it,on), owe = pk.cost*(1-lv/4);
+      if(!g.pantry) full += pk.cost;
+      left += owe;
+      if(owe>0.004){ const k=pk.store||'any'; route[k]=route[k]||{cost:0,n:0}; route[k].cost+=owe; route[k].n++; }
+    });
+    return {full,left,route};
+  }
+  function oneStore(id){
+    let total=0, priced=0, n=0;
+    allItems().forEach(([it,g])=>{ if(g.pantry) return; n++; const p=(it.prices||{})[id]; if(p){ total+=p.cost; priced++; } else total+=it.price||0; });
+    return {total,priced,n};
+  }
+  function itemPriceText(it, grp, on){
+    const lv = levelFor(it, grp), pk = pick(it,on);
+    return money(pk.cost*(1-lv/4));
+  }
+
+  function renderGroceries(){
+    const g = plan.grocery, on = enabledStores(), t = totals();
+    const stores = g.stores||[];
+    const toggles = stores.map(s=>`<button class="storechip" data-store="${esc(s.id)}" aria-pressed="${on.includes(s.id)}"><span class="sn">${esc(s.name)}</span><small>${esc(s.note||'')}</small></button>`).join('');
+    const routeRows = Object.entries(t.route).sort((a,b)=>b[1].cost-a[1].cost).map(([k,v])=>`<tr><td>${k==='any'?'Any store (typical price)':esc(storeName(k))}</td><td class="num">${v.n}</td><td class="num">${money(v.cost)}</td></tr>`).join('');
+    const compRows = stores.map(s=>{ const o=oneStore(s.id); return `<tr class="${on.includes(s.id)?'':'off'}"><td>${esc(s.name)}</td><td class="num">${money(o.total)}</td><td class="num">${o.priced} of ${o.n}</td></tr>`; }).join('');
+    const groups = (g.groups||[]).map(grp=>`
+      <div class="card store">
+        <div class="storehead"><h3>${esc(grp.name)}</h3>${grp.pantry?'<small>Most kitchens have these; slide to show what\'s empty</small>':''}</div>
+        ${grp.items.map(it=>{
+          const lv = levelFor(it, grp), pk = pick(it,on), pr = it.prices||{};
+          const strip = Object.keys(pr).length ? `<div class="strip">${stores.map(s=>{
+            const p = pr[s.id]; const best = pk.store===s.id; const off = !on.includes(s.id);
+            return `<div class="cell${best?' best':''}${off?' off':''}"><span class="st">${esc(s.name.replace('-Osco',''))}</span>${p?`<b>${money(p.cost)}</b><small>${esc(p.unit)}${p.sale?' · sale':''}${p.bulk?' · bulk':''}${p.approx?' · approx.':''}</small>`:'<b class="na">—</b><small>no price</small>'}</div>`;
+          }).join('')}</div>` : '';
+          const notes = [it.note, pk.p && pk.p.note].filter(Boolean);
+          return `<div class="item${lv===4?' have':''}">
+            <div><div class="nm">${esc(it.name)}</div><div class="am">${esc(it.amount)}${it.for?' · '+esc(it.for):''}</div></div>
+            <div class="pr"><span class="owe">${itemPriceText(it,grp,on)}</span><small>${pk.store?'at '+esc(storeName(pk.store)):'typical price'}</small></div>
+            ${strip}
+            ${notes.length?`<div class="tip">${notes.map(esc).join(' ')}</div>`:''}
+            <div class="slider"><input type="range" min="0" max="4" step="1" value="${lv}" id="inv-${esc(it.key)}" data-inv="${esc(it.key)}" aria-label="How much ${esc(it.name)} you already have" aria-valuetext="${LEVELS[lv]}"><output class="${lv===4?'full':''}" for="inv-${esc(it.key)}">${LEVELS[lv]}</output></div>
+            <div class="scale"><span>None on hand</span><span>Have enough</span></div>
+          </div>`;
+        }).join('')}
+      </div>`).join('');
+    return `
+      <section><h2>Grocery list &amp; best prices</h2><p class="lead">${esc(g.estimate)}</p></section>
+      <div class="card totals">
+        <div class="total"><b id="tLeft">${money(t.left)}</b><span>Left to buy at your stores</span></div>
+        <div class="total"><b>${money(t.full)}</b><span>Full list, before what's on hand</span></div>
+      </div>
+      <section>
+        <h3>My stores</h3>
+        <p class="status" style="margin-top:-6px">Turn off stores you won't visit. Each item's pick and the totals update.</p>
+        <div class="storechips">${toggles}</div>
+      </section>
+      <section>
+        <h3>Your trip</h3>
+        <div class="card tablewrap"><table><thead><tr><th>Store</th><th class="num">Items</th><th class="num">Spend</th></tr></thead><tbody id="route">${routeRows||'<tr><td colspan="3">Everything is on hand.</td></tr>'}</tbody></table></div>
+      </section>
+      <section>
+        <h3>If you shopped at one store</h3>
+        <div class="card tablewrap"><table><thead><tr><th>Store</th><th class="num">Whole list</th><th class="num">Items priced</th></tr></thead><tbody>${compRows}</tbody></table></div>
+        <p class="status">Items a store has no price for are counted at their typical price. Costco totals use whole bulk packs.</p>
+      </section>
+      <div class="note"><b>Shopping</b><p>${esc(plan.shopNote||'')}</p></div>
+      <p class="status">Slide each item to show how much you already have. Fresh items reset with each new plan; pantry, frozen and dry goods stay where you leave them.</p>
+      ${groups}
+      <p class="status">${esc(g.skipped||'')}</p>
+      <div class="sources">Prices from: ${(g.sources||[]).map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join('')}</div>
+      <div class="row"><button class="btn" id="resetInv">Reset all sliders</button></div>`;
+  }
+
+  // ---------- render ----------
+  function render(){
+    if(!plan){
+      renderTabs('');
+      $main.innerHTML = loadNote
+        ? `<div class="empty"><h2>Plan not reachable yet</h2><p>${esc(loadNote)}</p><p style="margin-top:16px"><button class="btn" id="import">Import a plan file</button></p></div>`
+        : `<div class="empty"><h2>Loading this week's plan</h2><p>Pulling up the dinners and grocery list.</p></div>`;
+      return;
+    }
+    header();
+    const id = current();
+    renderTabs(id);
+    if(id !== cookingFor) dropWake();
+    let html = id==='week' ? renderWeek() : id==='groceries' ? renderGroceries() : renderNight(id);
+    if(loadNote) html = `<div class="banner">${esc(loadNote)}</div>` + html;
+    $main.innerHTML = html;
+  }
+
+  // ---------- interactions ----------
+  document.addEventListener('click', e=>{
+    const g = e.target.closest('[data-go]');
+    if(g){ go(g.dataset.go); return; }
+    if(!e.target.closest('button')) return;
+    const b = e.target.closest('button');
+    if(b.id === 'export') return exportData();
+    if(b.id === 'import') return $('importfile').click();
+    if(b.id === 'refresh'){ loadPlan().then(()=>toast('Plan is up to date')); return; }
+    if(!plan) return;
+    if(b.id === 'wake'){ wake ? dropWake() : holdWake(current()); return; }
+    if(b.id === 'resetInv') return resetInventory();
+    if(b.dataset.step !== undefined){
+      const key = nightKey(current());
+      const st = store.get(key) || {ing:[], steps:[]};
+      const j = +b.dataset.step;
+      st.steps = st.steps.includes(j) ? st.steps.filter(x=>x!==j) : [...st.steps, j];
+      store.set(key, st);
+      b.parentElement.classList.toggle('done', st.steps.includes(j)); b.setAttribute('aria-pressed', st.steps.includes(j));
+      return;
+    }
+    const n = plan.nights.find(x=>x.id===current());
+    if(b.dataset.rate && n){ const k=b.dataset.rate; const cur=(ratings[n.mealId]||{})[k]; saveRating(n, {[k]: cur===b.dataset.val ? null : b.dataset.val}); return; }
+    if(b.dataset.ease && n){ const cur=(ratings[n.mealId]||{}).ease; saveRating(n, {ease: cur===b.dataset.ease ? null : b.dataset.ease}); return; }
+    if(b.dataset.store){
+      const cur = enabledStores(), id = b.dataset.store;
+      enabled = cur.includes(id) ? cur.filter(x=>x!==id) : [...cur, id];
+      persist(); render(); return;
+    }
+  });
+  document.addEventListener('change', e=>{
+    const t = e.target;
+    if(t.dataset.ing !== undefined && plan){
+      const key = nightKey(current());
+      const st = store.get(key) || {ing:[], steps:[]};
+      const j = +t.dataset.ing;
+      st.ing = t.checked ? [...new Set([...st.ing, j])] : st.ing.filter(x=>x!==j);
+      store.set(key, st);
+    }
+    if(t.dataset.inv) persist();
+    if(t.dataset.name !== undefined){
+      const i = +t.dataset.name;
+      names[i] = t.value.trim() || ('Adult '+(i+1));
+      persist();
+    }
+  });
+  document.addEventListener('input', e=>{
+    const t = e.target;
+    if(!t.dataset.inv || !plan) return;
+    const lv = +t.value, row = t.closest('.item');
+    const out = row.querySelector('output');
+    out.textContent = LEVELS[lv]; out.classList.toggle('full', lv===4);
+    t.setAttribute('aria-valuetext', LEVELS[lv]);
+    row.classList.toggle('have', lv===4);
+    inv[t.dataset.inv] = {level:lv, weekOf:plan.weekOf};
+    const hit = allItems().find(([it])=>it.key===t.dataset.inv);
+    if(hit) row.querySelector('.owe').textContent = itemPriceText(hit[0], hit[1], enabledStores());
+    const tl = $('tLeft'); if(tl) tl.textContent = money(totals().left);
+  });
+  // re-render the trip table once a slide is finished
+  document.addEventListener('change', e=>{ if(e.target.dataset.inv) { const y = scrollY; render(); scrollTo(0,y); } });
+
+  function resetInventory(){
+    allItems().forEach(([it,grp])=>{ inv[it.key] = {level: grp.pantry ? 4 : 0, weekOf: plan.weekOf}; });
+    persist(); render(); toast('Sliders reset');
+  }
+
+  window.addEventListener('hashchange', render);
+
+  // ---------- backup & plan import ----------
+  function checklistKeys(){
+    const out = {};
+    try{ for(let i=0;i<localStorage.length;i++){ const k = localStorage.key(i); if(/^fdp:\d{4}-\d{2}-\d{2}:/.test(k)) out[k] = store.get(k); } }catch(e){}
+    return out;
+  }
+  function exportData(){
+    const data = {app:'family-dinner', version:1, exported:new Date().toISOString(), ratings, inv, enabled, names, checklists:checklistKeys()};
+    const blob = new Blob([JSON.stringify(data, null, 1)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'family-dinner-' + new Date().toISOString().slice(0,10) + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+    toast('Backup exported');
+  }
+  async function importFile(file){
+    let c;
+    try{ c = JSON.parse(await file.text()); }catch(e){ toast("That file isn't a backup or a plan"); return; }
+    if(validPlan(c)){
+      const prev = plan && {plan, source:planSource};
+      usePlan(c, 'imported'); loadNote = ''; render();
+      toast('Plan for week of ' + c.weekOf + ' loaded', prev ? 'Undo' : null, ()=>{ usePlan(prev.plan, prev.source); render(); }, 8000);
+      return;
+    }
+    if(!c || c.app !== 'family-dinner'){ toast("That file isn't a backup or a plan"); return; }
+    if(!confirm('Replace the ratings, sliders and checklists on this device with the backup?')) return;
+    const prev = {ratings, inv, enabled, names};
+    ratings = obj(c.ratings); inv = obj(c.inv);
+    enabled = Array.isArray(c.enabled) ? c.enabled : null;
+    names = Array.isArray(c.names) && c.names.length ? [String(c.names[0]||'Adult 1'), String(c.names[1]||'Adult 2')] : names;
+    Object.entries(obj(c.checklists)).forEach(([k,v])=>{ if(/^fdp:\d{4}-\d{2}-\d{2}:/.test(k) && v && Array.isArray(v.ing) && Array.isArray(v.steps)) store.set(k, v); });
+    persist(); render();
+    toast('Backup imported', 'Undo', ()=>{ ({ratings, inv, enabled, names} = prev); persist(); render(); }, 8000);
+  }
+  $('importfile').addEventListener('change', e=>{ const f = e.target.files[0]; e.target.value = ''; if(f) importFile(f); });
+
+  // ---------- keep screen on while cooking ----------
+  let wake = null, cookingFor = null;
+  async function holdWake(id){
+    try{
+      if(!wake && navigator.wakeLock && !document.hidden){
+        wake = await navigator.wakeLock.request('screen'); cookingFor = id;
+        wake.addEventListener('release', ()=>{ wake = null; paintWake(); });
+      }
+    }catch(e){ toast("This device won't keep the screen on"); }
+    paintWake();
+  }
+  function dropWake(){ cookingFor = null; try{ wake && wake.release(); }catch(e){} wake = null; paintWake(); }
+  function paintWake(){ const b = $('wake'); if(b){ b.setAttribute('aria-pressed', !!wake); b.textContent = wake ? 'Screen stays on' : 'Keep screen on'; } }
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden && cookingFor && cookingFor === current()) { const id = cookingFor; cookingFor = null; holdWake(id); } });
+
+  // ---------- toast ----------
+  let toastT = null;
+  function toast(msg, btn, fn, ms=4000){
+    $('toastmsg').textContent = msg; const b = $('toastbtn');
+    if(btn){ b.textContent = btn; b.hidden = false; b.onclick = ()=>{ $('toast').hidden = true; fn(); }; } else b.hidden = true;
+    $('toast').hidden = false; clearTimeout(toastT);
+    if(ms) toastT = setTimeout(()=>{ $('toast').hidden = true; }, ms);
+  }
+
+  // ---------- app shell ----------
+  if('serviceWorker' in navigator && location.protocol !== 'file:'){
+    addEventListener('load', ()=>{
+      navigator.serviceWorker.register('sw.js').then(reg=>{
+        const offer = w => toast('A new version is ready', 'Reload', ()=>w.postMessage('skipWaiting'), 0);
+        if(reg.waiting && navigator.serviceWorker.controller) offer(reg.waiting);
+        reg.addEventListener('updatefound', ()=>{ const w = reg.installing; w && w.addEventListener('statechange', ()=>{ if(w.state === 'installed' && navigator.serviceWorker.controller) offer(w); }); });
+      }).catch(()=>{});
+      let reloaded = false;
+      navigator.serviceWorker.addEventListener('controllerchange', ()=>{ if(reloaded) return; reloaded = true; location.reload(); });
+    });
+  }
+  // a new plan may have been published while the app sat in the background
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden && plan) loadPlan(); });
+
+  render();
+  loadPlan();
+})();
