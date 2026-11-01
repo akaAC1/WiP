@@ -51,7 +51,7 @@
     }catch(e){
       loadNote = plan ? '' : "The plan couldn't load. Check your connection and reopen the app.";
     }
-    render();
+    safeRender();
   }
 
   // ---------- dates & navigation ----------
@@ -132,6 +132,7 @@
         <p class="status" style="margin-top:-6px">Each dinner tab has a thumbs up or down for each of you, plus an ease rating.</p>
         <div class="names"><label for="name-0">First adult<input id="name-0" data-name="0" value="${esc(names[0])}" maxlength="24"></label><label for="name-1">Second adult<input id="name-1" data-name="1" value="${esc(names[1])}" maxlength="24"></label></div>
       </section>
+      ${syncSection()}
       <section>
         <h3>Your data</h3>
         <p class="status" style="margin-top:-6px">Ratings, sliders, store choices and checklists are saved on this device. Export a backup to move them to another phone, or import a new week's plan file.</p>
@@ -178,8 +179,13 @@
   }
   function saveRating(n, patch){
     const prev = ratings[n.mealId] || {};
-    ratings[n.mealId] = Object.assign({}, prev, patch, {mealId:n.mealId, title:n.title, cuisine:n.cuisine||null, technique:n.technique||null, ratedWeek:plan.weekOf, updatedAt:new Date().toISOString()});
+    const now = new Date().toISOString();
+    // per-field times let two phones rate the same dinner without overwriting each other
+    const t = Object.assign({}, prev.t);
+    Object.keys(patch).forEach(k=>{ t[k] = now; });
+    ratings[n.mealId] = Object.assign({}, prev, patch, {mealId:n.mealId, title:n.title, cuisine:n.cuisine||null, technique:n.technique||null, ratedWeek:plan.weekOf, updatedAt:now, t});
     persist(); render();
+    markDirty();
   }
 
   // ---------- one night ----------
@@ -322,6 +328,165 @@
       <div class="row"><button class="btn" id="resetInv">Reset all sliders</button></div>`;
   }
 
+  // ---------- ratings sync (GitHub) ----------
+  // Ratings are saved to family-dinner/ratings.json on a data branch of the repo, where the
+  // Saturday plan task reads them. A data branch keeps rating saves from redeploying the site.
+  const SYNC_KEY = 'fdp:sync', DATA_BRANCH = 'family-dinner-data', RATINGS_PATH = 'family-dinner/ratings.json';
+  const RATE_FIELDS = ['a','b','ease'], META_FIELDS = ['mealId','title','cuisine','technique','ratedWeek'];
+  let sync = Object.assign({owner:'', repo:'', token:'', lastSync:null, error:'', dirty:false}, store.get(SYNC_KEY) || {});
+  if(!sync.owner || !sync.repo){ const g = guessRepo(); sync.owner = sync.owner || g.owner; sync.repo = sync.repo || g.repo; }
+  let syncing = false, syncAgain = false, syncTimer = null;
+  function guessRepo(){
+    const m = location.hostname.match(/^([^.]+)\.github\.io$/i);
+    const seg = location.pathname.split('/').filter(Boolean)[0] || '';
+    return m && seg ? {owner:m[1], repo:seg} : {owner:'', repo:''};
+  }
+  function saveSync(){ store.set(SYNC_KEY, sync); }
+  function syncOn(){ return !!(sync.token && sync.owner && sync.repo); }
+  function markDirty(){
+    if(!syncOn()) return;
+    sync.dirty = true; saveSync();
+    clearTimeout(syncTimer); syncTimer = setTimeout(syncRatings, 2500);
+  }
+  async function gh(method, path, body){
+    const res = await fetch('https://api.github.com/repos/' + encodeURIComponent(sync.owner) + '/' + encodeURIComponent(sync.repo) + path, {
+      method, cache:'no-store',
+      headers: Object.assign({'Authorization':'Bearer ' + sync.token, 'Accept':'application/vnd.github+json', 'X-GitHub-Api-Version':'2022-11-28'}, body ? {'Content-Type':'application/json'} : {}),
+      body: body ? JSON.stringify(body) : undefined
+    });
+    const data = res.status === 204 ? null : await res.json().catch(()=>null);
+    if(!res.ok){ const e = new Error((data && data.message) || ('HTTP ' + res.status)); e.status = res.status; throw e; }
+    return data;
+  }
+  const b64encode = s => { const bytes = new TextEncoder().encode(s); let bin = ''; bytes.forEach(b=>{ bin += String.fromCharCode(b); }); return btoa(bin); };
+  const b64decode = s => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\s/g,'')), c=>c.charCodeAt(0)));
+  async function ensureBranch(){
+    try{ await gh('GET', '/git/ref/heads/' + DATA_BRANCH); return; }
+    catch(e){ if(e.status !== 404) throw e; }
+    const repo = await gh('GET', '');
+    const base = await gh('GET', '/git/ref/heads/' + encodeURIComponent(repo.default_branch || 'main'));
+    try{ await gh('POST', '/git/refs', {ref:'refs/heads/' + DATA_BRANCH, sha:base.object.sha}); }
+    catch(e){ if(e.status !== 422) throw e; } // 422: another phone created it first
+  }
+  async function readRemote(){
+    try{
+      const f = await gh('GET', '/contents/' + RATINGS_PATH + '?ref=' + DATA_BRANCH);
+      const doc = JSON.parse(b64decode(f.content || ''));
+      return {sha:f.sha, ratings:obj(doc && doc.ratings)};
+    }catch(e){ if(e.status === 404) return {sha:null, ratings:{}}; throw e; }
+  }
+  // records with per-field times use them; older records (made in Claude, or from a backup) use updatedAt
+  function fieldTime(r, f){ if(!r) return ''; if(r.t && typeof r.t === 'object') return r.t[f] || ''; return r.updatedAt || ''; }
+  function mergeRatings(x, y){ // newest value wins per field; ties keep x
+    const out = {};
+    new Set([...Object.keys(x), ...Object.keys(y)]).forEach(id=>{
+      const a = x[id], b = y[id];
+      if(!a || !b){ out[id] = Object.assign({}, a || b); return; }
+      const newer = String(b.updatedAt||'') > String(a.updatedAt||'') ? b : a;
+      const r = {t:{}};
+      META_FIELDS.forEach(f=>{ r[f] = newer[f] !== undefined ? newer[f] : (a[f] !== undefined ? a[f] : b[f]); });
+      RATE_FIELDS.forEach(f=>{
+        const ta = fieldTime(a,f), tb = fieldTime(b,f);
+        const src = tb > ta ? b : a;
+        r[f] = src[f] === undefined ? null : src[f];
+        r.t[f] = tb > ta ? tb : ta;
+      });
+      r.updatedAt = String(b.updatedAt||'') > String(a.updatedAt||'') ? b.updatedAt : a.updatedAt;
+      out[id] = r;
+    });
+    return out;
+  }
+  const sameRatings = (x, y) => JSON.stringify(sortKeys(x)) === JSON.stringify(sortKeys(y));
+  function sortKeys(v){ if(Array.isArray(v)) return v.map(sortKeys); if(v && typeof v === 'object'){ const o = {}; Object.keys(v).sort().forEach(k=>{ o[k] = sortKeys(v[k]); }); return o; } return v; }
+
+  async function syncRatings(opts){
+    opts = opts || {};
+    if(!syncOn()) return;
+    if(syncing){ syncAgain = true; return; }
+    syncing = true; clearTimeout(syncTimer); paintSync('Syncing…');
+    try{
+      await ensureBranch();
+      for(let attempt = 0; ; attempt++){
+        const remote = await readRemote();
+        const merged = mergeRatings(ratings, remote.ratings);
+        if(!sameRatings(merged, remote.ratings)){
+          const doc = {updatedAt:new Date().toISOString(), ratings:sortKeys(merged)};
+          try{
+            await gh('PUT', '/contents/' + RATINGS_PATH, {
+              message: 'Dinner ratings from ' + names.join(' & ') + ' (' + new Date().toISOString().slice(0,10) + ')',
+              content: b64encode(JSON.stringify(doc, null, 1) + '\n'),
+              branch: DATA_BRANCH,
+              ...(remote.sha ? {sha:remote.sha} : {})
+            });
+          }catch(e){
+            if((e.status === 409 || e.status === 422) && attempt < 3) continue; // another phone saved first; merge again
+            throw e;
+          }
+        }
+        const changedHere = !sameRatings(merged, ratings);
+        ratings = merged; persist();
+        if(changedHere) safeRender();
+        break;
+      }
+      sync.dirty = false; sync.error = ''; sync.lastSync = new Date().toISOString(); saveSync();
+      paintSync();
+      if(opts.manual) toast('Ratings synced');
+    }catch(e){
+      sync.error = e.status === 401 ? 'GitHub rejected the token. It may have expired; paste a new one.'
+        : (e.status === 403 || e.status === 404) ? "The token can't write to " + sync.owner + '/' + sync.repo + '. Check its repository access and that Contents is set to Read and write.'
+        : (e instanceof TypeError) ? "Couldn't reach GitHub. Ratings will sync when you're back online."
+        : 'Sync failed: ' + e.message;
+      saveSync(); paintSync();
+      if(opts.manual) toast(sync.error);
+    }finally{
+      syncing = false;
+      if(syncAgain){ syncAgain = false; syncRatings(); }
+    }
+  }
+  function syncStatusText(){
+    if(!syncOn()) return 'Not connected. Ratings stay on this phone.';
+    if(sync.error) return sync.error;
+    const when = sync.lastSync ? new Date(sync.lastSync).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) : 'not yet';
+    return (sync.dirty ? 'Waiting to sync. ' : '') + 'Last synced ' + when + '.';
+  }
+  function paintSync(text){ const el = $('syncStatus'); if(el) el.textContent = text || syncStatusText(); }
+  function syncSection(){
+    const head = `<h3>Share ratings with the Saturday plan</h3>
+      <p class="status" style="margin-top:-6px">Ratings sync to your GitHub repo, where the Saturday plan reads them along with ratings made in Claude. Both phones can sync; each person's thumbs are kept.</p>`;
+    if(syncOn()) return `<section>${head}
+      <p><b>Connected to ${esc(sync.owner)}/${esc(sync.repo)}</b></p>
+      <p class="status" id="syncStatus">${esc(syncStatusText())}</p>
+      <div class="row"><button class="btn primary" id="syncNow">Sync now</button><button class="btn" id="syncOff">Disconnect</button></div>
+    </section>`;
+    return `<section>${head}
+      <div class="names">
+        <label for="syncOwner">GitHub owner<input id="syncOwner" value="${esc(sync.owner)}" autocapitalize="off" autocorrect="off" spellcheck="false"></label>
+        <label for="syncRepo">Repository<input id="syncRepo" value="${esc(sync.repo)}" autocapitalize="off" autocorrect="off" spellcheck="false"></label>
+      </div>
+      <div class="names" style="grid-template-columns:1fr"><label for="syncToken">Access token<input id="syncToken" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_…"></label></div>
+      <p class="status">Make a fine-grained token for this one repository with Contents set to Read and write. <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener" style="color:var(--accent)">Create a token</a> · the app's README has step-by-step instructions. The token is stored only on this phone.</p>
+      <div class="row"><button class="btn primary" id="syncConnect">Connect &amp; sync</button></div>
+      <p class="status" id="syncStatus">${esc(sync.error || '')}</p>
+    </section>`;
+  }
+  function connectSync(){
+    const owner = ($('syncOwner').value || '').trim(), repo = ($('syncRepo').value || '').trim(), token = ($('syncToken').value || '').trim();
+    if(!owner || !repo || !token){ paintSync('Fill in the owner, repository and token.'); return; }
+    sync = Object.assign(sync, {owner, repo, token, error:'', dirty:true}); saveSync();
+    render(); syncRatings({manual:true});
+  }
+  function disconnectSync(){
+    if(!confirm('Disconnect? The token is removed from this phone. Ratings already synced stay in the repo.')) return;
+    sync = Object.assign(sync, {token:'', error:'', lastSync:null, dirty:false}); saveSync(); render();
+  }
+  let pendingRender = false;
+  function safeRender(){
+    const a = document.activeElement;
+    if(a && (a.tagName === 'INPUT' && a.type !== 'checkbox' && a.type !== 'range')){ pendingRender = true; return; }
+    const y = scrollY; render(); scrollTo(0, y);
+  }
+  document.addEventListener('focusout', ()=>{ if(pendingRender){ pendingRender = false; setTimeout(safeRender, 0); } });
+
   // ---------- render ----------
   function render(){
     if(!plan){
@@ -349,6 +514,9 @@
     if(b.id === 'export') return exportData();
     if(b.id === 'import') return $('importfile').click();
     if(b.id === 'refresh'){ loadPlan().then(()=>toast('Plan is up to date')); return; }
+    if(b.id === 'syncConnect') return connectSync();
+    if(b.id === 'syncNow') return syncRatings({manual:true});
+    if(b.id === 'syncOff') return disconnectSync();
     if(!plan) return;
     if(b.id === 'wake'){ wake ? dropWake() : holdWake(current()); return; }
     if(b.id === 'resetInv') return resetInventory();
@@ -441,7 +609,7 @@
     enabled = Array.isArray(c.enabled) ? c.enabled : null;
     names = Array.isArray(c.names) && c.names.length ? [String(c.names[0]||'Adult 1'), String(c.names[1]||'Adult 2')] : names;
     Object.entries(obj(c.checklists)).forEach(([k,v])=>{ if(/^fdp:\d{4}-\d{2}-\d{2}:/.test(k) && v && Array.isArray(v.ing) && Array.isArray(v.steps)) store.set(k, v); });
-    persist(); render();
+    persist(); render(); markDirty();
     toast('Backup imported', 'Undo', ()=>{ ({ratings, inv, enabled, names} = prev); persist(); render(); }, 8000);
   }
   $('importfile').addEventListener('change', e=>{ const f = e.target.files[0]; e.target.value = ''; if(f) importFile(f); });
@@ -483,8 +651,14 @@
     });
   }
   // a new plan may have been published while the app sat in the background
-  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden && plan) loadPlan(); });
+  document.addEventListener('visibilitychange', ()=>{
+    if(document.hidden) return;
+    if(plan) loadPlan();
+    if(syncOn() && (sync.dirty || !sync.lastSync || Date.now() - new Date(sync.lastSync) > 10*60*1000)) syncRatings();
+  });
+  addEventListener('online', ()=>{ if(syncOn() && sync.dirty) syncRatings(); });
 
   render();
   loadPlan();
+  if(syncOn()) syncRatings();
 })();

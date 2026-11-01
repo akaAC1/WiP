@@ -37,6 +37,37 @@ keep a copy as `plans/<weekOf>.json` for history, and push. Open apps pick up th
 new plan the next time they come back to the foreground. You can also load a plan file
 directly on a phone with **Week → Your data → Import backup or plan**.
 
+## Share ratings with the Saturday plan
+
+Ratings you make in the app can shape next week's plan. The app saves them to
+`family-dinner/ratings.json` on the `family-dinner-data` branch of this repo.
+The Saturday plan task reads that file along with ratings made in the Claude
+artifact. Saving to a separate branch means a rating doesn't redeploy the site.
+
+One-time setup on each phone:
+
+1. On GitHub, open **Settings → Developer settings → Personal access tokens →
+   Fine-grained tokens → Generate new token**
+   (direct link: https://github.com/settings/personal-access-tokens/new).
+2. **Token name:** `Family Dinner app` (add the phone's name if you're making two).
+   **Expiration:** 1 year (or what you're comfortable with).
+3. **Repository access:** *Only select repositories* → `akaAC1/WiP`.
+4. **Permissions → Repository permissions → Contents:** *Read and write*.
+   Leave everything else at *No access*.
+5. **Generate token** and copy it (it starts with `github_pat_`).
+6. In the app, open **Week → Share ratings with the Saturday plan**. Check the
+   owner and repository, paste the token, and tap **Connect & sync**.
+
+After that, each rating syncs a few seconds after you tap it, and again whenever
+you open the app. If you each rate on your own phone, both sets of thumbs are
+kept: the newest value wins for each thumb and for the ease rating.
+
+The token is stored only in that phone's browser storage and isn't included in
+backups. Anyone using that phone could use it to change files in this one repo,
+so keep the scope to this repository. To turn sync off, tap **Disconnect**, or
+revoke the token on GitHub. When the token expires, the app says so; make a
+new one and paste it in.
+
 ## Your data
 
 Ratings, slider positions, store choices, names and recipe checklists are saved in
