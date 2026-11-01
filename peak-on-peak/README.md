@@ -25,8 +25,8 @@ It opens full screen and works offline after the first load.
 
 ## Deploy
 
-`.github/workflows/peak-on-peak-pages.yml` publishes this folder to GitHub Pages
-on every push to `main` that touches it (or run it by hand from the Actions tab).
+The repo's GitHub Pages workflow (`jekyll-gh-pages.yml`) publishes the whole
+repository on every push to `main`, so this app is served at `/peak-on-peak/`.
 Turn it on once in the repo: **Settings → Pages → Source: GitHub Actions**.
 Any static host (Netlify, Cloudflare Pages, Vercel) also works: point it at this folder.
 
