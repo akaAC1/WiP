@@ -109,7 +109,14 @@ tr.off td{color:var(--muted)}
 .item .pr{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
 .item .pr small{display:block;font-weight:400;color:var(--muted);font-size:12px}
 .item .tip{grid-column:1/-1;font-size:13px;color:var(--muted)}
-.item.have .nm,.item.have .pr{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line)}
+.item.have .nm,.item.have .pr,.item.have .am{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--muted)}
+.havelist summary{cursor:pointer;list-style:none}
+.havelist summary::-webkit-details-marker{display:none}
+.havelist summary h3::before{content:"▸";display:inline-block;width:1em;color:var(--muted);transition:transform .15s}
+.havelist[open] summary h3::before{transform:rotate(90deg)}
+.havelist .count{font-family:var(--body);font-size:13px;font-weight:600;color:var(--muted);background:var(--sunk);border-radius:999px;padding:1px 8px;vertical-align:middle}
+.havelist[open] summary{margin-bottom:4px}
+.havelist .item:first-of-type{border-top:1px solid var(--line)}
 .slider{grid-column:1/-1;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin-top:4px}
 .slider input{width:100%;accent-color:var(--accent);height:28px;margin:0}
 .slider output{font-size:13px;font-weight:600;min-width:72px;text-align:right;color:var(--muted)}
