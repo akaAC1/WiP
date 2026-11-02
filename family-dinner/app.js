@@ -319,26 +319,41 @@
     const toggles = stores.map(s=>`<button class="storechip" data-store="${esc(s.id)}" aria-pressed="${on.includes(s.id)}"><span class="sn">${esc(s.name)}</span><small>${esc(s.note||'')}</small></button>`).join('');
     const routeRows = Object.entries(t.route).sort((a,b)=>b[1].cost-a[1].cost).map(([k,v])=>`<tr><td>${k==='any'?'Any store (typical price)':esc(storeName(k))}</td><td class="num">${v.n}</td><td class="num">${money(v.cost)}</td></tr>`).join('');
     const compRows = stores.map(s=>{ const o=oneStore(s.id); return `<tr class="${on.includes(s.id)?'':'off'}"><td>${esc(s.name)}</td><td class="num">${money(o.total)}</td><td class="num">${o.priced} of ${o.n}</td></tr>`; }).join('');
-    const groups = (g.groups||[]).map(grp=>`
-      <div class="card store">
-        <div class="storehead"><h3>${esc(grp.name)}</h3>${grp.pantry?'<small>Most kitchens have these; slide to show what\'s empty</small>':''}</div>
-        ${grp.items.map(it=>{
+    const itemHTML = (it, grp, label) => {
           const lv = levelFor(it, grp), pk = pick(it,on), pr = it.prices||{};
           const strip = Object.keys(pr).length ? `<div class="strip" style="grid-template-columns:repeat(${stores.length > 4 ? 3 : Math.max(stores.length,1)},minmax(0,1fr))">${stores.map(s=>{
             const p = pr[s.id]; const best = pk.store===s.id; const off = !on.includes(s.id);
             return `<div class="cell${best?' best':''}${off?' off':''}"><span class="st">${esc(s.name.replace('-Osco',''))}</span>${p?`<b>${money(p.cost)}</b><small>${esc(p.unit)}${p.sale?' · sale':''}${p.bulk?' · bulk':''}${p.approx?' · approx.':''}</small>`:'<b class="na">—</b><small>no price</small>'}</div>`;
           }).join('')}</div>` : '';
           const notes = [it.note, pk.p && pk.p.note].filter(Boolean);
+          // items you have enough of are collapsed to name + slider at the bottom
+          const full = lv < 4;
           return `<div class="item${lv===4?' have':''}">
-            <div><div class="nm">${esc(it.name)}</div><div class="am">${esc(it.amount)}${it.for?' · '+esc(it.for):''}</div></div>
+            <div><div class="nm">${esc(it.name)}</div><div class="am">${esc(it.amount)}${it.for?' · '+esc(it.for):''}${label?' · '+esc(label):''}</div></div>
             <div class="pr"><span class="owe">${itemPriceText(it,grp,on)}</span><small>${pk.store?'at '+esc(storeName(pk.store)):'typical price'}</small></div>
-            ${strip}
-            ${notes.length?`<div class="tip">${notes.map(esc).join(' ')}</div>`:''}
+            ${full ? strip : ''}
+            ${full && notes.length?`<div class="tip">${notes.map(esc).join(' ')}</div>`:''}
             <div class="slider"><input type="range" min="0" max="4" step="1" value="${lv}" id="inv-${esc(it.key)}" data-inv="${esc(it.key)}" aria-label="How much ${esc(it.name)} you already have" aria-valuetext="${LEVELS[lv]}"><output class="${lv===4?'full':''}" for="inv-${esc(it.key)}">${LEVELS[lv]}</output></div>
             <div class="scale"><span>None on hand</span><span>Have enough</span></div>
           </div>`;
-        }).join('')}
-      </div>`).join('');
+    };
+    const have = [];
+    const groups = (g.groups||[]).map(grp=>{
+      const need = grp.items.filter(it=>levelFor(it,grp) < 4);
+      grp.items.forEach(it=>{ if(levelFor(it,grp) === 4) have.push([it,grp]); });
+      if(!need.length) return '';
+      return `
+      <div class="card store">
+        <div class="storehead"><h3>${esc(grp.name)}</h3>${grp.pantry?'<small>Running low on these; slide back to "Have it" when restocked</small>':''}</div>
+        ${need.map(it=>itemHTML(it, grp)).join('')}
+      </div>`;
+    }).join('');
+    const haveOpen = store.get('fdp:haveOpen') !== false;
+    const haveSection = have.length ? `
+      <details class="card store havelist" id="haveList" ${haveOpen?'open':''}>
+        <summary class="storehead"><h3>Already have <span class="count">${have.length}</span></h3><small>Slide one down if you need it after all</small></summary>
+        ${have.map(([it,grp])=>itemHTML(it, grp, grp.name)).join('')}
+      </details>` : '';
     return `
       <section><h2>Grocery list &amp; best prices</h2><p class="lead">${esc(g.estimate)}</p></section>
       <div class="card totals">
@@ -360,8 +375,9 @@
         <p class="status">Items a store has no price for are counted at their typical price. Costco totals use whole bulk packs.</p>
       </section>
       <div class="note"><b>Shopping</b><p>${esc(plan.shopNote||'')}</p></div>
-      <p class="status">Slide each item to show how much you already have. Fresh items reset with each new plan; pantry, frozen and dry goods stay where you leave them.</p>
-      ${groups}
+      <p class="status">Slide each item to show how much you already have. Items you have enough of move to Already have at the bottom. Fresh items reset with each new plan; pantry, frozen and dry goods stay where you leave them.</p>
+      ${groups || '<div class="card"><p>Nothing left to buy. Everything is in Already have.</p></div>'}
+      ${haveSection}
       <p class="status">${esc(g.skipped||'')}</p>
       <div class="sources">Prices from: ${(g.sources||[]).map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join('')}</div>
       <div class="row"><button class="btn" id="resetInv">Reset all sliders</button></div>`;
@@ -644,8 +660,19 @@
     if(hit) row.querySelector('.owe').textContent = itemPriceText(hit[0], hit[1], enabledStores());
     const tl = $('tLeft'); if(tl) tl.textContent = money(totals().left);
   });
-  // re-render the trip table once a slide is finished
-  document.addEventListener('change', e=>{ if(e.target.dataset.inv) { const y = scrollY; render(); scrollTo(0,y); } });
+  // when a slide finishes, redraw: the item moves to or from Already have
+  const slideStart = {};
+  document.addEventListener('input', e=>{ const k = e.target.dataset.inv; if(k && !(k in slideStart)) slideStart[k] = +e.target.defaultValue; }, true);
+  document.addEventListener('change', e=>{
+    const k = e.target.dataset.inv; if(!k) return;
+    const from = k in slideStart ? slideStart[k] : null, to = +e.target.value; delete slideStart[k];
+    const y = scrollY; render(); scrollTo(0,y);
+    const hit = allItems().find(([it])=>it.key===k); if(!hit || from === null) return;
+    const undo = ()=>{ inv[k] = {level:from, weekOf:plan.weekOf, t:new Date().toISOString()}; persist(); markDirty(); const y2 = scrollY; render(); scrollTo(0,y2); };
+    if(to === 4 && from < 4) toast(hit[0].name + ' moved to Already have', 'Undo', undo, 5000);
+    else if(from === 4 && to < 4) toast(hit[0].name + ' moved back to the list', 'Undo', undo, 5000);
+  });
+  document.addEventListener('toggle', e=>{ if(e.target.id === 'haveList') store.set('fdp:haveOpen', e.target.open); }, true);
 
   function resetInventory(){
     const now = new Date().toISOString();
