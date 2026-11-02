@@ -2,7 +2,7 @@
  "equipment": "Every recipe fits one pot, two pans and one sheet pan.",
  "generatedAt": "2026-11-01T15:45:00-06:00",
  "grocery": {
-  "estimate": "About $93 for the full list when each item comes from the cheapest of Aldi, Jewel-Osco and Mariano's. Pantry staples are only counted if you slide them below \"Have it\".",
+  "estimate": "About $92 for the full list when each item comes from the cheapest of Aldi, Jewel-Osco, Mariano's and Target. Pantry staples are only counted if you slide them below \"Have it\".",
   "groups": [
    {
     "items": [
@@ -35,6 +35,19 @@
         "cost": 13.49,
         "sale": true,
         "unit": "$8.99/lb"
+       },
+       "samsclub": {
+        "cost": 33.91,
+        "unit": "~$10.87–11.87/lb · ~3 lb fillet",
+        "bulk": true,
+        "note": "Fresh skinless fillet; portion and freeze the extra",
+        "approx": true
+       },
+       "target": {
+        "cost": 23.98,
+        "unit": "$11.99 per 16 oz frozen · 2 bags",
+        "note": "Good & Gather frozen; thaw overnight in the fridge",
+        "approx": true
        }
       }
      },
@@ -60,6 +73,19 @@
        "marianos": {
         "cost": 6.24,
         "unit": "$4.99/lb"
+       },
+       "samsclub": {
+        "cost": 15.08,
+        "unit": "$2.98/lb · 4 tenderloins",
+        "bulk": true,
+        "note": "Freeze the tenderloins you don't need",
+        "approx": true
+       },
+       "target": {
+        "cost": 6.24,
+        "unit": "$4.99/lb",
+        "note": "Pick the plain (all-natural) one, not the seasoned ones",
+        "approx": true
        }
       }
      },
@@ -86,6 +112,19 @@
         "note": "Extra stays frozen",
         "sale": true,
         "unit": "32 oz bag"
+       },
+       "samsclub": {
+        "cost": 29.94,
+        "unit": "$9.98/lb · 3 lb frozen loins",
+        "bulk": true,
+        "note": "Extra stays frozen",
+        "approx": true
+       },
+       "target": {
+        "cost": 23.98,
+        "unit": "$11.99 per 16 oz frozen · 2 bags",
+        "note": "Extra stays frozen",
+        "approx": true
        }
       },
       "staple": true
@@ -116,6 +155,19 @@
         "cost": 10.99,
         "sale": true,
         "unit": "16 oz bag"
+       },
+       "samsclub": {
+        "cost": 16.97,
+        "unit": "$8.48/lb · 2 lb jumbo bag",
+        "bulk": true,
+        "note": "Raw, peeled and deveined; extra stays frozen",
+        "approx": true
+       },
+       "target": {
+        "cost": 6.99,
+        "unit": "1 lb bag · 41–50 ct, tail-off",
+        "note": "Market Pantry, frozen",
+        "approx": true
        }
       },
       "staple": true
@@ -151,6 +203,17 @@
        "marianos": {
         "cost": 4.99,
         "unit": "4-count bag"
+       },
+       "samsclub": {
+        "cost": 5.23,
+        "unit": "5-count bag",
+        "bulk": true,
+        "approx": true
+       },
+       "target": {
+        "cost": 2.99,
+        "unit": "4-count bag",
+        "approx": true
        }
       }
      },
@@ -164,6 +227,11 @@
        "marianos": {
         "cost": 5.98,
         "unit": "$2.99 per 5 oz"
+       },
+       "target": {
+        "cost": 5.78,
+        "unit": "$2.89 per 5 oz",
+        "approx": true
        }
       }
      },
@@ -178,6 +246,11 @@
         "cost": 1.49,
         "sale": true,
         "unit": "99¢/lb"
+       },
+       "target": {
+        "cost": 3.98,
+        "unit": "$1.99 per crown · 2 crowns",
+        "approx": true
        }
       }
      },
@@ -206,6 +279,11 @@
         "cost": 1.99,
         "sale": true,
         "unit": "$1.99 per 8 oz"
+       },
+       "target": {
+        "cost": 3.79,
+        "unit": "10 oz bag (no 8 oz)",
+        "approx": true
        }
       }
      },
@@ -311,6 +389,12 @@
         "bulk": true,
         "cost": 9.99,
         "unit": "4.5 lb bag"
+       },
+       "samsclub": {
+        "cost": 8.78,
+        "unit": "64 oz organic",
+        "bulk": true,
+        "approx": true
        }
       },
       "staple": true
@@ -320,7 +404,14 @@
       "for": "Wed, Fri",
       "key": "greek-yogurt",
       "name": "Plain Greek yogurt",
-      "price": 4.29
+      "price": 4.29,
+      "prices": {
+       "target": {
+        "cost": 3.39,
+        "unit": "32 oz nonfat",
+        "approx": true
+       }
+      }
      },
      {
       "amount": "1 dozen",
@@ -328,7 +419,20 @@
       "key": "eggs",
       "name": "Eggs",
       "price": 3,
-      "staple": true
+      "staple": true,
+      "prices": {
+       "samsclub": {
+        "cost": 4.62,
+        "unit": "2 dozen cage-free",
+        "bulk": true,
+        "approx": true
+       },
+       "target": {
+        "cost": 2.99,
+        "unit": "1 dozen cage-free",
+        "approx": true
+       }
+      }
      },
      {
       "amount": "2 lb bag",
@@ -481,7 +585,7 @@
     "pantry": true
    }
   ],
-  "skipped": "Trader Joe's isn't included because it doesn't publish prices online. A blank store cell means no current price was found there; the item's typical price is used instead. Costco prices are for the whole bulk pack.",
+  "skipped": "Trader Joe's isn't included because it doesn't publish prices online. A blank store cell means no current price was found there; the item's typical price is used instead. Costco prices are for the whole bulk pack. Sam's Club and Target prices were added Nov 2 from their online listings and are approximate; prices in your store may differ. Sam's Club prices are for the whole bulk pack.",
   "sources": [
    {
     "label": "Jewel-Osco ad Oct 28–Nov 3",
@@ -542,6 +646,62 @@
    {
     "label": "Costco avocados",
     "url": "https://app.warehouserunner.com/costco/1188-avocados-gem-variety-6-count"
+   },
+   {
+    "label": "Sam's Club salmon",
+    "url": "https://www.samsclub.com/ip/members-mark-atlantic-salmon-fillet-skinless-priced-per-pound/13622507460"
+   },
+   {
+    "label": "Sam's Club pork tenderloin",
+    "url": "https://www.samsclub.com/ip/15568150002"
+   },
+   {
+    "label": "Sam's Club cod",
+    "url": "https://www.samsclub.com/ip/Member-s-Mark-Wild-Caught-Skinless-and-Boneless-Pacific-Cod-Loins-Frozen-3-lbs/13881768255"
+   },
+   {
+    "label": "Sam's Club shrimp",
+    "url": "https://www.samsclub.com/ip/members-mark-raw-jumbo-shrimp-2-lbs/13599361478"
+   },
+   {
+    "label": "Sam's Club avocados",
+    "url": "https://www.samsclub.com/ip/avocados-5-ct/13586650560"
+   },
+   {
+    "label": "Sam's Club quinoa",
+    "url": "https://www.samsclub.com/ip/members-mark-organic-quinoa-64-oz/19313819960"
+   },
+   {
+    "label": "Target salmon",
+    "url": "https://www.target.com/p/atlantic-salmon-frozen-16oz-good-38-gather-8482/-/A-80114702"
+   },
+   {
+    "label": "Target pork tenderloin",
+    "url": "https://www.target.com/p/all-natural-pork-tenderloin-price-per-lb-good-38-gather-8482/-/A-82166518"
+   },
+   {
+    "label": "Target cod",
+    "url": "https://target.com/p/alaska-cod-skinless-boneless-frozen-fillets-16oz-good-38-gather-8482/-/A-14673082"
+   },
+   {
+    "label": "Target shrimp",
+    "url": "https://www.target.com/p/market-pantry-raw-tail-off-large-shrimp-41-50-count/-/A-14871930"
+   },
+   {
+    "label": "Target avocados",
+    "url": "https://www.target.com/p/hass-avocados-4ct-good-38-gather-8482/-/A-81957708"
+   },
+   {
+    "label": "Target arugula",
+    "url": "https://target.com/p/organic-baby-arugula-5oz-good-38-gather-8482/-/A-54555980"
+   },
+   {
+    "label": "Target spinach",
+    "url": "https://www.target.com/p/baby-spinach-10oz-good-38-gather-8482/-/A-54555552"
+   },
+   {
+    "label": "Target Greek yogurt",
+    "url": "https://www.target.com/p/greek-plain-yogurt-32oz-good-gather/-/A-94895373"
    }
   ],
   "stores": [
@@ -564,6 +724,16 @@
     "id": "costco",
     "name": "Costco",
     "note": "Membership; bulk packs"
+   },
+   {
+    "id": "samsclub",
+    "name": "Sam's Club",
+    "note": "Membership; bulk packs. Online prices, approx."
+   },
+   {
+    "id": "target",
+    "name": "Target",
+    "note": "Online prices, approx.; check the Target app for your store"
    }
   ]
  },

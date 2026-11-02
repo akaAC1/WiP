@@ -4,7 +4,7 @@
   const $main = $('main'), $tabs = $('tabs');
   const EASE = [['easy','Easy'],['right','Just right'],['hard','Too much work']];
   const LEVELS = ['Need all','¾ needed','½ needed','¼ needed','Have it'];
-  const DEFAULT_STORES = ['aldi','jewel','marianos','costco'];
+  const ORIGINAL_STORES = ['aldi','jewel','marianos','costco']; // stores the app knew about before any were added
   const STATE_KEY = 'fdp:state', PLAN_KEY = 'fdp:plan';
 
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -18,13 +18,14 @@
   let plan = null, planSource = '', loadNote = '';
   const saved = store.get(STATE_KEY) || {};
   let ratings = obj(saved.ratings), inv = obj(saved.inv);
-  let enabled = Array.isArray(saved.enabled) ? saved.enabled : null;
+  let enabled = Array.isArray(saved.enabled) ? saved.enabled : null; // null = every store on
+  let seenStores = Array.isArray(saved.seenStores) ? saved.seenStores : ORIGINAL_STORES.slice();
   let names = Array.isArray(saved.names) ? saved.names : ['Adult 1','Adult 2'];
   // checklists: {"<weekOf>:<night>:<ing|steps>:<index>": {v: true|false, t: iso time}}
   let checks = obj(saved.checks);
   function obj(x){ return x && typeof x === 'object' && !Array.isArray(x) ? x : {}; }
   function persist(){
-    if(!store.set(STATE_KEY, {v:2, ratings, inv, enabled, names, checks})) toast("Couldn't save on this device. Storage may be full or blocked.");
+    if(!store.set(STATE_KEY, {v:2, ratings, inv, enabled, seenStores, names, checks})) toast("Couldn't save on this device. Storage may be full or blocked.");
   }
   // older versions kept each night's checklist under its own key; fold those in once
   function legacyChecklist(k, v){
@@ -268,7 +269,14 @@
   // ---------- groceries ----------
   function enabledStores(){
     const ids = (plan.grocery.stores||[]).map(s=>s.id);
-    const on = enabled || DEFAULT_STORES;
+    // a store that shows up in a plan for the first time starts switched on
+    const fresh = ids.filter(id=>!seenStores.includes(id));
+    if(fresh.length){
+      seenStores = [...seenStores, ...fresh];
+      if(enabled) enabled = [...enabled, ...fresh];
+      persist();
+    }
+    const on = enabled || ids;
     return ids.filter(id=>on.includes(id));
   }
   function storeName(id){ const s=(plan.grocery.stores||[]).find(s=>s.id===id); return s?s.name:id; }
@@ -316,7 +324,7 @@
         <div class="storehead"><h3>${esc(grp.name)}</h3>${grp.pantry?'<small>Most kitchens have these; slide to show what\'s empty</small>':''}</div>
         ${grp.items.map(it=>{
           const lv = levelFor(it, grp), pk = pick(it,on), pr = it.prices||{};
-          const strip = Object.keys(pr).length ? `<div class="strip">${stores.map(s=>{
+          const strip = Object.keys(pr).length ? `<div class="strip" style="grid-template-columns:repeat(${stores.length > 4 ? 3 : Math.max(stores.length,1)},minmax(0,1fr))">${stores.map(s=>{
             const p = pr[s.id]; const best = pk.store===s.id; const off = !on.includes(s.id);
             return `<div class="cell${best?' best':''}${off?' off':''}"><span class="st">${esc(s.name.replace('-Osco',''))}</span>${p?`<b>${money(p.cost)}</b><small>${esc(p.unit)}${p.sale?' · sale':''}${p.bulk?' · bulk':''}${p.approx?' · approx.':''}</small>`:'<b class="na">—</b><small>no price</small>'}</div>`;
           }).join('')}</div>` : '';
@@ -649,7 +657,7 @@
 
   // ---------- backup & plan import ----------
   function exportData(){
-    const data = {app:'family-dinner', version:1, exported:new Date().toISOString(), ratings, inv, enabled, names, checks};
+    const data = {app:'family-dinner', version:1, exported:new Date().toISOString(), ratings, inv, enabled, seenStores, names, checks};
     const blob = new Blob([JSON.stringify(data, null, 1)], {type:'application/json'});
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -669,15 +677,16 @@
     }
     if(!c || c.app !== 'family-dinner'){ toast("That file isn't a backup or a plan"); return; }
     if(!confirm('Replace the ratings, sliders and checklists on this device with the backup?')) return;
-    const prev = {ratings, inv, enabled, names, checks};
+    const prev = {ratings, inv, enabled, seenStores, names, checks};
     ratings = obj(c.ratings); inv = obj(c.inv);
     enabled = Array.isArray(c.enabled) ? c.enabled : null;
+    seenStores = Array.isArray(c.seenStores) ? c.seenStores : ORIGINAL_STORES.slice();
     names = Array.isArray(c.names) && c.names.length ? [String(c.names[0]||'Adult 1'), String(c.names[1]||'Adult 2')] : names;
     checks = {};
     Object.entries(obj(c.checks)).forEach(([k,v])=>{ if(/^\d{4}-\d{2}-\d{2}:[^:]+:(ing|steps):\d+$/.test(k) && v && typeof v === 'object') checks[k] = {v:!!v.v, t:String(v.t||'')}; });
     Object.entries(obj(c.checklists)).forEach(([k,v])=>legacyChecklist(k, v)); // backups from the first version
     persist(); render(); markDirty();
-    toast('Backup imported', 'Undo', ()=>{ ({ratings, inv, enabled, names, checks} = prev); persist(); render(); markDirty(); }, 8000);
+    toast('Backup imported', 'Undo', ()=>{ ({ratings, inv, enabled, seenStores, names, checks} = prev); persist(); render(); markDirty(); }, 8000);
   }
   $('importfile').addEventListener('change', e=>{ const f = e.target.files[0]; e.target.value = ''; if(f) importFile(f); });
 
