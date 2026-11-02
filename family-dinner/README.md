@@ -37,12 +37,19 @@ keep a copy as `plans/<weekOf>.json` for history, and push. Open apps pick up th
 new plan the next time they come back to the foreground. You can also load a plan file
 directly on a phone with **Week → Your data → Import backup or plan**.
 
-## Share ratings with the Saturday plan
+## Sync between phones
 
-Ratings you make in the app can shape next week's plan. The app saves them to
-`family-dinner/ratings.json` on the `family-dinner-data` branch of this repo.
-The Saturday plan task reads that file along with ratings made in the Claude
-artifact. Saving to a separate branch means a rating doesn't redeploy the site.
+Connected phones share their ratings, grocery sliders and recipe checklists
+through this repo, on the `family-dinner-data` branch:
+
+- `family-dinner/ratings.json`: ratings. The Saturday plan task reads this
+  along with ratings made in the Claude artifact, so app ratings shape next
+  week's plan.
+- `family-dinner/shared.json`: grocery slider positions and checked-off
+  ingredients and steps. Checklists older than five weeks are dropped.
+
+Saving to a separate branch means a sync doesn't redeploy the site. Store
+choices and names stay per phone.
 
 One-time setup on each phone:
 
@@ -55,12 +62,14 @@ One-time setup on each phone:
 4. **Permissions → Repository permissions → Contents:** *Read and write*.
    Leave everything else at *No access*.
 5. **Generate token** and copy it (it starts with `github_pat_`).
-6. In the app, open **Week → Share ratings with the Saturday plan**. Check the
-   owner and repository, paste the token, and tap **Connect & sync**.
+6. In the app, open **Week → Sync between phones**. Check the owner and
+   repository, paste the token, and tap **Connect & sync**.
 
-After that, each rating syncs a few seconds after you tap it, and again whenever
-you open the app. If you each rate on your own phone, both sets of thumbs are
-kept: the newest value wins for each thumb and for the ease rating.
+After that, changes sync a few seconds after you make them. The app also
+checks for the other phone's changes every 30 seconds while it's open, and
+whenever you switch back to it. Each thumb, the ease rating, each slider and
+each checkbox is merged separately, and the most recent change wins. That way
+two phones can work on the same list without overwriting each other.
 
 The token is stored only in that phone's browser storage and isn't included in
 backups. Anyone using that phone could use it to change files in this one repo,
@@ -71,14 +80,15 @@ new one and paste it in.
 ## Your data
 
 Ratings, slider positions, store choices, names and recipe checklists are saved in
-the browser's local storage on that device. Use **Week → Your data → Export
+the browser's local storage on that device, and synced as described above. Use **Week → Your data → Export
 backup** to save a JSON file, and **Import backup or plan** to restore it or
 move it to another phone.
 
 ## Differences from the artifact
 
-- Data is stored on the device instead of in your claude.ai account, so two
-  phones don't share it automatically. Use export/import to move it.
+- Data is stored on the device. Ratings, sliders and checklists sync between
+  phones once each one is connected (see above). Use export/import to move
+  everything else.
 - The plan comes from `plans/current.json` instead of the artifact's database.
 - It works offline and installs to the home screen.
 - Each recipe has a **Keep screen on** button so the phone doesn't lock while you cook.

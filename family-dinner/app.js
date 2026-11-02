@@ -20,10 +20,29 @@
   let ratings = obj(saved.ratings), inv = obj(saved.inv);
   let enabled = Array.isArray(saved.enabled) ? saved.enabled : null;
   let names = Array.isArray(saved.names) ? saved.names : ['Adult 1','Adult 2'];
+  // checklists: {"<weekOf>:<night>:<ing|steps>:<index>": {v: true|false, t: iso time}}
+  let checks = obj(saved.checks);
   function obj(x){ return x && typeof x === 'object' && !Array.isArray(x) ? x : {}; }
   function persist(){
-    if(!store.set(STATE_KEY, {v:1, ratings, inv, enabled, names})) toast("Couldn't save on this device. Storage may be full or blocked.");
+    if(!store.set(STATE_KEY, {v:2, ratings, inv, enabled, names, checks})) toast("Couldn't save on this device. Storage may be full or blocked.");
   }
+  // older versions kept each night's checklist under its own key; fold those in once
+  function legacyChecklist(k, v){
+    const m = /^fdp:(\d{4}-\d{2}-\d{2}):([^:]+)$/.exec(k);
+    if(!m || !v) return;
+    ['ing','steps'].forEach(kind=>{ (Array.isArray(v[kind]) ? v[kind] : []).forEach(j=>{
+      const ck = m[1] + ':' + m[2] + ':' + kind + ':' + j;
+      if(!checks[ck]) checks[ck] = {v:true, t:''};
+    }); });
+  }
+  (function migrateChecklists(){
+    const old = [];
+    try{ for(let i=0;i<localStorage.length;i++){ const k = localStorage.key(i); if(/^fdp:\d{4}-\d{2}-\d{2}:[^:]+$/.test(k)) old.push(k); } }catch(e){ return; }
+    if(!old.length) return;
+    old.forEach(k=>legacyChecklist(k, store.get(k)));
+    persist();
+    old.forEach(k=>{ try{ localStorage.removeItem(k); }catch(e){} });
+  })();
 
   // ---------- plan loading ----------
   function validPlan(p){ return p && typeof p === 'object' && /^\d{4}-\d{2}-\d{2}$/.test(p.weekOf||'') && Array.isArray(p.nights) && p.nights.length && p.grocery && p.prep; }
@@ -135,7 +154,7 @@
       ${syncSection()}
       <section>
         <h3>Your data</h3>
-        <p class="status" style="margin-top:-6px">Ratings, sliders, store choices and checklists are saved on this device. Export a backup to move them to another phone, or import a new week's plan file.</p>
+        <p class="status" style="margin-top:-6px">Everything is saved on this device. Export a backup to keep a copy or move store choices and names to another phone, or import a new week's plan file.</p>
         <div class="row">
           <button class="btn" id="export">Export backup</button>
           <button class="btn" id="import">Import backup or plan</button>
@@ -189,11 +208,23 @@
   }
 
   // ---------- one night ----------
-  function nightKey(id){ return 'fdp:' + plan.weekOf + ':' + id; }
+  function checkKey(id, kind, j){ return plan.weekOf + ':' + id + ':' + kind + ':' + j; }
+  function nightChecks(id){
+    const out = {ing:[], steps:[]};
+    ['ing','steps'].forEach(kind=>{
+      const n = plan.nights.find(x=>x.id===id), len = n ? (n[kind==='ing'?'ingredients':'steps']||[]).length : 0;
+      for(let j=0;j<len;j++){ const c = checks[checkKey(id,kind,j)]; if(c && c.v) out[kind].push(j); }
+    });
+    return out;
+  }
+  function setCheck(id, kind, j, v){
+    checks[checkKey(id,kind,j)] = {v:!!v, t:new Date().toISOString()};
+    persist(); markDirty();
+  }
   function renderNight(id){
     const i = plan.nights.findIndex(n=>n.id===id);
     const n = plan.nights[i];
-    const st = store.get(nightKey(id)) || {ing:[], steps:[]};
+    const st = nightChecks(id);
     const date = fmtDate(weekDate(i), {weekday:'long', month:'long', day:'numeric'});
     const r = ratingFor(n);
     return `
@@ -328,10 +359,11 @@
       <div class="row"><button class="btn" id="resetInv">Reset all sliders</button></div>`;
   }
 
-  // ---------- ratings sync (GitHub) ----------
-  // Ratings are saved to family-dinner/ratings.json on a data branch of the repo, where the
-  // Saturday plan task reads them. A data branch keeps rating saves from redeploying the site.
-  const SYNC_KEY = 'fdp:sync', DATA_BRANCH = 'family-dinner-data', RATINGS_PATH = 'family-dinner/ratings.json';
+  // ---------- sync between phones (GitHub) ----------
+  // Ratings go to family-dinner/ratings.json (the Saturday plan task reads it); grocery sliders and
+  // recipe checklists go to family-dinner/shared.json. Both live on a data branch of the repo so
+  // saves don't redeploy the site.
+  const SYNC_KEY = 'fdp:sync', DATA_BRANCH = 'family-dinner-data', RATINGS_PATH = 'family-dinner/ratings.json', SHARED_PATH = 'family-dinner/shared.json';
   const RATE_FIELDS = ['a','b','ease'], META_FIELDS = ['mealId','title','cuisine','technique','ratedWeek'];
   let sync = Object.assign({owner:'', repo:'', token:'', lastSync:null, error:'', dirty:false}, store.get(SYNC_KEY) || {});
   if(!sync.owner || !sync.repo){ const g = guessRepo(); sync.owner = sync.owner || g.owner; sync.repo = sync.repo || g.repo; }
@@ -346,7 +378,7 @@
   function markDirty(){
     if(!syncOn()) return;
     sync.dirty = true; saveSync();
-    clearTimeout(syncTimer); syncTimer = setTimeout(syncRatings, 2500);
+    clearTimeout(syncTimer); syncTimer = setTimeout(syncAll, 2500);
   }
   async function gh(method, path, body){
     const res = await fetch('https://api.github.com/repos/' + encodeURIComponent(sync.owner) + '/' + encodeURIComponent(sync.repo) + path, {
@@ -360,20 +392,39 @@
   }
   const b64encode = s => { const bytes = new TextEncoder().encode(s); let bin = ''; bytes.forEach(b=>{ bin += String.fromCharCode(b); }); return btoa(bin); };
   const b64decode = s => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\s/g,'')), c=>c.charCodeAt(0)));
+  let branchReady = false;
   async function ensureBranch(){
-    try{ await gh('GET', '/git/ref/heads/' + DATA_BRANCH); return; }
+    if(branchReady) return;
+    branchReady = await createBranchIfMissing();
+  }
+  async function createBranchIfMissing(){
+    try{ await gh('GET', '/git/ref/heads/' + DATA_BRANCH); return true; }
     catch(e){ if(e.status !== 404) throw e; }
     const repo = await gh('GET', '');
     const base = await gh('GET', '/git/ref/heads/' + encodeURIComponent(repo.default_branch || 'main'));
     try{ await gh('POST', '/git/refs', {ref:'refs/heads/' + DATA_BRANCH, sha:base.object.sha}); }
     catch(e){ if(e.status !== 422) throw e; } // 422: another phone created it first
+    return true;
   }
-  async function readRemote(){
+  async function readFile(path){
     try{
-      const f = await gh('GET', '/contents/' + RATINGS_PATH + '?ref=' + DATA_BRANCH);
-      const doc = JSON.parse(b64decode(f.content || ''));
-      return {sha:f.sha, ratings:obj(doc && doc.ratings)};
-    }catch(e){ if(e.status === 404) return {sha:null, ratings:{}}; throw e; }
+      const f = await gh('GET', '/contents/' + path + '?ref=' + DATA_BRANCH);
+      return {sha:f.sha, doc:obj(JSON.parse(b64decode(f.content || '')))};
+    }catch(e){ if(e.status === 404) return {sha:null, doc:{}}; throw e; }
+  }
+  // newest entry wins per key (entries carry t = time last set); ties keep x
+  function mergeLatest(x, y){
+    const out = Object.assign({}, x);
+    Object.entries(y).forEach(([k,v])=>{ if(!out[k] || String((v&&v.t)||'') > String(out[k].t||'')) out[k] = v; });
+    return out;
+  }
+  // drop checklist entries more than five weeks older than this week's plan
+  function pruneChecks(c){
+    if(!plan) return c;
+    const d = new Date(plan.weekOf + 'T12:00:00'); d.setDate(d.getDate() - 35);
+    const cutoff = d.toISOString().slice(0,10), out = {};
+    Object.entries(c).forEach(([k,v])=>{ if(k.slice(0,10) >= cutoff) out[k] = v; });
+    return out;
   }
   // records with per-field times use them; older records (made in Claude, or from a backup) use updatedAt
   function fieldTime(r, f){ if(!r) return ''; if(r.t && typeof r.t === 'object') return r.t[f] || ''; return r.updatedAt || ''; }
@@ -399,60 +450,85 @@
   const sameRatings = (x, y) => JSON.stringify(sortKeys(x)) === JSON.stringify(sortKeys(y));
   function sortKeys(v){ if(Array.isArray(v)) return v.map(sortKeys); if(v && typeof v === 'object'){ const o = {}; Object.keys(v).sort().forEach(k=>{ o[k] = sortKeys(v[k]); }); return o; } return v; }
 
-  async function syncRatings(opts){
+  // Read the file, merge with this phone, write it back if the merge added anything, retrying
+  // when another phone saved in between. Returns true if this phone's data changed.
+  async function syncFile(f){
+    for(let attempt = 0; ; attempt++){
+      const remote = await readFile(f.path);
+      const theirs = f.fromDoc(remote.doc), mine = f.local();
+      const merged = f.merge(mine, theirs);
+      if(!sameRatings(merged, theirs)){
+        try{
+          await gh('PUT', '/contents/' + f.path, {
+            message: f.message,
+            content: b64encode(JSON.stringify(Object.assign({updatedAt:new Date().toISOString()}, f.toDoc(merged)), null, 1) + '\n'),
+            branch: DATA_BRANCH,
+            ...(remote.sha ? {sha:remote.sha} : {})
+          });
+        }catch(e){
+          if((e.status === 409 || e.status === 422) && attempt < 3) continue; // another phone saved first; merge again
+          throw e;
+        }
+      }
+      // merge again with what's on the phone now, in case something was tapped while saving
+      const latest = f.merge(f.local(), merged);
+      const changed = !sameRatings(latest, mine);
+      f.apply(latest);
+      return changed;
+    }
+  }
+  const SYNC_FILES = [
+    { path: RATINGS_PATH,
+      fromDoc: d => obj(d.ratings), local: () => ratings,
+      merge: mergeRatings, apply: m => { ratings = m; },
+      toDoc: m => ({ratings: sortKeys(m)}),
+      get message(){ return 'Dinner ratings from ' + names.join(' & ') + ' (' + new Date().toISOString().slice(0,10) + ')'; } },
+    { path: SHARED_PATH,
+      fromDoc: d => ({inv: obj(d.inv), checks: obj(d.checks)}), local: () => ({inv, checks}),
+      merge: (x, y) => ({inv: mergeLatest(x.inv, y.inv), checks: pruneChecks(mergeLatest(x.checks, y.checks))}),
+      apply: m => { inv = m.inv; checks = m.checks; },
+      toDoc: m => ({inv: sortKeys(m.inv), checks: sortKeys(m.checks)}),
+      get message(){ return 'Grocery sliders and checklists (' + new Date().toISOString().slice(0,10) + ')'; } }
+  ];
+  async function syncAll(opts){
     opts = opts || {};
     if(!syncOn()) return;
     if(syncing){ syncAgain = true; return; }
-    syncing = true; clearTimeout(syncTimer); paintSync('Syncing…');
+    syncing = true; clearTimeout(syncTimer);
+    if(!opts.quiet) paintSync('Syncing…');
+    const wasDirty = sync.dirty; sync.dirty = false;
     try{
       await ensureBranch();
-      for(let attempt = 0; ; attempt++){
-        const remote = await readRemote();
-        const merged = mergeRatings(ratings, remote.ratings);
-        if(!sameRatings(merged, remote.ratings)){
-          const doc = {updatedAt:new Date().toISOString(), ratings:sortKeys(merged)};
-          try{
-            await gh('PUT', '/contents/' + RATINGS_PATH, {
-              message: 'Dinner ratings from ' + names.join(' & ') + ' (' + new Date().toISOString().slice(0,10) + ')',
-              content: b64encode(JSON.stringify(doc, null, 1) + '\n'),
-              branch: DATA_BRANCH,
-              ...(remote.sha ? {sha:remote.sha} : {})
-            });
-          }catch(e){
-            if((e.status === 409 || e.status === 422) && attempt < 3) continue; // another phone saved first; merge again
-            throw e;
-          }
-        }
-        const changedHere = !sameRatings(merged, ratings);
-        ratings = merged; persist();
-        if(changedHere) safeRender();
-        break;
-      }
-      sync.dirty = false; sync.error = ''; sync.lastSync = new Date().toISOString(); saveSync();
+      let changed = false;
+      for(const f of SYNC_FILES) changed = (await syncFile(f)) || changed;
+      persist();
+      if(changed) safeRender();
+      sync.error = ''; sync.lastSync = new Date().toISOString(); saveSync();
       paintSync();
-      if(opts.manual) toast('Ratings synced');
+      if(opts.manual) toast('Synced');
     }catch(e){
+      sync.dirty = sync.dirty || wasDirty;
       sync.error = e.status === 401 ? 'GitHub rejected the token. It may have expired; paste a new one.'
         : (e.status === 403 || e.status === 404) ? "The token can't write to " + sync.owner + '/' + sync.repo + '. Check its repository access and that Contents is set to Read and write.'
-        : (e instanceof TypeError) ? "Couldn't reach GitHub. Ratings will sync when you're back online."
+        : (e instanceof TypeError) ? "Couldn't reach GitHub. Changes will sync when you're back online."
         : 'Sync failed: ' + e.message;
       saveSync(); paintSync();
       if(opts.manual) toast(sync.error);
     }finally{
       syncing = false;
-      if(syncAgain){ syncAgain = false; syncRatings(); }
+      if(syncAgain){ syncAgain = false; syncAll(); }
     }
   }
   function syncStatusText(){
-    if(!syncOn()) return 'Not connected. Ratings stay on this phone.';
+    if(!syncOn()) return 'Not connected. Ratings, sliders and checklists stay on this phone.';
     if(sync.error) return sync.error;
     const when = sync.lastSync ? new Date(sync.lastSync).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) : 'not yet';
     return (sync.dirty ? 'Waiting to sync. ' : '') + 'Last synced ' + when + '.';
   }
   function paintSync(text){ const el = $('syncStatus'); if(el) el.textContent = text || syncStatusText(); }
   function syncSection(){
-    const head = `<h3>Share ratings with the Saturday plan</h3>
-      <p class="status" style="margin-top:-6px">Ratings sync to your GitHub repo, where the Saturday plan reads them along with ratings made in Claude. Both phones can sync; each person's thumbs are kept.</p>`;
+    const head = `<h3>Sync between phones</h3>
+      <p class="status" style="margin-top:-6px">Ratings, grocery sliders and recipe checklists sync through your GitHub repo, so both phones match. The Saturday plan also reads the ratings, along with ratings made in Claude. Connect each phone once.</p>`;
     if(syncOn()) return `<section>${head}
       <p><b>Connected to ${esc(sync.owner)}/${esc(sync.repo)}</b></p>
       <p class="status" id="syncStatus">${esc(syncStatusText())}</p>
@@ -473,16 +549,17 @@
     const owner = ($('syncOwner').value || '').trim(), repo = ($('syncRepo').value || '').trim(), token = ($('syncToken').value || '').trim();
     if(!owner || !repo || !token){ paintSync('Fill in the owner, repository and token.'); return; }
     sync = Object.assign(sync, {owner, repo, token, error:'', dirty:true}); saveSync();
-    render(); syncRatings({manual:true});
+    render(); syncAll({manual:true});
   }
   function disconnectSync(){
-    if(!confirm('Disconnect? The token is removed from this phone. Ratings already synced stay in the repo.')) return;
+    if(!confirm('Disconnect? The token is removed from this phone. What already synced stays in the repo.')) return;
     sync = Object.assign(sync, {token:'', error:'', lastSync:null, dirty:false}); saveSync(); render();
   }
   let pendingRender = false;
   function safeRender(){
     const a = document.activeElement;
-    if(a && (a.tagName === 'INPUT' && a.type !== 'checkbox' && a.type !== 'range')){ pendingRender = true; return; }
+    // don't redraw under someone typing or dragging a slider; redraw when they're done
+    if(a && a.tagName === 'INPUT' && a.type !== 'checkbox'){ pendingRender = true; return; }
     const y = scrollY; render(); scrollTo(0, y);
   }
   document.addEventListener('focusout', ()=>{ if(pendingRender){ pendingRender = false; setTimeout(safeRender, 0); } });
@@ -515,18 +592,16 @@
     if(b.id === 'import') return $('importfile').click();
     if(b.id === 'refresh'){ loadPlan().then(()=>toast('Plan is up to date')); return; }
     if(b.id === 'syncConnect') return connectSync();
-    if(b.id === 'syncNow') return syncRatings({manual:true});
+    if(b.id === 'syncNow') return syncAll({manual:true});
     if(b.id === 'syncOff') return disconnectSync();
     if(!plan) return;
     if(b.id === 'wake'){ wake ? dropWake() : holdWake(current()); return; }
     if(b.id === 'resetInv') return resetInventory();
     if(b.dataset.step !== undefined){
-      const key = nightKey(current());
-      const st = store.get(key) || {ing:[], steps:[]};
-      const j = +b.dataset.step;
-      st.steps = st.steps.includes(j) ? st.steps.filter(x=>x!==j) : [...st.steps, j];
-      store.set(key, st);
-      b.parentElement.classList.toggle('done', st.steps.includes(j)); b.setAttribute('aria-pressed', st.steps.includes(j));
+      const id = current(), j = +b.dataset.step;
+      const on = !nightChecks(id).steps.includes(j);
+      setCheck(id, 'steps', j, on);
+      b.parentElement.classList.toggle('done', on); b.setAttribute('aria-pressed', on);
       return;
     }
     const n = plan.nights.find(x=>x.id===current());
@@ -540,14 +615,8 @@
   });
   document.addEventListener('change', e=>{
     const t = e.target;
-    if(t.dataset.ing !== undefined && plan){
-      const key = nightKey(current());
-      const st = store.get(key) || {ing:[], steps:[]};
-      const j = +t.dataset.ing;
-      st.ing = t.checked ? [...new Set([...st.ing, j])] : st.ing.filter(x=>x!==j);
-      store.set(key, st);
-    }
-    if(t.dataset.inv) persist();
+    if(t.dataset.ing !== undefined && plan) setCheck(current(), 'ing', +t.dataset.ing, t.checked);
+    if(t.dataset.inv){ persist(); markDirty(); }
     if(t.dataset.name !== undefined){
       const i = +t.dataset.name;
       names[i] = t.value.trim() || ('Adult '+(i+1));
@@ -562,7 +631,7 @@
     out.textContent = LEVELS[lv]; out.classList.toggle('full', lv===4);
     t.setAttribute('aria-valuetext', LEVELS[lv]);
     row.classList.toggle('have', lv===4);
-    inv[t.dataset.inv] = {level:lv, weekOf:plan.weekOf};
+    inv[t.dataset.inv] = {level:lv, weekOf:plan.weekOf, t:new Date().toISOString()};
     const hit = allItems().find(([it])=>it.key===t.dataset.inv);
     if(hit) row.querySelector('.owe').textContent = itemPriceText(hit[0], hit[1], enabledStores());
     const tl = $('tLeft'); if(tl) tl.textContent = money(totals().left);
@@ -571,20 +640,16 @@
   document.addEventListener('change', e=>{ if(e.target.dataset.inv) { const y = scrollY; render(); scrollTo(0,y); } });
 
   function resetInventory(){
-    allItems().forEach(([it,grp])=>{ inv[it.key] = {level: grp.pantry ? 4 : 0, weekOf: plan.weekOf}; });
-    persist(); render(); toast('Sliders reset');
+    const now = new Date().toISOString();
+    allItems().forEach(([it,grp])=>{ inv[it.key] = {level: grp.pantry ? 4 : 0, weekOf: plan.weekOf, t: now}; });
+    persist(); render(); markDirty(); toast('Sliders reset');
   }
 
   window.addEventListener('hashchange', render);
 
   // ---------- backup & plan import ----------
-  function checklistKeys(){
-    const out = {};
-    try{ for(let i=0;i<localStorage.length;i++){ const k = localStorage.key(i); if(/^fdp:\d{4}-\d{2}-\d{2}:/.test(k)) out[k] = store.get(k); } }catch(e){}
-    return out;
-  }
   function exportData(){
-    const data = {app:'family-dinner', version:1, exported:new Date().toISOString(), ratings, inv, enabled, names, checklists:checklistKeys()};
+    const data = {app:'family-dinner', version:1, exported:new Date().toISOString(), ratings, inv, enabled, names, checks};
     const blob = new Blob([JSON.stringify(data, null, 1)], {type:'application/json'});
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -604,13 +669,15 @@
     }
     if(!c || c.app !== 'family-dinner'){ toast("That file isn't a backup or a plan"); return; }
     if(!confirm('Replace the ratings, sliders and checklists on this device with the backup?')) return;
-    const prev = {ratings, inv, enabled, names};
+    const prev = {ratings, inv, enabled, names, checks};
     ratings = obj(c.ratings); inv = obj(c.inv);
     enabled = Array.isArray(c.enabled) ? c.enabled : null;
     names = Array.isArray(c.names) && c.names.length ? [String(c.names[0]||'Adult 1'), String(c.names[1]||'Adult 2')] : names;
-    Object.entries(obj(c.checklists)).forEach(([k,v])=>{ if(/^fdp:\d{4}-\d{2}-\d{2}:/.test(k) && v && Array.isArray(v.ing) && Array.isArray(v.steps)) store.set(k, v); });
+    checks = {};
+    Object.entries(obj(c.checks)).forEach(([k,v])=>{ if(/^\d{4}-\d{2}-\d{2}:[^:]+:(ing|steps):\d+$/.test(k) && v && typeof v === 'object') checks[k] = {v:!!v.v, t:String(v.t||'')}; });
+    Object.entries(obj(c.checklists)).forEach(([k,v])=>legacyChecklist(k, v)); // backups from the first version
     persist(); render(); markDirty();
-    toast('Backup imported', 'Undo', ()=>{ ({ratings, inv, enabled, names} = prev); persist(); render(); }, 8000);
+    toast('Backup imported', 'Undo', ()=>{ ({ratings, inv, enabled, names, checks} = prev); persist(); render(); markDirty(); }, 8000);
   }
   $('importfile').addEventListener('change', e=>{ const f = e.target.files[0]; e.target.value = ''; if(f) importFile(f); });
 
@@ -654,11 +721,13 @@
   document.addEventListener('visibilitychange', ()=>{
     if(document.hidden) return;
     if(plan) loadPlan();
-    if(syncOn() && (sync.dirty || !sync.lastSync || Date.now() - new Date(sync.lastSync) > 10*60*1000)) syncRatings();
+    if(syncOn()) syncAll({quiet:true});
   });
-  addEventListener('online', ()=>{ if(syncOn() && sync.dirty) syncRatings(); });
+  // while the app is open, pick up the other phone's changes every 30 seconds
+  setInterval(()=>{ if(syncOn() && !document.hidden && !syncing) syncAll({quiet:true}); }, 30000);
+  addEventListener('online', ()=>{ if(syncOn() && sync.dirty) syncAll(); });
 
   render();
   loadPlan();
-  if(syncOn()) syncRatings();
+  if(syncOn()) syncAll();
 })();
