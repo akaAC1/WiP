@@ -564,6 +564,16 @@
     "id": "costco",
     "name": "Costco",
     "note": "Membership; bulk packs"
+   },
+   {
+    "id": "samsclub",
+    "name": "Sam's Club",
+    "note": "Membership; bulk packs. Prices start with the Nov 9 plan"
+   },
+   {
+    "id": "target",
+    "name": "Target",
+    "note": "Prices start with the Nov 9 plan"
    }
   ]
  },
