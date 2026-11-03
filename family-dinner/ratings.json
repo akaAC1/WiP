@@ -1,21 +1,21 @@
 {
- "updatedAt": "2026-11-03T00:34:23.068Z",
+ "updatedAt": "2026-11-03T00:48:36.998Z",
  "ratings": {
   "sheet-pan-lemon-salmon-broccoli": {
-   "a": null,
+   "a": "up",
    "b": "up",
    "cuisine": "American",
    "ease": null,
    "mealId": "sheet-pan-lemon-salmon-broccoli",
    "ratedWeek": "2026-11-02",
    "t": {
-    "a": "",
+    "a": "2026-11-03T00:48:34.240Z",
     "b": "2026-11-03T00:33:58.829Z",
     "ease": ""
    },
    "technique": "Sheet-pan roasting",
    "title": "Sheet-pan lemon salmon & broccoli",
-   "updatedAt": "2026-11-03T00:33:58.829Z"
+   "updatedAt": "2026-11-03T00:48:34.240Z"
   }
  }
 }
