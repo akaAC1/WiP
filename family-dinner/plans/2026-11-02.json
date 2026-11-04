@@ -778,7 +778,8 @@
    "title": "Sheet-pan lemon salmon & broccoli",
    "toddler": "About 2 oz flaked salmon (check for bones), 2 tbsp quinoa, soft broccoli \"trees\" and avocado slices. Skip the peppery arugula and stir a few soft spinach leaves into the quinoa instead.",
    "totalMin": 30,
-   "why": "Salmon is the richest common source of heart-protective omega-3s. One pan, 30 minutes."
+   "why": "Salmon is the richest common source of heart-protective omega-3s. One pan, 30 minutes.",
+   "portions": "Each adult: 1 fillet (about 5 oz raw), ½ cup quinoa, a big handful of broccoli and arugula, ¼ avocado. Toddler: 1–2 oz salmon, 2 tbsp quinoa."
   },
   {
    "activeMin": 20,
@@ -821,7 +822,8 @@
    "title": "Herb pork tenderloin with garlicky white beans & kale",
    "toddler": "Thin pork slices cut into small strips, beans lightly mashed with a fork, soft carrots cut lengthwise, and finely chopped kale mixed into the beans.",
    "totalMin": 45,
-   "why": "Pork tenderloin is about as lean as chicken breast, and the beans bring fiber that blunts the glucose rise."
+   "why": "Pork tenderloin is about as lean as chicken breast, and the beans bring fiber that blunts the glucose rise.",
+   "portions": "Each adult: 4–5 oz sliced pork (about 3 fingers' width), ½ cup beans, carrots and kale filling half the plate. Toddler: 1–2 oz pork, 2 tbsp beans. Set aside the lunch pork before serving."
   },
   {
    "activeMin": 15,
@@ -832,16 +834,16 @@
    ],
    "id": "wed",
    "ingredients": [
-    "2 cans (15 oz) black beans, rinsed",
-    "1 cup frozen corn",
+    "1½ cans (15 oz) black beans, rinsed (about 2½ cups)",
+    "½ cup frozen corn",
     "1 tbsp olive oil",
     "1 tsp cumin, 1 tsp chili powder, ½ tsp garlic powder",
-    "2 cups cooked brown rice (from Sunday, or 2 microwave pouches)",
+    "1¼ cups cooked brown rice (from Sunday, or 1 microwave pouch)",
     "1 head romaine, shredded (about 4 cups)",
-    "2 avocados",
+    "1 avocado",
     "1 cup jarred salsa (mild)",
     "½ cup plain Greek yogurt (in place of sour cream)",
-    "½ cup shredded cheddar or Mexican-blend cheese",
+    "¼ cup shredded cheddar or Mexican-blend cheese",
     "1 lime"
    ],
    "mealId": "black-bean-corn-burrito-bowls",
@@ -853,19 +855,20 @@
     "green": "Romaine",
     "protein": "Black beans"
    },
-   "prep": "Rice is cooked and romaine washed on Sunday. Extra beans make a great breakfast with scrambled eggs.",
+   "prep": "Rice is cooked and romaine washed on Sunday. You bought 2 cans of beans: the extra half can is great with scrambled eggs, or mashed on toast for the toddler. Use the second avocado Friday.",
    "steps": [
     "Warm the oil in a saucepan over medium heat. Add the beans, corn, spices and ¼ cup water.",
     "Simmer 5–6 minutes, stirring now and then, until the corn is hot. Mash about a quarter of the beans against the pan to thicken.",
     "Reheat the rice in the microwave with a splash of water, covered, 2 minutes.",
-    "Mash 1 avocado with half the lime juice and a pinch of salt. Dice the other avocado.",
+    "Mash half the avocado with half the lime juice and a pinch of salt. Dice the other half.",
     "Build bowls: romaine, rice, beans and corn, then avocado, salsa, a spoon of yogurt and a sprinkle of cheese."
    ],
    "technique": "One-pan simmer and build-your-own bowls",
    "title": "Black bean & corn burrito bowls",
    "toddler": "A scoop of rice with the beans mostly mashed, cheese melted on top, and mashed avocado on the side. Hold the salsa or offer a tiny taste. Mash the corn a little if your toddler is still learning to chew it.",
    "totalMin": 20,
-   "why": "Beans plus brown rice make a complete protein with lots of soluble fiber, which helps lower LDL cholesterol. No oven."
+   "why": "Beans plus brown rice make a complete protein with lots of soluble fiber, which helps lower LDL cholesterol. No oven.",
+   "portions": "Each adult: ¾ cup beans and corn, ½ cup rice, a full bowl base of romaine, 2 tbsp avocado, 1 tbsp cheese. Toddler: ¼ cup beans, 2 tbsp rice."
   },
   {
    "activeMin": 20,
@@ -877,14 +880,14 @@
    ],
    "id": "thu",
    "ingredients": [
-    "12 oz–1 lb frozen raw shrimp, peeled and deveined (thawed)",
-    "8 oz spaghetti or penne",
+    "12 oz frozen raw shrimp, peeled and deveined (thawed)",
+    "5 oz spaghetti or penne (about a third of a 16 oz box)",
     "3 tbsp olive oil, divided",
     "4 garlic cloves, minced",
     "5 oz baby spinach",
     "1 cup cherry tomatoes, halved",
     "1 lemon",
-    "¼ cup grated Parmesan",
+    "3 tbsp grated Parmesan",
     "Optional for adults: pinch of red pepper flakes"
    ],
    "mealId": "garlic-shrimp-spinach-pasta",
@@ -895,7 +898,7 @@
     "green": "Spinach",
     "protein": "Shrimp"
    },
-   "prep": "Move the shrimp to the fridge Wednesday night. One serving keeps for the next day's lunch.",
+   "prep": "Move the shrimp to the fridge Wednesday night. The rest of the pasta box keeps in the pantry for a future week.",
    "steps": [
     "Thaw the shrimp if needed: put them in a colander under cold running water for about 5 minutes. Pat dry.",
     "Boil a large pot of salted water. Cook the pasta 1 minute less than the package says. Scoop out 1 cup of pasta water, then drain.",
@@ -908,7 +911,8 @@
    "title": "Garlic shrimp & spinach pasta",
    "toddler": "Shrimp chopped into pea-sized pieces, short pasta pieces, quartered tomatoes, wilted spinach and a little extra Parmesan.",
    "totalMin": 25,
-   "why": "Pasta cooked al dente digests more slowly than soft-cooked pasta. Keep adult portions to about 1 cup cooked and let the shrimp and spinach fill the rest of the plate."
+   "why": "Pasta cooked al dente digests more slowly than soft-cooked pasta. Keep adult portions to about 1 cup cooked and let the shrimp and spinach fill the rest of the plate.",
+   "portions": "Each adult: about 5 oz shrimp and 1 cup cooked pasta, with spinach and tomatoes making up the rest. Toddler: 1 oz shrimp, ¼ cup pasta."
   },
   {
    "activeMin": 20,
@@ -919,15 +923,15 @@
    ],
    "id": "fri",
    "ingredients": [
-    "1.25 lb cod fillets (frozen is fine, thawed), cut into 1½-inch chunks",
-    "1 cup panko breadcrumbs",
+    "12 oz cod fillets (frozen is fine, thawed), cut into 1½-inch chunks",
+    "¾ cup panko breadcrumbs",
     "2 tbsp grated Parmesan",
     "1 tsp paprika, ½ tsp garlic powder, ¼ tsp salt",
-    "2 eggs",
+    "1 egg",
     "¼ cup all-purpose flour",
     "Olive oil spray (or 2 tbsp olive oil)",
-    "2 cups cooked quinoa (from Sunday)",
-    "2 cups frozen peas",
+    "1¼ cups cooked quinoa (from Sunday)",
+    "1 cup frozen peas",
     "5 oz arugula, 1 avocado, 2 tbsp lemon vinaigrette",
     "Lemon wedges; optional dip of Greek yogurt mixed with lemon and dill"
    ],
@@ -939,20 +943,21 @@
     "green": "Arugula",
     "protein": "Cod"
    },
-   "prep": "Move the cod to the fridge Wednesday night. Quinoa is from Sunday. Cod bites are best fresh; leftovers re-crisp in a 400°F oven in 5 minutes.",
+   "prep": "Move the cod to the fridge Wednesday night, only the 12 oz you need; the rest of the bag stays frozen. Extra Sunday quinoa makes adult lunch bowls. Cod bites are best fresh; leftovers re-crisp in a 400°F oven in 5 minutes.",
    "steps": [
     "Heat the oven to 425°F. Set a wire rack on the sheet pan if you have one; otherwise line it with parchment.",
     "Set up 3 shallow bowls: flour in the first; beaten eggs in the second; panko, Parmesan, paprika, garlic powder and salt in the third.",
     "Pat the cod dry. Dip each piece in flour, then egg, then press into the crumbs. Place on the pan.",
     "Spray or drizzle the tops with olive oil. Bake 12–15 minutes, until golden and the fish flakes easily (145°F).",
-    "While it bakes, microwave the peas with 2 tbsp water, covered, for 3–4 minutes. Warm the quinoa.",
+    "While it bakes, microwave the peas with 1 tbsp water, covered, for 2–3 minutes. Warm the quinoa.",
     "Toss the arugula with vinaigrette and sliced avocado."
    ],
    "technique": "Three-bowl breading station",
    "title": "Crispy baked cod bites with peas & quinoa",
    "toddler": "2–3 cod bites broken into smaller pieces (check for bones), peas lightly mashed, quinoa and avocado. The yogurt dip makes it fun.",
    "totalMin": 30,
-   "why": "Homemade fish sticks, baked instead of fried, are a toddler favorite, and cod is very lean."
+   "why": "Homemade fish sticks, baked instead of fried, are a toddler favorite, and cod is very lean.",
+   "portions": "Each adult: 5–6 cod bites (about 5 oz), ½ cup quinoa, ⅓ cup peas, arugula salad. Toddler: 2–3 bites, 2 tbsp each of quinoa and peas."
   }
  ],
  "prep": {

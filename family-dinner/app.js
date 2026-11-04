@@ -244,6 +244,7 @@
         <p class="lead" style="margin-top:6px">${esc(n.why)}</p>
       </section>
       <div class="card">${plateHTML(n.plate)}</div>
+      ${n.portions?`<div class="note green"><b>Portions</b><p>${esc(n.portions)}</p></div>`:''}
       <section>
         <div class="row" style="justify-content:space-between"><h3 style="margin:0">Ingredients</h3><span class="status">Serves ${esc(plan.household||'2 adults + toddler')}</span></div>
         <div class="card" style="padding-block:6px"><ul class="check">
