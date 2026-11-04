@@ -1,17 +1,21 @@
 {
- "updatedAt": "2026-11-04T23:57:02.201Z",
+ "updatedAt": "2026-11-04T23:57:06.400Z",
  "ratings": {
   "black-bean-corn-burrito-bowls": {
    "a": "up",
+   "b": null,
    "cuisine": "Mexican",
+   "ease": "easy",
    "mealId": "black-bean-corn-burrito-bowls",
    "ratedWeek": "2026-11-02",
    "t": {
-    "a": "2026-11-04T23:57:01.849Z"
+    "a": "2026-11-04T23:57:01.849Z",
+    "b": "",
+    "ease": "2026-11-04T23:57:03.650Z"
    },
    "technique": "One-pan simmer and build-your-own bowls",
    "title": "Black bean & corn burrito bowls",
-   "updatedAt": "2026-11-04T23:57:01.849Z"
+   "updatedAt": "2026-11-04T23:57:03.650Z"
   },
   "pork-tenderloin-white-beans-kale": {
    "a": "up",
