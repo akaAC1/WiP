@@ -1,6 +1,18 @@
 {
- "updatedAt": "2026-11-03T00:49:03.301Z",
+ "updatedAt": "2026-11-04T00:08:32.805Z",
  "ratings": {
+  "pork-tenderloin-white-beans-kale": {
+   "a": "up",
+   "cuisine": "Italian",
+   "mealId": "pork-tenderloin-white-beans-kale",
+   "ratedWeek": "2026-11-02",
+   "t": {
+    "a": "2026-11-04T00:08:30.064Z"
+   },
+   "technique": "Roasting a whole tenderloin to temperature",
+   "title": "Herb pork tenderloin with garlicky white beans & kale",
+   "updatedAt": "2026-11-04T00:08:30.064Z"
+  },
   "sheet-pan-lemon-salmon-broccoli": {
    "a": "up",
    "b": "up",
