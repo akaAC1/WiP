@@ -166,3 +166,17 @@ tr.off td{color:var(--muted)}
 .toast button{border:1px solid currentColor;background:transparent;color:inherit;border-radius:7px;padding:4px 10px;font:inherit;font-size:13px;cursor:pointer}
 
 @media (prefers-reduced-motion:no-preference){main>*{animation:rise .25s ease both}@keyframes rise{from{transform:translateY(4px)}to{transform:none}}}
+
+/* nutrition per adult serving */
+.nutri{display:flex;flex-direction:column;gap:12px}
+.nutri .kcal{font-size:14px;color:var(--muted)}
+.nutri .kcal b{font-family:var(--display);font-size:22px;color:var(--fg);font-variant-numeric:tabular-nums}
+.macros{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.macro{display:flex;flex-direction:column;gap:0;padding:10px;border-radius:10px;background:var(--sunk);min-width:0;border-top:4px solid var(--c)}
+.macro b{font-family:var(--display);font-size:24px;line-height:1.1;font-variant-numeric:tabular-nums}
+.macro b small{font-size:14px;font-weight:600;color:var(--muted)}
+.macro span{font-size:13px;font-weight:700}
+.macro i{font-style:normal;font-size:12px;color:var(--muted)}
+.m-protein{--c:var(--warm)} .m-carbs{--c:#8A8F3C} .m-fat{--c:var(--accent)}
+.macrobar{display:flex;height:8px;border-radius:999px;overflow:hidden;background:var(--sunk)}
+.macrobar span{background:var(--c)}

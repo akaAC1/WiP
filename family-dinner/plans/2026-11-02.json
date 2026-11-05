@@ -779,7 +779,17 @@
    "toddler": "About 2 oz flaked salmon (check for bones), 2 tbsp quinoa, soft broccoli \"trees\" and avocado slices. Skip the peppery arugula and stir a few soft spinach leaves into the quinoa instead.",
    "totalMin": 30,
    "why": "Salmon is the richest common source of heart-protective omega-3s. One pan, 30 minutes.",
-   "portions": "Each adult: 1 fillet (about 5 oz raw), ½ cup quinoa, a big handful of broccoli and arugula, ¼ avocado. Toddler: 1–2 oz salmon, 2 tbsp quinoa."
+   "portions": "Each adult: 1 fillet (about 5 oz raw), ½ cup quinoa, a big handful of broccoli and arugula, ¼ avocado. Toddler: 1–2 oz salmon, 2 tbsp quinoa.",
+   "nutrition": {
+    "perAdult": {
+     "calories": 640,
+     "protein": 37,
+     "carbs": 31,
+     "fat": 42,
+     "fiber": 9
+    },
+    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil and dressing."
+   }
   },
   {
    "activeMin": 20,
@@ -823,7 +833,17 @@
    "toddler": "Thin pork slices cut into small strips, beans lightly mashed with a fork, soft carrots cut lengthwise, and finely chopped kale mixed into the beans.",
    "totalMin": 45,
    "why": "Pork tenderloin is about as lean as chicken breast, and the beans bring fiber that blunts the glucose rise.",
-   "portions": "Each adult: 4–5 oz sliced pork (about 3 fingers' width), ½ cup beans, carrots and kale filling half the plate. Toddler: 1–2 oz pork, 2 tbsp beans. Set aside the lunch pork before serving."
+   "portions": "Each adult: 4–5 oz sliced pork (about 3 fingers' width), ½ cup beans, carrots and kale filling half the plate. Toddler: 1–2 oz pork, 2 tbsp beans. Set aside the lunch pork before serving.",
+   "nutrition": {
+    "perAdult": {
+     "calories": 515,
+     "protein": 41,
+     "carbs": 36,
+     "fat": 23,
+     "fiber": 13
+    },
+    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil and dressing."
+   }
   },
   {
    "activeMin": 15,
@@ -868,7 +888,17 @@
    "toddler": "A scoop of rice with the beans mostly mashed, cheese melted on top, and mashed avocado on the side. Hold the salsa or offer a tiny taste. Mash the corn a little if your toddler is still learning to chew it.",
    "totalMin": 20,
    "why": "Beans plus brown rice make a complete protein with lots of soluble fiber, which helps lower LDL cholesterol. No oven.",
-   "portions": "Each adult: ¾ cup beans and corn, ½ cup rice, a full bowl base of romaine, 2 tbsp avocado, 1 tbsp cheese. Toddler: ¼ cup beans, 2 tbsp rice."
+   "portions": "Each adult: ¾ cup beans and corn, ½ cup rice, a full bowl base of romaine, 2 tbsp avocado, 1 tbsp cheese. Toddler: ¼ cup beans, 2 tbsp rice.",
+   "nutrition": {
+    "perAdult": {
+     "calories": 440,
+     "protein": 20,
+     "carbs": 63,
+     "fat": 13,
+     "fiber": 16
+    },
+    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil and dressing."
+   }
   },
   {
    "activeMin": 20,
@@ -912,7 +942,17 @@
    "toddler": "Shrimp chopped into pea-sized pieces, short pasta pieces, quartered tomatoes, wilted spinach and a little extra Parmesan.",
    "totalMin": 25,
    "why": "Pasta cooked al dente digests more slowly than soft-cooked pasta. Keep adult portions to about 1 cup cooked and let the shrimp and spinach fill the rest of the plate.",
-   "portions": "Each adult: about 5 oz shrimp and 1 cup cooked pasta, with spinach and tomatoes making up the rest. Toddler: 1 oz shrimp, ¼ cup pasta."
+   "portions": "Each adult: about 5 oz shrimp and 1 cup cooked pasta, with spinach and tomatoes making up the rest. Toddler: 1 oz shrimp, ¼ cup pasta.",
+   "nutrition": {
+    "perAdult": {
+     "calories": 545,
+     "protein": 40,
+     "carbs": 50,
+     "fat": 21,
+     "fiber": 4
+    },
+    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil and dressing."
+   }
   },
   {
    "activeMin": 20,
@@ -957,7 +997,17 @@
    "toddler": "2–3 cod bites broken into smaller pieces (check for bones), peas lightly mashed, quinoa and avocado. The yogurt dip makes it fun.",
    "totalMin": 30,
    "why": "Homemade fish sticks, baked instead of fried, are a toddler favorite, and cod is very lean.",
-   "portions": "Each adult: 5–6 cod bites (about 5 oz), ½ cup quinoa, ⅓ cup peas, arugula salad. Toddler: 2–3 bites, 2 tbsp each of quinoa and peas."
+   "portions": "Each adult: 5–6 cod bites (about 5 oz), ½ cup quinoa, ⅓ cup peas, arugula salad. Toddler: 2–3 bites, 2 tbsp each of quinoa and peas.",
+   "nutrition": {
+    "perAdult": {
+     "calories": 580,
+     "protein": 41,
+     "carbs": 50,
+     "fat": 25,
+     "fiber": 9
+    },
+    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil and dressing."
+   }
   }
  ],
  "prep": {
