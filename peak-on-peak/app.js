@@ -1,6 +1,6 @@
 "use strict";
 // Shown in Year → Your data. Keep in step with VERSION in sw.js.
-const APP_VERSION="5";
+const APP_VERSION="6";
 // ---------- program ----------
 const TYPES={plyo:["Plyometrics","--t-plyo"],oiso:["Overcoming isometric","--t-iso"],yiso:["Yielding isometric","--t-iso"],power:["Power","--t-power"],str:["Strength + contrast","--t-str"],hyp:["Hypertrophy","--t-hyp"],core:["Core","--t-core"],mob:["Mobility","--t-mob"],
   sa:["Block A","--t-str"],sb:["Block B","--t-hyp"],sc:["Block C","--t-power"],sd:["Block D","--t-iso"],fin:["Finisher","--t-core"],run:["Main set","--t-str"],cool:["Cool-down","--t-hyp"]};
@@ -175,11 +175,18 @@ addEventListener("focus",()=>checkDayRollover());
 load();
 // Day buttons used to save a session swap the moment they were tapped, so browsing
 // (e.g. tapping MON on a Thursday to look at Monday's run) left that day showing the
-// wrong workout. Drop swaps that have nothing logged against them.
+// wrong workout. Drop swaps with nothing logged in the moved session itself (logs from
+// the day's own session, e.g. a weight typed before the swap, don't count).
+function loggedIn(r,s,d){
+  if(!r||!s)return false;
+  const keys=new Set();
+  for(const [,items] of progFor(d)[s].blocks)for(const x of items){keys.add(x.n);keys.add(x.n+" · top");keys.add(x.n+" · back-off")}
+  for(const k of keys){if((r.sets?.[k]||[]).some(Boolean)||r.wt?.[k]!=null)return true}
+  return false;
+}
 (function cleanSwaps(){let n=0;for(const [d,r] of Object.entries(days)){
   if(!r||!r.session||r.session===sessionForDow(parse(d).getDay()))continue;
-  const logged=setsDone(r)>0||Object.keys(r.wt||{}).length>0;
-  if(!logged){delete r.session;n++}}
+  if(!DAYS[r.session]||!loggedIn(r,r.session,d)){delete r.session;n++}}
   if(n)save();})();
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
 // The app can stay open (or suspended) overnight, and iOS doesn't reliably say when it
@@ -240,8 +247,7 @@ function swapNote(s){
   if(s===nat)return "";
   const from=DOW[DAYS[s].dow],back=nat?`Back to ${dn}'s session`:"Back to rest day";
   if(view.pick)return `<div class="swap"><span>Previewing ${from}'s session. Log a set to do it on ${dn} instead${nat?` of ${DAYS[nat].title}`:""}.</span><button class="ghost" id="unswap">${back}</button></div>`;
-  const logged=setsDone(days[view.date])>0||Object.keys(days[view.date]?.wt||{}).length>0;
-  return `<div class="swap"><span>${from}'s session, moved to ${dn}.</span>${logged?"":`<button class="ghost" id="unswap">${back}</button>`}</div>`;
+  return `<div class="swap"><span>${from}'s session, moved to ${dn}.${loggedIn(days[view.date],s,view.date)?" Your logged sets stay saved if you switch back.":""}</span><button class="ghost" id="unswap">${back}</button></div>`;
 }
 function restView(){
   const d=parse(view.date);let nx=view.date;for(let i=1;i<7;i++){const t=addDays(view.date,i);if(sessionForDow(parse(t).getDay())){nx=t;break}}
@@ -465,12 +471,12 @@ document.addEventListener("click",e=>{
     // Preview only; the swap is saved when something is logged (see pips/weights below).
     const k=b.dataset.d||b.dataset.move,saved=sessionOf(view.date),nat=sessionForDow(parse(view.date).getDay()),r=days[view.date];
     if(k===saved)view.pick=null;
-    else if(k===nat&&r?.session&&!setsDone(r)&&!Object.keys(r.wt||{}).length){delete r.session;view.pick=null;persist()}
+    else if(k===nat&&r?.session&&!loggedIn(r,r.session,view.date)){delete r.session;view.pick=null;persist()}
     else view.pick=k;
     render();paintSync();return}
   if(b.id==="unswap"){
     const r=days[view.date];view.pick=null;
-    if(r&&r.session&&!setsDone(r)&&!Object.keys(r.wt||{}).length){delete r.session;persist()}
+    if(r&&r.session){delete r.session;persist()}
     render();paintSync();return}
   if(b.dataset.p){
     const [i,j,k]=b.dataset.p.split("|").map(Number),s=shownSession(view.date),x=itemsFor(s,i,progWeek(view.date).w)[j],r=dayRec(view.date);
