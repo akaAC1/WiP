@@ -1,5 +1,6 @@
 // Offline support: app shell is cached on install; fonts are cached as they load.
-const VERSION = "pop-v3";
+// Keep VERSION in step with APP_VERSION in app.js.
+const VERSION = "pop-v4";
 const SHELL = [
   "./",
   "index.html",
@@ -13,7 +14,13 @@ const SHELL = [
 ];
 
 self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(VERSION).then((c) => c.addAll(SHELL)));
+  // cache: "reload" skips the browser's HTTP cache so a new version never installs old files.
+  // Take over as soon as the new files are cached; the page reloads itself out of sight.
+  e.waitUntil(
+    caches.open(VERSION)
+      .then((c) => c.addAll(SHELL.map((u) => new Request(u, { cache: "reload" }))))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener("activate", (e) => {
@@ -24,8 +31,12 @@ self.addEventListener("activate", (e) => {
   );
 });
 
+// Older pages ask for "skipWaiting" from their "Reload" button. This worker is usually
+// already active by then, so reload the page that asked.
 self.addEventListener("message", (e) => {
-  if (e.data === "skipWaiting") self.skipWaiting();
+  if (e.data !== "skipWaiting") return;
+  self.skipWaiting();
+  if (e.source && e.source.navigate) e.source.navigate(e.source.url).catch(() => {});
 });
 
 self.addEventListener("fetch", (e) => {
@@ -63,15 +74,17 @@ self.addEventListener("fetch", (e) => {
     return;
   }
 
-  // Everything else from this origin: serve from cache, refresh in the background.
+  // Everything else from this origin: network first so the newest code always loads
+  // when online; fall back to the cached copy if offline or the network takes > 3 s.
   e.respondWith(
-    caches.open(VERSION).then(async (c) => {
-      const hit = await c.match(req);
-      const net = fetch(req).then((res) => {
+    caches.open(VERSION).then((c) => {
+      const net = fetch(req, { cache: "no-cache" }).then((res) => {
         if (res.ok) c.put(req, res.clone());
         return res;
-      }).catch(() => hit);
-      return hit || net;
+      });
+      const slow = new Promise((r) => setTimeout(r, 3000)).then(() => c.match(req));
+      return Promise.race([net.catch(() => c.match(req)), slow.then((hit) => hit || net)])
+        .then((res) => res || net);
     })
   );
 });
