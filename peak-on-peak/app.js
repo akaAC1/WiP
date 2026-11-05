@@ -168,15 +168,22 @@ function persist(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>{save();pain
 function flushSave(){if(saveTimer){clearTimeout(saveTimer);saveTimer=null;save()}}
 addEventListener("pagehide",flushSave);
 document.addEventListener("visibilitychange",()=>{if(document.hidden)flushSave();else checkDayRollover()});
+addEventListener("pageshow",()=>checkDayRollover());
+addEventListener("focus",()=>checkDayRollover());
 load();
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
-// The app can stay open overnight: move "today" forward when it's reopened.
+// The app can stay open (or suspended) overnight, and iOS doesn't reliably say when it
+// comes back. syncToday() re-reads the clock before every tap without moving the page,
+// so Today, the "today" label and Prev/Next always work from the real date.
+function syncToday(){const now=iso(new Date());if(now===TODAY)return false;TODAY=now;return true}
+// On reopening: if you were looking at the old "today", follow it to the new one.
 function checkDayRollover(){
-  const now=iso(new Date());if(now===TODAY)return;
-  const wasToday=view.date===TODAY;TODAY=now;
-  if(wasToday)view.date=now;
+  const old=TODAY;if(!syncToday())return;
+  if(view.date===old)view.date=TODAY;
   safeRender();
 }
+// While the app sits open across midnight, keep the label right without moving the page.
+setInterval(()=>{if(!document.hidden&&syncToday())safeRender()},60000);
 // ---------- helpers ----------
 function dayRec(d){return days[d]||(days[d]={sets:{},wt:{}})}
 function sessionOf(d){return days[d]?.session||sessionForDow(parse(d).getDay())}
@@ -419,6 +426,7 @@ let armed=false;
 function go(date){view.date=date;view.tab="train";render();paintSync();window.scrollTo(0,0)}
 document.addEventListener("click",e=>{
   const b=e.target.closest("button");if(!b)return;
+  syncToday();
   if(b.dataset.tab){view.tab=b.dataset.tab;if(view.tab==="year")view.year=+view.date.slice(0,4);render();paintSync();window.scrollTo(0,0);return}
   if(b.id==="prev")return go(addDays(view.date,-1));
   if(b.id==="next")return go(addDays(view.date,1));
@@ -464,15 +472,18 @@ $("tplus").onclick=()=>{end=Math.max(end,Date.now())+15000;$("timer").classList.
 $("tskip").onclick=()=>{clearInterval(tick);tick=null;dropWake();$("timer").classList.remove("on")};
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&tick)holdWake()});
 // ---------- app shell ----------
+let wantReload=false;
 if("serviceWorker" in navigator&&location.protocol!=="file:"){
   addEventListener("load",()=>{
     navigator.serviceWorker.register("sw.js").then(reg=>{
-      const offer=w=>toast("A new version is ready","Reload",()=>w.postMessage("skipWaiting"),0);
+      const offer=w=>toast("A new version is ready","Reload",()=>{wantReload=true;w.postMessage("skipWaiting")},0);
       if(reg.waiting&&navigator.serviceWorker.controller)offer(reg.waiting);
       reg.addEventListener("updatefound",()=>{const w=reg.installing;w&&w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)offer(w)})});
     }).catch(()=>{});
+    // Reload only when the viewer tapped Reload on an update. The first install also
+    // fires controllerchange, and reloading then would reset the page to today mid-use.
     let reloaded=false;
-    navigator.serviceWorker.addEventListener("controllerchange",()=>{if(reloaded)return;reloaded=true;flushSave();location.reload()});
+    navigator.serviceWorker.addEventListener("controllerchange",()=>{if(reloaded||!wantReload)return;reloaded=true;flushSave();location.reload()});
   });
 }
 render();paintSync();
