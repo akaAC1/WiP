@@ -117,14 +117,13 @@
 
   function plateHTML(p){
     p = p || {};
-    return `<div class="plate-row">
-      <div class="plate" aria-hidden="true"><span class="q-protein">Protein</span><span class="q-green">Greens</span><span class="q-carb">Slow carb</span><span class="q-fat">Good fat</span></div>
-      <div class="plate-key">
+    // the plate formula is the same every night, so just list what fills each part tonight
+    return `<div class="platekey">
         <div><b>Protein</b><span>${esc(p.protein)}</span></div>
         <div><b>Greens</b><span>${esc(p.green)}</span></div>
         <div><b>Slow carb</b><span>${esc(p.carb)}</span></div>
         <div><b>Good fat</b><span>${esc(p.fat)}</span></div>
-      </div></div>`;
+      </div>`;
   }
 
   // ---------- week ----------
