@@ -1,6 +1,6 @@
 "use strict";
 // Shown in Year → Your data. Keep in step with VERSION in sw.js.
-const APP_VERSION="7";
+const APP_VERSION="8";
 // ---------- program ----------
 const TYPES={plyo:["Plyometrics","--t-plyo"],oiso:["Overcoming isometric","--t-iso"],yiso:["Yielding isometric","--t-iso"],power:["Power","--t-power"],str:["Strength + contrast","--t-str"],hyp:["Hypertrophy","--t-hyp"],core:["Core","--t-core"],mob:["Mobility","--t-mob"],
   sa:["Block A","--t-str"],sb:["Block B","--t-hyp"],sc:["Block C","--t-power"],sd:["Block D","--t-iso"],fin:["Finisher","--t-core"],run:["Main set","--t-str"],cool:["Cool-down","--t-hyp"]};
@@ -80,7 +80,7 @@ const DAYS={
    ["plyo",[X("","Box jump (step down)",3,"3","45 s",45,"Land soft and quiet; reset each rep",false)]],
    ["oiso",[X("A1","Pin squat push, bar at ~parallel",3,"6 s","15 s",15,"Build to max effort over 1–2 s, then hold. Same pins as A2",false),X("A2","Pin RDL pull, bar just below knee",3,"6 s","45 s",45,"Brace, pull the bar through the pins",false)]],
    ["yiso",[X("A1","DB split-squat hold (bottom)",2,"30 s/side","none",0,"Back knee 1 inch off the floor. Go straight into A2"),X("A2","DB RDL hold (mid-shin)",2,"30 s","45 s",45,"Flat back, hamstrings loaded")]],
-   ["str",[X("A1","Back squat",4,"4–5","20 s",20,"RPE 7–8. 20 s later, do A2"),C("A2","Barbell jump squat (20–30% of squat)",4,"3","2 min",120,"Contrast set: max height every rep"),C("A3","Barbell rollout (or ab wheel)",4,"8","",0,"Filler: do it early in the 2-min rest. Ribs down, no low-back sag",false),
+   ["str",[X("A1","Back squat",4,"4–5","20 s",20,"RPE 7–8. 20 s later, do A2"),C("A2","Dumbbell jump squat (light DBs at sides)",4,"3","2 min",120,"Contrast set: max height every rep. Keep the DBs light enough that every jump is fast"),C("A3","Barbell rollout (or ab wheel)",4,"8","",0,"Filler: do it early in the 2-min rest. Ribs down, no low-back sag",false),
             X("B1","Conventional or trap-bar deadlift",3,"3–5","20 s",20,"RPE 7–8. 20 s later, do B2"),C("B2","Broad jump",3,"3","2–3 min",150,"Contrast set: stick each landing 2 s",false),C("B3","Dead bug, DB held overhead",3,"8/side","",0,"Filler: do it early in the rest. Low back pinned to floor")]],
    ["hyp",[X("A1","DB Bulgarian split squat",3,"8–10/side","30 s",30,"3 s lowering"),X("A2","Barbell hip thrust",3,"10–12","45 s",45,"1 s squeeze at top")]],
    ["mob",[X("","90/90 hip switches",2,"8/side","",0,"Slow, tall torso",false),X("","Knee-to-wall ankle mobilization",2,"10/side","",0,"Heel stays down. Couch stretch now lives on Wednesday",false)]]
@@ -98,7 +98,7 @@ const DAYS={
    ["oiso",[X("A1","Pin bench press, bar 2–3 in. off chest",3,"6 s","15 s",15,"Press into the pins at full effort. Same rack as A2",false),X("A2","Pin row, bar on pins",3,"6 s","45 s",45,"Drive elbows back, hold",false)]],
    ["yiso",[X("A1","DB bench hold, 90° elbow",2,"30 s","none",0,"Don't let the DBs drift. Go straight into A2"),X("A2","Flexed-arm hang or chest-supported row hold",2,"20–30 s","45 s",45,"Shoulder blades pinned back")]],
    ["str",[X("A1","Barbell bench press",4,"4–5","20 s",20,"RPE 7–8. 20 s later, do A2"),C("A2","Plyo push-up (hands leave floor)",4,"4","2 min",120,"Contrast set: explode off the floor",false),C("A3","DB front-rack march",4,"30 s","",0,"Filler: do it early in the 2-min rest. Tall chest, elbows high"),
-            X("B1","Weighted pull-up or Pendlay row",4,"4–6","20 s",20,"RPE 7–8. 20 s later, do B2"),C("B2","Explosive inverted row (barbell in rack)",4,"5","2 min",120,"Contrast set: chest to bar fast, lower under control",false),C("B3","Back-extension hold or light good morning",3,"30 s / 10","",0,"Filler, anti-flexion. Long spine, no rounding")]],
+            X("B1","Weighted pull-up or Pendlay row",4,"4–6","20 s",20,"RPE 7–8. 20 s later, do B2"),C("B2","Explosive DB row (light)",4,"4/side","2 min",120,"Contrast set: pull the DB to your hip as fast as possible, lower under control"),C("B3","Back-extension hold or light good morning",3,"30 s / 10","",0,"Filler, anti-flexion. Long spine, no rounding")]],
    ["hyp",[X("A1","Incline DB press",3,"8–12","30 s",30,"3 s lowering"),X("A2","Single-arm DB row",3,"10–12/side","30 s",30,"Pause at top"),X("A3","Seated DB overhead press",2,"10–12","45 s",45,"Tri-set: A1 → A2 → A3, then rest")]],
    ["mob",[X("","Thoracic open book",2,"8/side","",0,"Exhale into the rotation",false),X("","Wrist rocks + prayer stretches",2,"30 s each","",0,"Shoulder dislocates now live on Friday",false)]]
   ]},
