@@ -1,6 +1,6 @@
 // Offline support: app shell is cached on install; fonts are cached as they load.
 // The plan file is network-first so a new week shows up as soon as it is published.
-const VERSION = "fdp-v9";
+const VERSION = "fdp-v10";
 const SHELL = [
   "./",
   "index.html",
