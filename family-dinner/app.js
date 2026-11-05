@@ -208,6 +208,36 @@
     markDirty();
   }
 
+  // ---------- nutrition (per adult serving) ----------
+  function nutritionHTML(nu){
+    const p = nu && nu.perAdult;
+    if(!p || !(p.protein >= 0 && p.carbs >= 0 && p.fat >= 0)) return '';
+    const cal = { protein: p.protein*4, carbs: p.carbs*4, fat: p.fat*9 };
+    const total = cal.protein + cal.carbs + cal.fat || 1;
+    const pct = k => Math.round(cal[k] / total * 100);
+    const tile = (k, label) => `<div class="macro m-${k}"><b>${esc(p[k])}<small> g</small></b><span>${label}</span><i>${pct(k)}% of calories</i></div>`;
+    return `<section class="card nutri" aria-label="Nutrition per adult serving">
+      <div class="row" style="justify-content:space-between;align-items:baseline"><h3 style="margin:0">Per adult serving</h3>${p.calories ? `<span class="kcal"><b>${esc(p.calories)}</b> cal</span>` : ''}</div>
+      <div class="macros">${tile('protein','Protein')}${tile('carbs','Carbs')}${tile('fat','Fat')}</div>
+      <div class="macrobar" aria-hidden="true"><span class="m-protein" style="width:${pct('protein')}%"></span><span class="m-carbs" style="width:${pct('carbs')}%"></span><span class="m-fat" style="width:${pct('fat')}%"></span></div>
+      ${sodiumHTML(p.sodium, nu.sodiumNote)}
+      <p class="status">${p.fiber != null ? esc(p.fiber) + ' g fiber. ' : ''}${esc(nu.note || 'Estimated.')}</p>
+    </section>`;
+  }
+  // sodium against the American Heart Association's daily targets: 1,500 mg ideal, 2,300 mg limit
+  function sodiumHTML(mg, note){
+    if(!(mg >= 0)) return '';
+    const IDEAL = 1500, LIMIT = 2300;
+    const share = Math.round(mg / IDEAL * 100);
+    const level = mg <= 600 ? 'low' : mg <= 900 ? 'mid' : 'high';
+    const words = {low:'Low for a dinner', mid:'Moderate for a dinner', high:'High for a dinner'}[level];
+    return `<div class="sodium s-${level}">
+      <div class="row" style="justify-content:space-between;align-items:baseline"><span><b>${esc(mg)}</b> mg sodium</span><span class="slabel">${words}</span></div>
+      <div class="smeter" aria-hidden="true"><span style="width:${Math.min(100, mg / LIMIT * 100)}%"></span><i style="left:${IDEAL / LIMIT * 100}%"></i></div>
+      <p class="status">About ${share}% of the 1,500 mg daily ideal (the line); the bar runs to the 2,300 mg daily limit.${note ? ' ' + esc(note) : ''}</p>
+    </div>`;
+  }
+
   // ---------- one night ----------
   function checkKey(id, kind, j){ return plan.weekOf + ':' + id + ':' + kind + ':' + j; }
   function nightChecks(id){
@@ -245,6 +275,7 @@
       </section>
       <div class="card">${plateHTML(n.plate)}</div>
       ${n.portions?`<div class="note green"><b>Portions</b><p>${esc(n.portions)}</p></div>`:''}
+      ${nutritionHTML(n.nutrition)}
       <section>
         <div class="row" style="justify-content:space-between"><h3 style="margin:0">Ingredients</h3><span class="status">Serves ${esc(plan.household||'2 adults + toddler')}</span></div>
         <div class="card" style="padding-block:6px"><ul class="check">
