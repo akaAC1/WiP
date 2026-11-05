@@ -1,6 +1,6 @@
 "use strict";
 // Shown in Year → Your data. Keep in step with VERSION in sw.js.
-const APP_VERSION="4";
+const APP_VERSION="5";
 // ---------- program ----------
 const TYPES={plyo:["Plyometrics","--t-plyo"],oiso:["Overcoming isometric","--t-iso"],yiso:["Yielding isometric","--t-iso"],power:["Power","--t-power"],str:["Strength + contrast","--t-str"],hyp:["Hypertrophy","--t-hyp"],core:["Core","--t-core"],mob:["Mobility","--t-mob"],
   sa:["Block A","--t-str"],sb:["Block B","--t-hyp"],sc:["Block C","--t-power"],sd:["Block D","--t-iso"],fin:["Finisher","--t-core"],run:["Main set","--t-str"],cool:["Cool-down","--t-hyp"]};
@@ -157,7 +157,7 @@ function progWeek(s){
 const LS="peak-on-peak-v1";
 let settings={start:mondayOf(TODAY)};
 let days={};               // date -> {session, sets:{name:[0/1]}, wt:{name:lb}, bw}
-let view={tab:"train", date:TODAY, year:+TODAY.slice(0,4)};
+let view={tab:"train", date:TODAY, year:+TODAY.slice(0,4), pick:null}; // pick: a session previewed on this date, not saved
 let saveState="ok";        // "ok" | "error"
 function load(){
   try{const c=JSON.parse(localStorage.getItem(LS)||"null");if(c){if(c.settings)settings={...settings,...c.settings};if(c.days)days=c.days}}catch(e){}
@@ -173,6 +173,14 @@ document.addEventListener("visibilitychange",()=>{if(document.hidden)flushSave()
 addEventListener("pageshow",()=>checkDayRollover());
 addEventListener("focus",()=>checkDayRollover());
 load();
+// Day buttons used to save a session swap the moment they were tapped, so browsing
+// (e.g. tapping MON on a Thursday to look at Monday's run) left that day showing the
+// wrong workout. Drop swaps that have nothing logged against them.
+(function cleanSwaps(){let n=0;for(const [d,r] of Object.entries(days)){
+  if(!r||!r.session||r.session===sessionForDow(parse(d).getDay()))continue;
+  const logged=setsDone(r)>0||Object.keys(r.wt||{}).length>0;
+  if(!logged){delete r.session;n++}}
+  if(n)save();})();
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
 // The app can stay open (or suspended) overnight, and iOS doesn't reliably say when it
 // comes back. syncToday() re-reads the clock before every tap without moving the page,
@@ -189,6 +197,8 @@ setInterval(()=>{if(!document.hidden&&syncToday())safeRender()},60000);
 // ---------- helpers ----------
 function dayRec(d){return days[d]||(days[d]={sets:{},wt:{}})}
 function sessionOf(d){return days[d]?.session||sessionForDow(parse(d).getDay())}
+// What the Train view shows for a date: a previewed session if one is picked, else the saved one.
+function shownSession(d){return (d===view.date&&view.pick)||sessionOf(d)}
 function setsDone(rec){let n=0;for(const a of Object.values(rec?.sets||{}))n+=a.filter(Boolean).length;return n}
 function lastWeight(name,before){
   const ds=Object.keys(days).filter(d=>d<before&&days[d].wt&&days[d].wt[name]).sort();
@@ -203,7 +213,7 @@ function render(){
   const H=$("hdr");
   const tabs=`<div class="seg"><button id="tab-train" data-tab="train" aria-pressed="${view.tab==="train"}">Train</button><button id="tab-year" data-tab="year" aria-pressed="${view.tab==="year"}">Year</button></div>`;
   if(view.tab==="train"){
-    const d=parse(view.date),s=sessionOf(view.date),pw=progWeek(view.date);
+    const d=parse(view.date),s=shownSession(view.date),pw=progWeek(view.date);
     H.innerHTML=`<div class="top"><h1 class="brand">Peak on Peak</h1>${tabs}</div>
      <div class="datebar"><button class="icon" id="prev" aria-label="Previous day">‹</button>
       <div class="d"><b>${DOW[d.getDay()]}, ${fmtShort(view.date)}</b><span>${WEEKS[pw.w][0]} · ${pw.mon} week ${pw.i+1} of ${pw.n}${view.date===TODAY?" · today":""}</span></div>
@@ -224,11 +234,20 @@ function bwCard(){
   return `<div class="bw"><div class="lbl"><span class="k">Body weight</span><small>${lb?`Last: ${lb.v} lb on ${fmtShort(lb.d)}`:"Log it any morning to see the trend in Year"}</small></div>
    <label class="num"><input id="bw" type="number" inputmode="decimal" step="0.1" min="50" max="600" placeholder="—" value="${rec?.bw??""}" aria-label="Body weight in pounds"><span>lb</span></label></div>`;
 }
+// Explain when the date shows another day's session, with a way back.
+function swapNote(s){
+  const nat=sessionForDow(parse(view.date).getDay()),dn=DOW[parse(view.date).getDay()];
+  if(s===nat)return "";
+  const from=DOW[DAYS[s].dow],back=nat?`Back to ${dn}'s session`:"Back to rest day";
+  if(view.pick)return `<div class="swap"><span>Previewing ${from}'s session. Log a set to do it on ${dn} instead${nat?` of ${DAYS[nat].title}`:""}.</span><button class="ghost" id="unswap">${back}</button></div>`;
+  const logged=setsDone(days[view.date])>0||Object.keys(days[view.date]?.wt||{}).length>0;
+  return `<div class="swap"><span>${from}'s session, moved to ${dn}.</span>${logged?"":`<button class="ghost" id="unswap">${back}</button>`}</div>`;
+}
 function restView(){
   const d=parse(view.date);let nx=view.date;for(let i=1;i<7;i++){const t=addDays(view.date,i);if(sessionForDow(parse(t).getDay())){nx=t;break}}
   const ns=DAYS[sessionForDow(parse(nx).getDay())];
   return `<div class="rest"><span class="k">${DOW[d.getDay()]}</span><h2>Rest day</h2><p>Next: ${ns.title}, ${DOW[parse(nx).getDay()]} ${fmtShort(nx)}.</p>
-   <p>Moved a session? Log it here instead:</p>
+   <p>Moved a session? Pick it to see it here. It is saved to this day once you log a set.</p>
    <div class="days">${Object.entries(DAYS).map(([k,v])=>`<button id="move-${k}" data-move="${k}"><b>${v.short}</b><span>${v.tag}</span></button>`).join("")}</div></div>
    ${view.date>=PROGRAM_SWITCH?ckCard(false):""}${bwCard()}`;
 }
@@ -314,6 +333,7 @@ function trainView(s,pw){
   const pct=total?done/total:0,C=2*Math.PI*28;
   return `<div class="hero"><div><h2>${D.title}</h2><p>${D.sub}</p></div>
     <div class="ring" aria-label="${done} of ${total} sets done"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="var(--line)" stroke-width="6"/><circle cx="32" cy="32" r="28" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pct)}"/></svg><div class="n">${done}/${total}</div></div></div>
+    ${swapNote(s)}
     <div class="note"><span class="k">${WEEKS[pw.w][0]}</span>${D.cardio?D.wk[ew]:WEEKS[pw.w][1]}</div>
     ${nw?ckCard():""}
     ${bwCard()}
@@ -426,7 +446,7 @@ async function importData(file){
 $("importfile").addEventListener("change",e=>{const f=e.target.files[0];e.target.value="";if(f)importData(f)});
 // ---------- events ----------
 let armed=false;
-function go(date){view.date=date;view.tab="train";render();paintSync();window.scrollTo(0,0)}
+function go(date){view.date=date;view.pick=null;view.tab="train";render();paintSync();window.scrollTo(0,0)}
 document.addEventListener("click",e=>{
   const b=e.target.closest("button");if(!b)return;
   syncToday();
@@ -441,10 +461,20 @@ document.addEventListener("click",e=>{
   if(b.dataset.go)return go(b.dataset.go);
   if(b.dataset.cks){const [k,v]=b.dataset.cks.split("|"),r=dayRec(view.date);r.ck=r.ck||{};if(r.ck[k]===+v)delete r.ck[k];else r.ck[k]=+v;persist();render();paintSync();return}
   if(b.dataset.zone){const r=dayRec(view.date),auto=readiness(view.date).z||"green";if(b.dataset.zone===auto)delete r.mode;else r.mode=b.dataset.zone;persist();render();paintSync();return}
-  if(b.dataset.d||b.dataset.move){const r=dayRec(view.date);r.session=b.dataset.d||b.dataset.move;persist();render();paintSync();return}
+  if(b.dataset.d||b.dataset.move){
+    // Preview only; the swap is saved when something is logged (see pips/weights below).
+    const k=b.dataset.d||b.dataset.move,saved=sessionOf(view.date),nat=sessionForDow(parse(view.date).getDay()),r=days[view.date];
+    if(k===saved)view.pick=null;
+    else if(k===nat&&r?.session&&!setsDone(r)&&!Object.keys(r.wt||{}).length){delete r.session;view.pick=null;persist()}
+    else view.pick=k;
+    render();paintSync();return}
+  if(b.id==="unswap"){
+    const r=days[view.date];view.pick=null;
+    if(r&&r.session&&!setsDone(r)&&!Object.keys(r.wt||{}).length){delete r.session;persist()}
+    render();paintSync();return}
   if(b.dataset.p){
-    const [i,j,k]=b.dataset.p.split("|").map(Number),s=sessionOf(view.date),x=itemsFor(s,i,progWeek(view.date).w)[j],r=dayRec(view.date);
-    if(!r.session)r.session=s;
+    const [i,j,k]=b.dataset.p.split("|").map(Number),s=shownSession(view.date),x=itemsFor(s,i,progWeek(view.date).w)[j],r=dayRec(view.date);
+    r.session=s;view.pick=null;
     const a=r.sets[x.key]||(r.sets[x.key]=[]);a[k]=a[k]?0:1;
     if(a[k]&&x.w&&r.wt[x.key]==null){const sg=suggest(x,r);if(sg!=null)r.wt[x.key]=sg}
     if(a[k]&&x.sec)startTimer(x.sec,x.n);
@@ -457,8 +487,8 @@ document.addEventListener("input",e=>{
   const t=e.target;
   if(t.dataset.ck){const r=dayRec(view.date);r.ck=r.ck||{};const v=parseFloat(t.value);if(isNaN(v))delete r.ck[t.dataset.ck];else r.ck[t.dataset.ck]=v;persist();pendingRender=true;return}
   if(t.id==="bw"){const r=dayRec(view.date);const v=parseFloat(t.value);if(isNaN(v))delete r.bw;else r.bw=v;persist();return}
-  if(t.dataset.w){const [i,j]=t.dataset.w.split("|").map(Number),s=sessionOf(view.date),x=itemsFor(s,i,progWeek(view.date).w)[j],r=dayRec(view.date);
-    if(!r.session)r.session=s;const v=parseFloat(t.value);if(isNaN(v))delete r.wt[x.key];else r.wt[x.key]=v;persist();return}
+  if(t.dataset.w){const [i,j]=t.dataset.w.split("|").map(Number),s=shownSession(view.date),x=itemsFor(s,i,progWeek(view.date).w)[j],r=dayRec(view.date);
+    if(r.session!==s){r.session=s;view.pick=null}const v=parseFloat(t.value);if(isNaN(v))delete r.wt[x.key];else r.wt[x.key]=v;persist();return}
 });
 document.addEventListener("change",e=>{
   if(e.target.id==="start"&&e.target.value){settings.start=e.target.value;persist();render();paintSync()}

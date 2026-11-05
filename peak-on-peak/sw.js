@@ -1,6 +1,6 @@
 // Offline support: app shell is cached on install; fonts are cached as they load.
 // Keep VERSION in step with APP_VERSION in app.js.
-const VERSION = "pop-v4";
+const VERSION = "pop-v5";
 const SHELL = [
   "./",
   "index.html",
