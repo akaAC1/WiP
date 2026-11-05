@@ -1,6 +1,6 @@
 "use strict";
 // Shown in Year → Your data. Keep in step with VERSION in sw.js.
-const APP_VERSION="6";
+const APP_VERSION="7";
 // ---------- program ----------
 const TYPES={plyo:["Plyometrics","--t-plyo"],oiso:["Overcoming isometric","--t-iso"],yiso:["Yielding isometric","--t-iso"],power:["Power","--t-power"],str:["Strength + contrast","--t-str"],hyp:["Hypertrophy","--t-hyp"],core:["Core","--t-core"],mob:["Mobility","--t-mob"],
   sa:["Block A","--t-str"],sb:["Block B","--t-hyp"],sc:["Block C","--t-power"],sd:["Block D","--t-iso"],fin:["Finisher","--t-core"],run:["Main set","--t-str"],cool:["Cool-down","--t-hyp"]};
@@ -226,7 +226,7 @@ function render(){
       <div class="d"><b>${DOW[d.getDay()]}, ${fmtShort(view.date)}</b><span>${WEEKS[pw.w][0]} · ${pw.mon} week ${pw.i+1} of ${pw.n}${view.date===TODAY?" · today":""}</span></div>
       ${view.date!==TODAY?`<button class="today" id="gotoday">Today</button>`:""}
       <button class="icon" id="next" aria-label="Next day">›</button></div>
-     ${s?`<div class="days">${Object.entries(DAYS).map(([k,v])=>`<button id="day-${k}" aria-pressed="${k===s}" data-d="${k}"><b>${v.short}</b><span>${v.tag}</span></button>`).join("")}</div>`:""}`;
+     ${weekButtons()}`;
     $("app").innerHTML=s?trainView(s,pw):restView();
   }else{
     H.innerHTML=`<div class="top"><h1 class="brand">Peak on Peak</h1>${tabs}</div>
@@ -249,12 +249,20 @@ function swapNote(s){
   if(view.pick)return `<div class="swap"><span>Previewing ${from}'s session. Log a set to do it on ${dn} instead${nat?` of ${DAYS[nat].title}`:""}.</span><button class="ghost" id="unswap">${back}</button></div>`;
   return `<div class="swap"><span>${from}'s session, moved to ${dn}.${loggedIn(days[view.date],s,view.date)?" Your logged sets stay saved if you switch back.":""}</span><button class="ghost" id="unswap">${back}</button></div>`;
 }
+// Day buttons go to that weekday in the Mon–Sun week being viewed: earlier days show what
+// was logged, later days what's planned. (Doing another day's session is "swapButtons".)
+function weekButtons(){
+  const mon=mondayOf(view.date);
+  return `<div class="days">${Object.entries(DAYS).map(([k,v])=>{const dt=addDays(mon,v.dow-1),dn=parse(dt).getDate();
+    return `<button id="day-${k}" aria-pressed="${dt===view.date}" data-go="${dt}" aria-label="${DOW[v.dow]} ${fmtShort(dt)}"><b>${v.short}<i>${dn}</i></b><span>${v.tag}</span></button>`}).join("")}</div>`;
+}
+function swapButtons(cur){return `<div class="days">${Object.entries(DAYS).map(([k,v])=>`<button id="move-${k}" data-move="${k}" aria-pressed="${k===cur}"><b>${v.short}</b><span>${v.tag}</span></button>`).join("")}</div>`}
 function restView(){
   const d=parse(view.date);let nx=view.date;for(let i=1;i<7;i++){const t=addDays(view.date,i);if(sessionForDow(parse(t).getDay())){nx=t;break}}
   const ns=DAYS[sessionForDow(parse(nx).getDay())];
   return `<div class="rest"><span class="k">${DOW[d.getDay()]}</span><h2>Rest day</h2><p>Next: ${ns.title}, ${DOW[parse(nx).getDay()]} ${fmtShort(nx)}.</p>
    <p>Moved a session? Pick it to see it here. It is saved to this day once you log a set.</p>
-   <div class="days">${Object.entries(DAYS).map(([k,v])=>`<button id="move-${k}" data-move="${k}"><b>${v.short}</b><span>${v.tag}</span></button>`).join("")}</div></div>
+   ${swapButtons(null)}</div>
    ${view.date>=PROGRAM_SWITCH?ckCard(false):""}${bwCard()}`;
 }
 // ---------- readiness check-in ----------
@@ -340,6 +348,7 @@ function trainView(s,pw){
   return `<div class="hero"><div><h2>${D.title}</h2><p>${D.sub}</p></div>
     <div class="ring" aria-label="${done} of ${total} sets done"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="none" stroke="var(--line)" stroke-width="6"/><circle cx="32" cy="32" r="28" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pct)}"/></svg><div class="n">${done}/${total}</div></div></div>
     ${swapNote(s)}
+    <details class="warm swapper"${view.pick?" open":""}><summary>Do a different session today</summary><div>${swapButtons(s)}<p class="tip">Shows that session here. It's saved to ${DOW[parse(view.date).getDay()]} once you log a set.</p></div></details>
     <div class="note"><span class="k">${WEEKS[pw.w][0]}</span>${D.cardio?D.wk[ew]:WEEKS[pw.w][1]}</div>
     ${nw?ckCard():""}
     ${bwCard()}
