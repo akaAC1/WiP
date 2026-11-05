@@ -36,6 +36,8 @@ header .wrap{padding-block:12px 10px;display:grid;gap:10px}
 .days{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}
 .days button{border:0;background:var(--soft);color:var(--ink);border-radius:10px;padding:8px 6px;cursor:pointer;text-align:left;display:grid;gap:1px}
 .days button b{font-family:var(--display);font-size:19px;font-weight:700;text-transform:uppercase;letter-spacing:.02em;line-height:1}
+.days button b i{font:500 11px var(--mono);font-style:normal;margin-left:4px;opacity:.75;letter-spacing:0}
+.swapper .days{margin-bottom:8px}
 .days button span{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .days button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
 .days button[aria-pressed="true"] span{color:inherit;opacity:.85}
@@ -64,7 +66,7 @@ details.warm summary{cursor:pointer;padding:10px 12px;font-weight:600;list-style
 details.warm summary::-webkit-details-marker{display:none}
 details.warm summary::after{content:"+";color:var(--muted)}
 details.warm[open] summary::after{content:"–"}
-details.warm div{padding:0 12px 12px;color:var(--muted);font-size:14px}
+details.warm>div{padding:0 12px 12px;color:var(--muted);font-size:14px}
 .block{display:grid;gap:8px}
 .bh{display:flex;align-items:center;gap:8px}
 .bh .idx{font-family:var(--mono);font-size:11px;color:var(--muted)}
