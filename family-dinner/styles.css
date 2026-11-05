@@ -180,3 +180,10 @@ tr.off td{color:var(--muted)}
 .m-protein{--c:var(--warm)} .m-carbs{--c:#8A8F3C} .m-fat{--c:var(--accent)}
 .macrobar{display:flex;height:8px;border-radius:999px;overflow:hidden;background:var(--sunk)}
 .macrobar span{background:var(--c)}
+.sodium{display:flex;flex-direction:column;gap:6px;padding-top:12px;border-top:1px solid var(--line)}
+.sodium b{font-family:var(--display);font-size:20px;font-variant-numeric:tabular-nums}
+.sodium .slabel{font-size:13px;font-weight:700;color:var(--sc)}
+.smeter{position:relative;height:8px;border-radius:999px;background:var(--sunk)}
+.smeter span{display:block;height:100%;border-radius:999px;background:var(--sc)}
+.smeter i{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--fg);opacity:.6}
+.s-low{--sc:var(--accent)} .s-mid{--sc:#8A8F3C} .s-high{--sc:var(--warm)}

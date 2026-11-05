@@ -220,8 +220,22 @@
       <div class="row" style="justify-content:space-between;align-items:baseline"><h3 style="margin:0">Per adult serving</h3>${p.calories ? `<span class="kcal"><b>${esc(p.calories)}</b> cal</span>` : ''}</div>
       <div class="macros">${tile('protein','Protein')}${tile('carbs','Carbs')}${tile('fat','Fat')}</div>
       <div class="macrobar" aria-hidden="true"><span class="m-protein" style="width:${pct('protein')}%"></span><span class="m-carbs" style="width:${pct('carbs')}%"></span><span class="m-fat" style="width:${pct('fat')}%"></span></div>
+      ${sodiumHTML(p.sodium, nu.sodiumNote)}
       <p class="status">${p.fiber != null ? esc(p.fiber) + ' g fiber. ' : ''}${esc(nu.note || 'Estimated.')}</p>
     </section>`;
+  }
+  // sodium against the American Heart Association's daily targets: 1,500 mg ideal, 2,300 mg limit
+  function sodiumHTML(mg, note){
+    if(!(mg >= 0)) return '';
+    const IDEAL = 1500, LIMIT = 2300;
+    const share = Math.round(mg / IDEAL * 100);
+    const level = mg <= 600 ? 'low' : mg <= 900 ? 'mid' : 'high';
+    const words = {low:'Low for a dinner', mid:'Moderate for a dinner', high:'High for a dinner'}[level];
+    return `<div class="sodium s-${level}">
+      <div class="row" style="justify-content:space-between;align-items:baseline"><span><b>${esc(mg)}</b> mg sodium</span><span class="slabel">${words}</span></div>
+      <div class="smeter" aria-hidden="true"><span style="width:${Math.min(100, mg / LIMIT * 100)}%"></span><i style="left:${IDEAL / LIMIT * 100}%"></i></div>
+      <p class="status">About ${share}% of the 1,500 mg daily ideal (the line); the bar runs to the 2,300 mg daily limit.${note ? ' ' + esc(note) : ''}</p>
+    </div>`;
   }
 
   // ---------- one night ----------

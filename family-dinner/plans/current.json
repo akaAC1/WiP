@@ -786,9 +786,11 @@
      "protein": 37,
      "carbs": 31,
      "fat": 42,
-     "fiber": 9
+     "fiber": 9,
+     "sodium": 430
     },
-    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil and dressing."
+    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil, dressing and the salt the recipe adds.",
+    "sodiumNote": "Mostly the pinches of salt on the broccoli and salmon."
    }
   },
   {
@@ -840,9 +842,11 @@
      "protein": 41,
      "carbs": 36,
      "fat": 23,
-     "fiber": 13
+     "fiber": 13,
+     "sodium": 770
     },
-    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil and dressing."
+    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil, dressing and the salt the recipe adds.",
+    "sodiumNote": "Mostly the salt in the pork rub and the canned beans (rinsing them removes about a third)."
    }
   },
   {
@@ -895,9 +899,11 @@
      "protein": 20,
      "carbs": 63,
      "fat": 13,
-     "fiber": 16
+     "fiber": 16,
+     "sodium": 930
     },
-    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil and dressing."
+    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil, dressing and the salt the recipe adds.",
+    "sodiumNote": "Mostly the jarred salsa (about 460 mg in ¼ cup) and the canned beans. A low-sodium salsa saves about 300 mg."
    }
   },
   {
@@ -949,9 +955,11 @@
      "protein": 40,
      "carbs": 50,
      "fat": 21,
-     "fiber": 4
+     "fiber": 4,
+     "sodium": 620
     },
-    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil and dressing."
+    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil, dressing and the salt the recipe adds.",
+    "sodiumNote": "Mostly the shrimp and the salted pasta water. Frozen shrimp varies a lot: check the label for sodium tripolyphosphate, which can double it."
    }
   },
   {
@@ -1004,9 +1012,11 @@
      "protein": 41,
      "carbs": 50,
      "fat": 25,
-     "fiber": 9
+     "fiber": 9,
+     "sodium": 560
     },
-    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil and dressing."
+    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil, dressing and the salt the recipe adds.",
+    "sodiumNote": "Mostly the salt in the breading and the Parmesan."
    }
   }
  ],
