@@ -1,4 +1,6 @@
 "use strict";
+// Shown in Year → Your data. Keep in step with VERSION in sw.js.
+const APP_VERSION="4";
 // ---------- program ----------
 const TYPES={plyo:["Plyometrics","--t-plyo"],oiso:["Overcoming isometric","--t-iso"],yiso:["Yielding isometric","--t-iso"],power:["Power","--t-power"],str:["Strength + contrast","--t-str"],hyp:["Hypertrophy","--t-hyp"],core:["Core","--t-core"],mob:["Mobility","--t-mob"],
   sa:["Block A","--t-str"],sb:["Block B","--t-hyp"],sc:["Block C","--t-power"],sd:["Block D","--t-iso"],fin:["Finisher","--t-core"],run:["Main set","--t-str"],cool:["Cool-down","--t-hyp"]};
@@ -344,6 +346,7 @@ function yearView(){
    <div class="panel"><h3>Your data</h3>
     <p class="empty">Everything is stored on this device. Export a backup now and then, or to move your log to another phone.</p>
     <div class="btns"><button class="ghost" id="export">Export backup</button><button class="ghost" id="import">Import backup</button></div>
+    <span class="sync">App version ${APP_VERSION}</span>
     <span class="sync" id="sync"></span></div>`;
 }
 function months(Y){
@@ -472,18 +475,25 @@ $("tplus").onclick=()=>{end=Math.max(end,Date.now())+15000;$("timer").classList.
 $("tskip").onclick=()=>{clearInterval(tick);tick=null;dropWake();$("timer").classList.remove("on")};
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&tick)holdWake()});
 // ---------- app shell ----------
-let wantReload=false;
+// iPhone home-screen apps usually resume from memory instead of reloading, so new code
+// can sit unused for days. Check for an update each time the app comes back; a new
+// version takes over as soon as it's downloaded, and the page reloads the next time it
+// goes to the background (or right away from the toast).
 if("serviceWorker" in navigator&&location.protocol!=="file:"){
-  addEventListener("load",()=>{
-    navigator.serviceWorker.register("sw.js").then(reg=>{
-      const offer=w=>toast("A new version is ready","Reload",()=>{wantReload=true;w.postMessage("skipWaiting")},0);
-      if(reg.waiting&&navigator.serviceWorker.controller)offer(reg.waiting);
-      reg.addEventListener("updatefound",()=>{const w=reg.installing;w&&w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)offer(w)})});
-    }).catch(()=>{});
-    // Reload only when the viewer tapped Reload on an update. The first install also
-    // fires controllerchange, and reloading then would reset the page to today mid-use.
-    let reloaded=false;
-    navigator.serviceWorker.addEventListener("controllerchange",()=>{if(reloaded||!wantReload)return;reloaded=true;flushSave();location.reload()});
+  // No controller yet means this is the first install: that also fires controllerchange,
+  // and reloading then would reset the page to today mid-use.
+  const hadCtrl=!!navigator.serviceWorker.controller;
+  let updated=false,reloaded=false;
+  const reload=()=>{if(reloaded)return;reloaded=true;flushSave();location.reload()};
+  addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{})});
+  navigator.serviceWorker.addEventListener("controllerchange",()=>{
+    if(!hadCtrl)return;
+    updated=true;
+    if(document.hidden)reload();else toast("App updated","Reload",reload,0);
+  });
+  document.addEventListener("visibilitychange",()=>{
+    if(document.hidden){if(updated)reload()}
+    else navigator.serviceWorker.getRegistration().then(r=>r&&r.update()).catch(()=>{});
   });
 }
 render();paintSync();
