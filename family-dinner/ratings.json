@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-06T00:15:25.139Z",
+ "updatedAt": "2026-11-06T14:22:14.325Z",
  "ratings": {
   "black-bean-corn-burrito-bowls": {
    "a": "up",
@@ -19,12 +19,14 @@
   },
   "garlic-shrimp-spinach-pasta": {
    "a": "up",
+   "b": null,
    "cuisine": "Italian",
    "ease": "easy",
    "mealId": "garlic-shrimp-spinach-pasta",
    "ratedWeek": "2026-11-02",
    "t": {
     "a": "2026-11-06T00:15:22.406Z",
+    "b": "",
     "ease": "2026-11-06T00:15:21.487Z"
    },
    "technique": "Searing shrimp and finishing pasta in the pan",
