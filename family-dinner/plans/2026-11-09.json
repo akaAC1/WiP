@@ -1,0 +1,1072 @@
+{
+ "weekOf": "2026-11-09",
+ "generatedAt": "2026-11-07T06:50:00-06:00",
+ "household": "2 adults + 1 toddler",
+ "equipment": "Every recipe fits one pot, two pans and one sheet pan.",
+ "headline": "Seared chicken with Dijon pan sauce, sheet-pan shrimp fajita tacos, lentil-stuffed peppers, turkey mushroom penne and cornmeal tilapia bowls.",
+ "toddlerRules": "Set aside the toddler's portion before adding salt or red pepper flakes. Cut food into pea-sized pieces, flatten or mash beans and peas, quarter small round foods, skip whole or chopped nuts, and flake fish by hand to check for bones.",
+ "nights": [
+  {
+   "id": "mon",
+   "day": "Monday",
+   "mealId": "seared-chicken-lemon-dijon-brussels",
+   "title": "Seared chicken with lemon-Dijon pan sauce, roasted Brussels sprouts & quinoa",
+   "cuisine": "French bistro",
+   "technique": "Pan-searing chicken and making a pan sauce",
+   "newTechnique": true,
+   "activeMin": 25,
+   "totalMin": 35,
+   "gear": [
+    "Sheet pan",
+    "Large skillet"
+   ],
+   "why": "A bistro classic made lean: chicken breast for protein, a quick sauce from the browned bits instead of cream, and November's Brussels sprouts for fiber. Tonight's new skill, a pan sauce, works on any seared meat.",
+   "plate": {
+    "protein": "Chicken breast",
+    "carb": "Quinoa",
+    "green": "Arugula",
+    "fat": "Olive oil, lemon vinaigrette"
+   },
+   "ingredients": [
+    "12 oz boneless, skinless chicken breast (2 small breasts, or 1 large cut in half)",
+    "1 bag (12 oz) Brussels sprouts, trimmed and halved (done Sunday)",
+    "2 tbsp olive oil, divided",
+    "1 small shallot, finely chopped (about 2 tbsp)",
+    "½ cup unsalted or low-sodium chicken broth",
+    "1 tsp Dijon mustard",
+    "½ lemon (about 1 tbsp juice)",
+    "½ tsp dried thyme, ¼ tsp salt plus a pinch, black pepper",
+    "1¼ cups cooked quinoa (from Sunday)",
+    "3 oz arugula (about 3 big handfuls) and 1½ tbsp lemon vinaigrette (from Sunday)"
+   ],
+   "steps": [
+    "Heat the oven to 425°F. Toss the Brussels sprouts on the sheet pan with 1 tbsp oil and a pinch of salt, cut side down. Roast 20–25 minutes, until the cut sides are deep brown and a knife slides in easily.",
+    "Prepare the chicken: if a breast is thicker than ¾ inch, lay it between two sheets of plastic wrap and pound the thick end with the bottom of a pan until it is an even ½–¾ inch. Pat it very dry with paper towels (dry meat browns; wet meat steams). Set aside a 2 oz piece for the toddler, then season the rest with ¼ tsp salt, the thyme and pepper. Season the toddler piece with thyme only.",
+    "Sear: heat 1 tbsp oil in the skillet over medium-high heat until it shimmers and a drop of water sizzles hard, about 2 minutes. Lay the chicken in, away from you. You should hear a steady sizzle; if it is silent, the pan is too cold. Do not move it for 5–6 minutes, until the bottom is golden and releases easily.",
+    "Flip and cook 4–6 minutes more, until an instant-read thermometer in the thickest part reads 165°F. Move the chicken to a plate to rest. Leave the browned bits in the pan: they are the flavor for the sauce.",
+    "Make the pan sauce: lower the heat to medium. Add the shallot and stir 1 minute until soft. Pour in the broth; it will bubble hard. Scrape the bottom with a wooden spoon to loosen the browned bits. Simmer 2–3 minutes until reduced by about half and slightly syrupy. Turn off the heat and stir in the Dijon, the lemon juice and any juices from the chicken plate.",
+    "Warm the quinoa in the microwave for 1–2 minutes with a splash of water. Toss the arugula with the vinaigrette.",
+    "Slice the chicken, spoon the sauce over the adult plates, and serve with the sprouts, quinoa and arugula."
+   ],
+   "portions": "Each adult: about 4 oz cooked chicken (5 oz raw) with 2 tbsp sauce, ½ cup quinoa, about 1 cup roasted Brussels sprouts and a big handful of dressed arugula. Toddler: 1–2 oz chicken, 2–3 tbsp quinoa and 2–3 tbsp soft sprout leaves.",
+   "nutrition": {
+    "perAdult": {
+     "calories": 550,
+     "protein": 43,
+     "carbs": 38,
+     "fat": 26,
+     "fiber": 10,
+     "sodium": 590
+    },
+    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil, dressing and the salt the recipe adds.",
+    "sodiumNote": "Mostly the measured salt on the chicken and sprouts, plus the Dijon."
+   },
+   "toddler": "Set the toddler's piece of chicken aside before salting. Cut it into thin strips or pea-sized pieces. Pull the softest outer leaves off a few sprouts (whole sprouts are a choking risk). Skip the peppery arugula; offer quinoa mixed with a little of the sauce, which has cooled.",
+   "prep": "Brussels sprouts trimmed and quinoa cooked on Sunday. Move the shrimp from the freezer to the fridge tonight for Tuesday."
+  },
+  {
+   "id": "tue",
+   "day": "Tuesday",
+   "mealId": "sheet-pan-shrimp-fajita-tacos",
+   "title": "Sheet-pan shrimp fajita tacos with avocado & lime yogurt",
+   "cuisine": "Tex-Mex",
+   "technique": "Sheet-pan roasting",
+   "newTechnique": false,
+   "activeMin": 15,
+   "totalMin": 30,
+   "gear": [
+    "Sheet pan"
+   ],
+   "why": "Your shrimp pasta and burrito bowls both got two thumbs up, so this puts shrimp and Tex-Mex flavors together on one sheet pan. Shrimp is very lean, peppers bring vitamin C, and Greek yogurt stands in for sour cream.",
+   "plate": {
+    "protein": "Shrimp",
+    "carb": "Corn tortillas",
+    "green": "Romaine",
+    "fat": "Avocado, olive oil"
+   },
+   "ingredients": [
+    "12 oz raw peeled, deveined shrimp (frozen is fine, thawed overnight in the fridge)",
+    "2 bell peppers (red, yellow or orange), sliced into thin strips (done Sunday)",
+    "1 medium onion, sliced (done Sunday)",
+    "1½ tbsp olive oil",
+    "2 tsp chili powder, 1 tsp ground cumin, ½ tsp garlic powder, ½ tsp paprika",
+    "A pinch of salt (about ⅛ tsp)",
+    "1 lime",
+    "6 small (6-inch) corn tortillas",
+    "1 avocado",
+    "2 cups shredded romaine",
+    "¼ cup plain Greek yogurt"
+   ],
+   "steps": [
+    "Heat the oven to 425°F. Mix the chili powder, cumin, garlic powder and paprika in a small bowl.",
+    "Toss the peppers and onion on the sheet pan with 1 tbsp oil and half the spice mix. Spread out in one layer. Roast 12 minutes, until softened and starting to brown at the edges.",
+    "Meanwhile, pat the shrimp dry. Set aside 4–5 shrimp for the toddler. Toss the rest with ½ tbsp oil, the rest of the spice mix and the pinch of salt.",
+    "Push the vegetables to the sides and spread the shrimp (and the toddler's plain shrimp at one end) in the middle. Roast 5–7 minutes, until the shrimp are pink and opaque all the way through and curled into a loose C (145°F). A tight O means overcooked.",
+    "While the shrimp roast, stir the yogurt with 1 tsp lime juice. Slice the avocado. Cut the rest of the lime into wedges.",
+    "Warm the tortillas: wrap them in a damp paper towel and microwave 30–45 seconds, or heat each in a dry skillet 20 seconds per side.",
+    "Fill each tortilla with romaine, shrimp and vegetables, avocado and a spoonful of lime yogurt."
+   ],
+   "portions": "Each adult: 2 tacos with about 4 oz cooked shrimp (5 oz raw), about 1 cup peppers and onions, ½ cup romaine, ¼ avocado and 2 tbsp lime yogurt. Toddler: 4–5 shrimp (1–2 oz), half a tortilla, 2–3 tbsp soft peppers and a slice of avocado.",
+   "nutrition": {
+    "perAdult": {
+     "calories": 500,
+     "protein": 38,
+     "carbs": 45,
+     "fat": 20,
+     "fiber": 12,
+     "sodium": 680
+    },
+    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil, dressing and the salt the recipe adds.",
+    "sodiumNote": "Mostly the frozen shrimp, which are often treated with salt or sodium tripolyphosphate, plus the chili powder. A bag whose only ingredient is shrimp cuts about 300 mg."
+   },
+   "toddler": "Roast the toddler's shrimp unseasoned at the end of the pan. Cut each shrimp into small pieces (whole shrimp are a choking risk). Serve soft pepper strips, avocado slices and a torn half tortilla with yogurt for dipping.",
+   "prep": "Peppers and onion sliced on Sunday. Thaw the shrimp in the fridge overnight Monday."
+  },
+  {
+   "id": "wed",
+   "day": "Wednesday",
+   "mealId": "lentil-spinach-stuffed-peppers",
+   "title": "Lentil, spinach & tomato stuffed peppers with lemon-dill yogurt",
+   "cuisine": "Mediterranean",
+   "technique": "Stuffing and baking peppers",
+   "newTechnique": true,
+   "meatless": true,
+   "activeMin": 20,
+   "totalMin": 45,
+   "gear": [
+    "Sheet pan",
+    "Large skillet"
+   ],
+   "why": "Tonight's meatless dinner: lentils are one of the best sources of soluble fiber, which helps lower LDL cholesterol, and walnuts add plant omega-3s. New skill: pre-roasting the pepper shells so they come out tender, not crunchy.",
+   "plate": {
+    "protein": "Lentils, Greek yogurt",
+    "carb": "Lentils",
+    "green": "Spinach, arugula",
+    "fat": "Olive oil, walnuts"
+   },
+   "ingredients": [
+    "3 large bell peppers (red, yellow or orange)",
+    "1¾ cups cooked green or brown lentils (from Sunday)",
+    "1 tbsp plus 1 tsp olive oil",
+    "½ onion, diced",
+    "2 garlic cloves, minced",
+    "1 can (14.5 oz) no-salt-added diced tomatoes, drained",
+    "3 oz baby spinach (3 big handfuls)",
+    "1 tsp dried oregano, ½ tsp ground cumin, ½ tsp paprika, ¼ tsp salt",
+    "2 tbsp walnuts, toasted and chopped (from Sunday)",
+    "2 tbsp grated Parmesan",
+    "Sauce: ⅓ cup plain Greek yogurt, 1 tsp lemon juice, ½ tsp dried dill, a pinch of garlic powder",
+    "2 oz arugula and 1 tbsp lemon vinaigrette (from Sunday)"
+   ],
+   "steps": [
+    "Heat the oven to 400°F. Cut 2½ peppers in half lengthwise through the stem and pull out the seeds and white ribs, leaving 5 boat-shaped halves. Finely chop the last half pepper for the filling.",
+    "Rub the pepper boats with 1 tsp oil and set them cut side down on the sheet pan. Roast 10 minutes. They should look slightly wrinkled and bend a little when pressed with tongs, but still hold their shape. This pre-roast is what makes them tender.",
+    "Meanwhile, make the filling: heat 1 tbsp oil in the skillet over medium heat. Cook the onion and chopped pepper 5 minutes, stirring, until soft. Add the garlic, oregano, cumin and paprika and stir 30 seconds until fragrant.",
+    "Add the drained tomatoes and lentils and cook 3–4 minutes until hot and most of the liquid is gone (a wet filling makes soggy peppers). Stir in the spinach a handful at a time until wilted. Scoop out the toddler's portion now, then stir the ¼ tsp salt into the rest.",
+    "Flip the pepper boats cut side up. Spoon the filling in, pressing it down gently and mounding it slightly. Sprinkle the adult peppers with Parmesan.",
+    "Bake 15 minutes, until the filling is hot in the center and the Parmesan is lightly golden. Meanwhile stir together the yogurt sauce and toss the arugula with the vinaigrette.",
+    "Top the adult peppers with walnuts and a spoonful of yogurt sauce. Serve with the arugula."
+   ],
+   "portions": "Each adult: 2 stuffed pepper halves (about ¾ cup lentils in the filling), 1 tbsp Parmesan, 1 tbsp walnuts, 2 tbsp yogurt sauce and a handful of dressed arugula. Toddler: 1 pepper half, cut up, with 2–3 tbsp filling and a little yogurt sauce.",
+   "nutrition": {
+    "perAdult": {
+     "calories": 505,
+     "protein": 25,
+     "carbs": 56,
+     "fat": 21,
+     "fiber": 20,
+     "sodium": 460
+    },
+    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil, dressing and the salt the recipe adds.",
+    "sodiumNote": "Mostly the ¼ tsp salt in the filling and the Parmesan."
+   },
+   "toddler": "Take the toddler's filling out before the salt goes in. Bake their pepper half with the rest, then chop the pepper into small soft pieces and mix with the filling; lentils are soft enough as is. No walnut pieces (choking risk); stir a little yogurt sauce in instead.",
+   "prep": "Lentils cooked and walnuts toasted on Sunday. Wash the extra pepper on Sunday so it's ready."
+  },
+  {
+   "id": "thu",
+   "day": "Thursday",
+   "mealId": "turkey-mushroom-spinach-penne",
+   "title": "Turkey, mushroom & spinach penne in quick tomato sauce",
+   "cuisine": "Italian-American",
+   "technique": "Finishing pasta in the pan",
+   "newTechnique": false,
+   "activeMin": 25,
+   "totalMin": 35,
+   "gear": [
+    "Large pot",
+    "Large skillet"
+   ],
+   "why": "Your garlic shrimp pasta was a hit, so this uses the same finish-in-the-pan method with lean ground turkey and mushrooms for a meaty sauce. No-salt-added tomato sauce keeps the sodium well under a jarred marinara.",
+   "plate": {
+    "protein": "93% lean ground turkey",
+    "carb": "Penne (al dente)",
+    "green": "Spinach",
+    "fat": "Olive oil"
+   },
+   "ingredients": [
+    "12 oz 93% lean ground turkey (freeze the other 4 oz of the pack)",
+    "5 oz penne (about 1⅔ cups dry; regular, not whole-wheat)",
+    "1 tsp salt for the pasta water",
+    "8 oz white or cremini mushrooms, sliced",
+    "½ onion, diced",
+    "2 garlic cloves, minced",
+    "1 can (15 oz) no-salt-added tomato sauce",
+    "1 tsp Italian seasoning, ¼ tsp salt, a pinch of red pepper flakes (adults)",
+    "3 oz baby spinach",
+    "1 tbsp olive oil",
+    "2 tbsp grated Parmesan"
+   ],
+   "steps": [
+    "Bring a large pot of water to a boil and add 1 tsp salt. Cook the penne 1 minute less than the package says (it finishes in the sauce). Scoop out 1 cup of the pasta water before draining.",
+    "Meanwhile, heat the oil in the skillet over medium-high heat. Add the mushrooms in one layer and leave them 3 minutes until browned on the bottom, then stir and cook 2 minutes more.",
+    "Add the turkey and onion. Break the turkey into small crumbles with a wooden spoon and cook 6–7 minutes until no pink remains (165°F). Stir in the garlic and Italian seasoning for 30 seconds.",
+    "Pour in the tomato sauce and simmer 5 minutes. Scoop out the toddler's sauce, then stir in ¼ tsp salt and the red pepper flakes.",
+    "Add the drained penne, the spinach and a splash of pasta water. Toss over medium heat 1–2 minutes until the spinach wilts and the sauce clings to the pasta. Add more pasta water if it looks dry.",
+    "Serve topped with Parmesan (1 tbsp per adult)."
+   ],
+   "portions": "Each adult: 1 cup cooked penne with about 4 oz cooked turkey (5 oz raw), about ¾ cup mushroom-tomato sauce and spinach, and 1 tbsp Parmesan. Toddler: 2–3 tbsp penne with 1–2 oz turkey and sauce.",
+   "nutrition": {
+    "perAdult": {
+     "calories": 610,
+     "protein": 43,
+     "carbs": 62,
+     "fat": 22,
+     "fiber": 8,
+     "sodium": 690
+    },
+    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil, dressing and the salt the recipe adds.",
+    "sodiumNote": "The salted pasta water and the ¼ tsp salt in the sauce, plus the Parmesan and turkey."
+   },
+   "toddler": "Take the toddler's sauce out before the salt and pepper flakes. Cut the penne into short pieces and chop the mushrooms small. Toss with their sauce and a pinch of Parmesan.",
+   "prep": "Move the tilapia (if frozen) to the fridge tonight for Friday. Freeze the extra 4 oz of turkey flat in a zip-top bag."
+  },
+  {
+   "id": "fri",
+   "day": "Friday",
+   "mealId": "cornmeal-tilapia-collards-rice",
+   "title": "Cornmeal-crusted Cajun-lite tilapia bowls with garlicky collards & brown rice",
+   "cuisine": "Southern",
+   "technique": "Three-bowl breading station",
+   "newTechnique": false,
+   "activeMin": 25,
+   "totalMin": 35,
+   "gear": [
+    "Sheet pan",
+    "Large skillet"
+   ],
+   "why": "Your family already knows the breading station from last week's cod bites; a cornmeal crust gives it a Southern twist. Tilapia is mild and very lean, and collards are one of November's best greens.",
+   "plate": {
+    "protein": "Tilapia",
+    "carb": "Brown rice",
+    "green": "Collard greens",
+    "fat": "Olive oil, walnuts"
+   },
+   "ingredients": [
+    "12 oz tilapia fillets (3–4 fillets; thawed if frozen)",
+    "2 tbsp all-purpose flour",
+    "1 egg",
+    "⅓ cup yellow cornmeal",
+    "1 tsp paprika, ½ tsp garlic powder, ½ tsp dried thyme, ¼ tsp salt",
+    "Olive oil spray",
+    "1 bunch collard greens (about 9 oz), stems removed, leaves sliced into thin ribbons",
+    "1 tbsp olive oil, 2 garlic cloves (sliced), a pinch of salt, 1 tsp apple cider vinegar",
+    "1¼ cups cooked brown rice (from the freezer)",
+    "2 tbsp toasted walnuts or pecans, chopped (from Sunday)",
+    "Lemon wedges"
+   ],
+   "steps": [
+    "Heat the oven to 425°F. Line the sheet pan with parchment and spray it lightly with oil.",
+    "Set up 3 shallow bowls: flour in the first; the egg, beaten with 1 tsp water, in the second; cornmeal, paprika, garlic powder and thyme in the third. Dip the toddler's piece first, then stir the ¼ tsp salt into the cornmeal.",
+    "Pat the tilapia dry. Dip each piece in flour (shake off the extra), then egg (let it drip), then press into the cornmeal on both sides. Lay on the pan and spray the tops with oil.",
+    "Bake 10–12 minutes, until the crust is golden and the fish flakes easily with a fork (145°F).",
+    "Meanwhile, heat 1 tbsp oil in the skillet over medium heat. Add the garlic for 30 seconds, then the collards and 2 tbsp water. Cook, tossing with tongs, 6–8 minutes until tender and bright green. Take out the toddler's greens, then add a pinch of salt and the vinegar.",
+    "Reheat the rice in the microwave, covered, 2–3 minutes with a splash of water, until steaming.",
+    "Build bowls: rice, collards and tilapia, topped with walnuts or pecans and a squeeze of lemon."
+   ],
+   "portions": "Each adult: about 4 oz cooked tilapia (5 oz raw), ½ cup brown rice, about ¾ cup cooked collards and 1 tbsp toasted nuts. Toddler: 1–2 oz tilapia, 2–3 tbsp rice and 2 tbsp finely chopped collards.",
+   "nutrition": {
+    "perAdult": {
+     "calories": 510,
+     "protein": 39,
+     "carbs": 47,
+     "fat": 19,
+     "fiber": 8,
+     "sodium": 450
+    },
+    "note": "Estimated per adult serving from the portions above, using USDA values; includes cooking oil, dressing and the salt the recipe adds.",
+    "sodiumNote": "Mostly the ¼ tsp salt in the cornmeal crust and the pinch on the collards."
+   },
+   "toddler": "Coat the toddler's piece before salt goes into the cornmeal. Flake it by hand to check for bones. Chop their collards very finely (big leaves are hard to chew) and mix them into the rice. No nut pieces.",
+   "prep": "Brown rice cooked and frozen on Sunday; move it to the fridge Thursday night. If you bought fresh tilapia, buy it Thursday or Friday."
+  }
+ ],
+ "prep": {
+  "minutes": 45,
+  "steps": [
+   {
+    "title": "Cook the grains and lentils",
+    "text": "Use all three burners at once. Pot: rinse ¾ cup lentils, cover with 3 cups water, simmer 20–25 minutes until tender but holding their shape, then drain (no salt). Saucepan 1: rinse 7 tbsp quinoa and simmer in ¾ cup water, covered, 15 minutes, then rest 5 minutes. Saucepan 2: simmer 7 tbsp brown rice in 1 cup water, covered, 40–45 minutes. Cool everything. Refrigerate the quinoa and lentils; freeze the rice flat in a bag for Friday."
+   },
+   {
+    "title": "Trim and slice the vegetables",
+    "text": "Trim and halve the Brussels sprouts for Monday. Slice 2 bell peppers and 1 onion into strips for Tuesday's fajitas. Store each in a container."
+   },
+   {
+    "title": "Wash and dry the greens",
+    "text": "Wash the romaine and collards, dry them well and store wrapped in a paper towel in a bag. Spinach and arugula are pre-washed; leave them in their containers."
+   },
+   {
+    "title": "Mix the lemon vinaigrette",
+    "text": "2 tbsp olive oil, 2 tsp lemon juice, ½ tsp Dijon mustard, a pinch of salt and pepper. Shake in a small jar and refrigerate (Mon and Wed)."
+   },
+   {
+    "title": "Toast the nuts",
+    "text": "Toast ¼ cup walnuts in a dry skillet over medium heat 3–4 minutes, shaking the pan, until fragrant. Cool, chop and store in a jar (Wed and Fri)."
+   },
+   {
+    "title": "Plan the thaws",
+    "text": "Shrimp: freezer to fridge Monday night. Tilapia (if frozen) and the brown rice: freezer to fridge Thursday night."
+   }
+  ],
+  "leftovers": [
+   {
+    "cook": "Sun: quinoa",
+    "extra": "About 1¼ cups",
+    "use": "Mon dinner"
+   },
+   {
+    "cook": "Sun: lentils",
+    "extra": "About 1¾ cups",
+    "use": "Wed stuffed peppers"
+   },
+   {
+    "cook": "Sun: brown rice",
+    "extra": "About 1¼ cups, frozen",
+    "use": "Fri tilapia bowls"
+   },
+   {
+    "cook": "Tue: avocado",
+    "extra": "About ¼",
+    "use": "Toddler snack Wednesday; keep the pit in and wrap tightly"
+   },
+   {
+    "cook": "Thu: ground turkey",
+    "extra": "4 oz raw, frozen",
+    "use": "A future week's tacos or meatballs"
+   },
+   {
+    "cook": "Thu: penne",
+    "extra": "About ¼ cup",
+    "use": "Toddler lunch Friday; reheat until steaming"
+   }
+  ],
+  "storage": "Cooked grains and lentils keep 4–5 days in the fridge; frozen rice keeps 2 months. Cooked meat keeps 3–4 days; shrimp and fish are best within 1–2 days."
+ },
+ "shopNote": "Best split this week: Jewel-Osco by Tue Nov 10 (shrimp $5.99/lb, bell peppers and mushrooms 99¢, avocados 49¢, spinach $1.99) and Aldi for the chicken family pack (freeze the extra) and fresh tilapia, bought Thursday. Target has the cheapest 93% lean ground turkey ($4.99).",
+ "grocery": {
+  "stores": [
+   {
+    "id": "aldi",
+    "name": "Aldi",
+    "note": "Ad runs Wed Nov 4–Tue Nov 10"
+   },
+   {
+    "id": "jewel",
+    "name": "Jewel-Osco",
+    "note": "Ad ends Tue Nov 10"
+   },
+   {
+    "id": "marianos",
+    "name": "Mariano's",
+    "note": "Website prices; sales marked"
+   },
+   {
+    "id": "costco",
+    "name": "Costco",
+    "note": "Membership; bulk packs"
+   },
+   {
+    "id": "samsclub",
+    "name": "Sam's Club",
+    "note": "Membership; bulk packs. Online prices, approx."
+   },
+   {
+    "id": "target",
+    "name": "Target",
+    "note": "Online prices, approx.; check the Target app for your store"
+   }
+  ],
+  "groups": [
+   {
+    "name": "Meat & seafood",
+    "items": [
+     {
+      "key": "chicken-breast",
+      "name": "Boneless skinless chicken breast",
+      "amount": "12 oz (2 small breasts)",
+      "for": "Mon",
+      "price": 4.49,
+      "note": "Most stores sell family packs; freeze the rest in 12 oz bags for another week.",
+      "prices": {
+       "aldi": {
+        "cost": 5.97,
+        "unit": "$1.99/lb · ~3 lb family pack",
+        "approx": true,
+        "note": "Price reported through Nov 3; check the shelf"
+       },
+       "marianos": {
+        "cost": 9.69,
+        "unit": "$2.99/lb · ~3.2 lb Perdue value pack",
+        "sale": true
+       },
+       "costco": {
+        "cost": 18.99,
+        "unit": "$2.92/lb · 6.5 lb frozen bag",
+        "bulk": true,
+        "approx": true
+       },
+       "samsclub": {
+        "cost": 16.39,
+        "unit": "~$2.88/lb · ~5.7 lb",
+        "bulk": true,
+        "approx": true,
+        "note": "Online listing; club price may differ"
+       },
+       "target": {
+        "cost": 12.13,
+        "unit": "Good & Gather pack, 1.5–3.2 lb",
+        "approx": true,
+        "note": "Online price; weight varies"
+       }
+      }
+     },
+     {
+      "key": "shrimp",
+      "name": "Raw peeled shrimp, frozen",
+      "amount": "12 oz",
+      "for": "Tue",
+      "price": 5.99,
+      "staple": true,
+      "note": "Pick a bag whose only ingredient is shrimp if you can; many add salt or sodium tripolyphosphate.",
+      "prices": {
+       "jewel": {
+        "cost": 5.99,
+        "unit": "$5.99/lb · Waterfront Bistro 51–60 ct",
+        "sale": true,
+        "note": "Ad ends Tue Nov 10"
+       },
+       "aldi": {
+        "cost": 6.59,
+        "unit": "12 oz bag",
+        "approx": true,
+        "note": "Price checked Nov 2"
+       },
+       "marianos": {
+        "cost": 10.99,
+        "unit": "16 oz bag",
+        "approx": true,
+        "note": "Price checked Nov 2"
+       },
+       "costco": {
+        "cost": 16.49,
+        "unit": "1.5 lb bag",
+        "bulk": true,
+        "approx": true,
+        "note": "Price checked Nov 2"
+       },
+       "samsclub": {
+        "cost": 16.97,
+        "unit": "$8.48/lb · 2 lb jumbo bag",
+        "bulk": true,
+        "approx": true,
+        "note": "Price checked Nov 2"
+       },
+       "target": {
+        "cost": 6.99,
+        "unit": "1 lb bag · 41–50 ct, tail-off",
+        "approx": true,
+        "note": "Price checked Nov 2"
+       }
+      }
+     },
+     {
+      "key": "ground-turkey",
+      "name": "Ground turkey, 93% lean",
+      "amount": "12 oz (of a 1 lb pack)",
+      "for": "Thu",
+      "price": 4.99,
+      "note": "Freeze the extra 4 oz. Jewel's ad has 85% lean at $3.33/lb, but it has about twice the fat.",
+      "prices": {
+       "target": {
+        "cost": 4.99,
+        "unit": "16 oz Good & Gather"
+       },
+       "marianos": {
+        "cost": 5.99,
+        "unit": "16 oz Simple Truth"
+       },
+       "costco": {
+        "cost": 22.99,
+        "unit": "4 × 1.67 lb",
+        "bulk": true,
+        "approx": true
+       },
+       "samsclub": {
+        "cost": 22.77,
+        "unit": "2 × 2 lb Jennie-O",
+        "bulk": true,
+        "approx": true
+       }
+      }
+     },
+     {
+      "key": "tilapia",
+      "name": "Tilapia fillets",
+      "amount": "12 oz",
+      "for": "Fri",
+      "price": 5.09,
+      "note": "Fresh: buy Thursday or Friday. Frozen: thaw in the fridge Thursday night; the rest of the bag stays frozen.",
+      "prices": {
+       "aldi": {
+        "cost": 5.09,
+        "unit": "~$6.79/lb · fresh ¾ lb pack",
+        "approx": true
+       },
+       "marianos": {
+        "cost": 10.0,
+        "unit": "32 oz frozen bag",
+        "sale": true,
+        "note": "Sale from $11.99"
+       },
+       "target": {
+        "cost": 9.99,
+        "unit": "24 oz frozen bag"
+       },
+       "costco": {
+        "cost": 19.79,
+        "unit": "3 lb frozen loins",
+        "bulk": true,
+        "approx": true
+       },
+       "samsclub": {
+        "cost": 12.64,
+        "unit": "$4.21/lb · 3 lb frozen",
+        "bulk": true,
+        "sale": true,
+        "note": "$2 off online"
+       }
+      }
+     }
+    ]
+   },
+   {
+    "name": "Produce",
+    "items": [
+     {
+      "key": "bell-peppers",
+      "name": "Bell peppers (red, yellow or orange)",
+      "amount": "5",
+      "for": "Tue, Wed",
+      "price": 4.95,
+      "prices": {
+       "jewel": {
+        "cost": 4.95,
+        "unit": "99¢ each",
+        "sale": true,
+        "note": "Ad ends Tue Nov 10"
+       }
+      }
+     },
+     {
+      "key": "brussels-sprouts",
+      "name": "Brussels sprouts",
+      "amount": "12 oz bag",
+      "for": "Mon",
+      "price": 2.99,
+      "prices": {
+       "target": {
+        "cost": 3.49,
+        "unit": "12 oz bag"
+       },
+       "samsclub": {
+        "cost": 8.82,
+        "unit": "$5.88/lb · ~1.5 lb",
+        "bulk": true,
+        "approx": true
+       }
+      }
+     },
+     {
+      "key": "arugula",
+      "name": "Arugula, 5 oz container",
+      "amount": "1",
+      "for": "Mon, Wed",
+      "price": 2.99,
+      "prices": {
+       "marianos": {
+        "cost": 2.99,
+        "unit": "5 oz",
+        "approx": true,
+        "note": "Price checked Nov 2"
+       },
+       "target": {
+        "cost": 2.89,
+        "unit": "5 oz",
+        "approx": true,
+        "note": "Price checked Nov 2"
+       }
+      }
+     },
+     {
+      "key": "spinach",
+      "name": "Fresh Express spinach",
+      "amount": "1 bag (use about 6 oz)",
+      "for": "Wed, Thu",
+      "price": 1.99,
+      "prices": {
+       "jewel": {
+        "cost": 1.99,
+        "unit": "bag",
+        "sale": true,
+        "note": "Ad ends Tue Nov 10"
+       },
+       "target": {
+        "cost": 3.79,
+        "unit": "10 oz bag",
+        "approx": true,
+        "note": "Price checked Nov 2"
+       }
+      }
+     },
+     {
+      "key": "mushrooms",
+      "name": "White or cremini mushrooms",
+      "amount": "8 oz",
+      "for": "Thu",
+      "price": 0.99,
+      "prices": {
+       "jewel": {
+        "cost": 0.99,
+        "unit": "99¢ each package",
+        "sale": true,
+        "note": "Ad ends Tue Nov 10"
+       }
+      }
+     },
+     {
+      "key": "avocados",
+      "name": "Avocados",
+      "amount": "1",
+      "for": "Tue",
+      "price": 0.49,
+      "prices": {
+       "jewel": {
+        "cost": 0.49,
+        "unit": "49¢ each",
+        "sale": true,
+        "note": "Ad ends Tue Nov 10"
+       },
+       "aldi": {
+        "cost": 2.99,
+        "unit": "organic 4-pack",
+        "sale": true,
+        "note": "Ad ends Tue Nov 10; extras are toddler snacks"
+       }
+      }
+     },
+     {
+      "key": "collards",
+      "name": "Collard greens",
+      "amount": "1 bunch",
+      "for": "Fri",
+      "price": 1.99
+     },
+     {
+      "key": "romaine",
+      "name": "Romaine heart",
+      "amount": "1 (use about 2 cups shredded)",
+      "for": "Tue",
+      "price": 1.49
+     },
+     {
+      "key": "onions",
+      "name": "Yellow onions",
+      "amount": "2 medium",
+      "for": "Tue, Wed, Thu",
+      "price": 1.0
+     },
+     {
+      "key": "shallot",
+      "name": "Shallot",
+      "amount": "1 small",
+      "for": "Mon",
+      "price": 0.6
+     },
+     {
+      "key": "lemons",
+      "name": "Lemons",
+      "amount": "2",
+      "for": "Mon, Wed, Fri",
+      "price": 1.38
+     },
+     {
+      "key": "lime",
+      "name": "Lime",
+      "amount": "1",
+      "for": "Tue",
+      "price": 0.4
+     },
+     {
+      "key": "garlic",
+      "name": "Garlic",
+      "amount": "1 head (about 6 cloves)",
+      "for": "Wed, Thu, Fri",
+      "price": 0.75,
+      "staple": true
+     }
+    ]
+   },
+   {
+    "name": "Dairy, grains & cans",
+    "items": [
+     {
+      "key": "greek-yogurt",
+      "name": "Plain nonfat Greek yogurt",
+      "amount": "1 small tub (about ¾ cup needed)",
+      "for": "Tue, Wed",
+      "price": 2.99,
+      "prices": {
+       "target": {
+        "cost": 3.39,
+        "unit": "32 oz nonfat",
+        "approx": true,
+        "note": "Price checked Nov 2; the big tub costs about the same as small ones"
+       }
+      }
+     },
+     {
+      "key": "parmesan",
+      "name": "Parmesan wedge",
+      "amount": "¼ cup grated",
+      "for": "Wed, Thu",
+      "price": 3.99,
+      "staple": true,
+      "note": "Use last week's wedge if you have it.",
+      "prices": {
+       "aldi": {
+        "cost": 3.99,
+        "unit": "wedge",
+        "approx": true,
+        "note": "Price checked Nov 2"
+       }
+      }
+     },
+     {
+      "key": "corn-tortillas",
+      "name": "Corn tortillas, 6-inch",
+      "amount": "6",
+      "for": "Tue",
+      "price": 1.99,
+      "staple": true,
+      "note": "Packs are 10–30; freeze the rest."
+     },
+     {
+      "key": "lentils",
+      "name": "Green or brown lentils, dry",
+      "amount": "¾ cup (of a 1 lb bag)",
+      "for": "Wed",
+      "price": 1.69,
+      "staple": true
+     },
+     {
+      "key": "quinoa",
+      "name": "Quinoa",
+      "amount": "7 tbsp dry",
+      "for": "Mon",
+      "price": 3.49,
+      "staple": true
+     },
+     {
+      "key": "brown-rice",
+      "name": "Brown rice",
+      "amount": "7 tbsp dry",
+      "for": "Fri",
+      "price": 1.99,
+      "staple": true
+     },
+     {
+      "key": "pasta",
+      "name": "Penne (regular, not whole-wheat)",
+      "amount": "5 oz (of a 16 oz box)",
+      "for": "Thu",
+      "price": 1.29,
+      "staple": true,
+      "note": "Barilla is buy-one-get-one at Jewel through Nov 10."
+     },
+     {
+      "key": "cornmeal",
+      "name": "Yellow cornmeal",
+      "amount": "⅓ cup",
+      "for": "Fri",
+      "price": 2.49,
+      "staple": true
+     },
+     {
+      "key": "diced-tomatoes-nsa",
+      "name": "Diced tomatoes, no salt added, 14.5 oz",
+      "amount": "1 can",
+      "for": "Wed",
+      "price": 1.29,
+      "staple": true
+     },
+     {
+      "key": "tomato-sauce-nsa",
+      "name": "Tomato sauce, no salt added, 15 oz",
+      "amount": "1 can",
+      "for": "Thu",
+      "price": 1.29,
+      "staple": true
+     },
+     {
+      "key": "broth",
+      "name": "Unsalted or low-sodium chicken broth",
+      "amount": "½ cup",
+      "for": "Mon",
+      "price": 1.99,
+      "staple": true,
+      "note": "Use last week's carton if it was opened less than 7–10 days ago."
+     },
+     {
+      "key": "walnuts",
+      "name": "Walnut pieces",
+      "amount": "¼ cup",
+      "for": "Wed, Fri",
+      "price": 3.49,
+      "staple": true
+     },
+     {
+      "key": "eggs",
+      "name": "Eggs",
+      "amount": "1",
+      "for": "Fri",
+      "price": 3.0,
+      "staple": true
+     }
+    ]
+   },
+   {
+    "name": "Pantry staples",
+    "pantry": true,
+    "items": [
+     {
+      "key": "olive-oil",
+      "name": "Olive oil",
+      "amount": "about ½ cup this week",
+      "price": 8.99,
+      "staple": true
+     },
+     {
+      "key": "olive-oil-spray",
+      "name": "Olive oil spray",
+      "amount": "a few sprays",
+      "price": 3.99,
+      "staple": true
+     },
+     {
+      "key": "flour",
+      "name": "All-purpose flour",
+      "amount": "2 tbsp",
+      "price": 2.99,
+      "staple": true
+     },
+     {
+      "key": "dijon",
+      "name": "Dijon mustard",
+      "amount": "1½ tsp",
+      "price": 1.99,
+      "staple": true
+     },
+     {
+      "key": "apple-cider-vinegar",
+      "name": "Apple cider vinegar",
+      "amount": "1 tsp",
+      "price": 1.99,
+      "staple": true
+     },
+     {
+      "key": "garlic-powder",
+      "name": "Garlic powder",
+      "amount": "about 1½ tsp",
+      "price": 1.49,
+      "staple": true
+     },
+     {
+      "key": "italian-seasoning",
+      "name": "Dried Italian seasoning",
+      "amount": "1 tsp",
+      "price": 1.49,
+      "staple": true
+     },
+     {
+      "key": "dried-thyme",
+      "name": "Dried thyme",
+      "amount": "1 tsp",
+      "price": 1.49,
+      "staple": true
+     },
+     {
+      "key": "dried-oregano",
+      "name": "Dried oregano",
+      "amount": "1 tsp",
+      "price": 1.49,
+      "staple": true
+     },
+     {
+      "key": "dill",
+      "name": "Dried dill",
+      "amount": "½ tsp",
+      "price": 1.49,
+      "staple": true
+     },
+     {
+      "key": "cumin",
+      "name": "Ground cumin",
+      "amount": "1½ tsp",
+      "price": 1.49,
+      "staple": true
+     },
+     {
+      "key": "chili-powder",
+      "name": "Chili powder",
+      "amount": "2 tsp",
+      "price": 1.49,
+      "staple": true
+     },
+     {
+      "key": "paprika",
+      "name": "Paprika",
+      "amount": "2 tsp",
+      "price": 1.49,
+      "staple": true
+     },
+     {
+      "key": "red-pepper-flakes",
+      "name": "Red pepper flakes",
+      "amount": "a pinch",
+      "price": 1.49,
+      "staple": true
+     }
+    ]
+   }
+  ],
+  "estimate": "About $76 for the full list when each item comes from the cheapest of Aldi, Jewel-Osco, Mariano's and Target. Pantry staples are only counted if you slide them below \"Have it\".",
+  "skipped": "Trader Joe's isn't included because it doesn't publish prices online. A blank store cell means no current price was found there; the item's typical price is used instead. Costco and Sam's Club prices are for the whole bulk pack and are approximate. Prices marked \"checked Nov 2\" are from last week's listings. Aldi doesn't post regular meat prices online, so its chicken and tilapia prices come from recent reports. Target prices are online and approximate; your store may differ.",
+  "sources": [
+   {
+    "label": "Jewel-Osco ad Nov 4–10",
+    "url": "https://weeklyadhunters.com/jewel-osco-weekly-ad/"
+   },
+   {
+    "label": "Aldi ad Nov 4–10",
+    "url": "https://aldiweekly.com/"
+   },
+   {
+    "label": "Aldi chicken breast $1.99/lb",
+    "url": "https://www.moneydigest.com/2292807/popular-grocery-chain-chicken-breast-honeycrisp-apples-lowest-prices-years-aldi/"
+   },
+   {
+    "label": "Aldi fresh tilapia",
+    "url": "https://www.tastingtable.com/2281572/aldi-fresh-fish-cheapest/"
+   },
+   {
+    "label": "Mariano's chicken breast value pack",
+    "url": "https://www.marianos.com/p/perdue-boneless-skinless-chicken-breasts/0027061550000"
+   },
+   {
+    "label": "Mariano's ground turkey",
+    "url": "https://www.marianos.com/p/simple-truth-natural-93-7-ground-turkey-tray/0001111066275"
+   },
+   {
+    "label": "Mariano's tilapia",
+    "url": "https://www.marianos.com/p/kroger-farm-raised-tilapia-fillets-frozen-big-deal-/0001111086003"
+   },
+   {
+    "label": "Mariano's shrimp",
+    "url": "https://www.marianos.com/p/simple-truth-peeled-deveined-jumbo-raw-frozen-shrimp/0001111008068"
+   },
+   {
+    "label": "Mariano's arugula",
+    "url": "https://www.marianos.com/p/kroger-baby-arugula/0001111060639"
+   },
+   {
+    "label": "Costco meat prices",
+    "url": "https://costcoguides.com/costco-meat-prices/"
+   },
+   {
+    "label": "Costco tilapia",
+    "url": "https://app.warehouserunner.com/costco/1139689-kirkland-signature-farmed-tilapia-loins-3-lb-bag"
+   },
+   {
+    "label": "Costco ground turkey",
+    "url": "https://app.warehouserunner.com/costco/19629-fresh-ground-turkey-93-lean-7-fat-4-1-67-lb-units"
+   },
+   {
+    "label": "Costco shrimp",
+    "url": "https://app.warehouserunner.com/costco/25553-kirkland-signature-11-15-ct-raw-shrimp-1-5-lbs"
+   },
+   {
+    "label": "Sam's Club chicken breast",
+    "url": "https://www.samsclub.com/ip/Member-s-Mark-Boneless-and-Skinless-Chicken-Breast-priced-per-pound/13588173694"
+   },
+   {
+    "label": "Sam's Club tilapia",
+    "url": "https://www.samsclub.com/ip/Member-s-Mark-Farm-Raised-Skinless-and-Boneless-Tilapia-Fillet-Portions-Frozen-3-lbs/13884706767"
+   },
+   {
+    "label": "Sam's Club ground turkey",
+    "url": "https://www.samsclub.com/ip/Jennie-O-93-7-Ground-Turkey-2-lbs-2-pk/13878113633"
+   },
+   {
+    "label": "Sam's Club Brussels sprouts",
+    "url": "https://www.samsclub.com/ip/13624255190"
+   },
+   {
+    "label": "Sam's Club shrimp",
+    "url": "https://www.samsclub.com/ip/members-mark-raw-jumbo-shrimp-2-lbs/1359936147"
+   },
+   {
+    "label": "Target chicken breast",
+    "url": "https://target.com/p/boneless-skinless-chicken-breast-1-5-3-2lbs-price-per-lb-good-38-gather-8482/-/A-52205815"
+   },
+   {
+    "label": "Target ground turkey",
+    "url": "https://www.target.com/p/product/-/A-47979428"
+   },
+   {
+    "label": "Target tilapia",
+    "url": "https://www.target.com/p/tilapia-skinless-fillets-frozen-24oz-good-38-gather-8482/-/A-14673086"
+   },
+   {
+    "label": "Target Brussels sprouts",
+    "url": "https://www.target.com/p/brussels-sprouts-12oz-good-38-gather-8482/-/A-54535942"
+   },
+   {
+    "label": "Target shrimp",
+    "url": "https://www.target.com/p/market-pantry-raw-tail-off-large-shrimp-41-50-count/-/A-14871930"
+   },
+   {
+    "label": "Target arugula",
+    "url": "https://target.com/p/organic-baby-arugula-5oz-good-38-gather-8482/-/A-54555980"
+   },
+   {
+    "label": "Target spinach",
+    "url": "https://www.target.com/p/baby-spinach-10oz-good-38-gather-8482/-/A-54555552"
+   },
+   {
+    "label": "Target Greek yogurt",
+    "url": "https://www.target.com/p/greek-plain-yogurt-32oz-good-gather/-/A-94895373"
+   }
+  ]
+ }
+}
